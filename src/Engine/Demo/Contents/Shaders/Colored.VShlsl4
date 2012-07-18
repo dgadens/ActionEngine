@@ -1,0 +1,39 @@
+//******************************
+// VS colored, apenas exibe a cor do vertice
+// Creator: Daniel Gadens
+// Date: 05/05/2012
+//******************************
+
+cbuffer cbPerModel : register(b1)
+{
+    float4x4 xWorld                     : packoffset(c0); 
+};
+
+cbuffer cbPerPass : register(b2)
+{
+    float4x4 xViewProjection            : packoffset(c0);
+};
+
+struct VS_INPUT
+{
+    float4 Position  : POSITION;
+    float4 Color     : COLOR;
+};
+
+struct PS_INPUT
+{
+    float4 Position  : SV_POSITION;
+    float4 Color     : TEXCOORD0;
+};
+
+
+PS_INPUT main( VS_INPUT input )
+{
+    PS_INPUT output = (PS_INPUT)0;
+
+    float4x4 worldViewProjection = mul ( xWorld, xViewProjection);
+    output.Position = mul( input.Position, worldViewProjection );
+    output.Color = input.Color;
+
+    return output;
+}

@@ -1,0 +1,7 @@
+Begin Network Init
+WinSock 2.0 initialized (NMD: 0)
+ACSocketObjects constructed
+socket created
+server bind to port: 27042
+server is now listening for incoming connection...
+initialized (online and ready)

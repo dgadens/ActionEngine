@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{b2476ed0-af43-4422-9003-f9ac270f41b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{3cba50f3-410f-49ab-a87e-992626c10bf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\RenderEngine">
+      <UniqueIdentifier>{8b17c87e-8d79-45ab-a444-de6859bf1a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\RenderEngine">
+      <UniqueIdentifier>{2d25f58d-be37-48bc-add1-4524d9c7c820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{9083c963-cada-4a23-a35a-cbb53e2bb4f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{9a246e2f-9022-4660-8f73-75ea0b44a72b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{50bc81ba-8e15-4171-913c-e406b7839aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{13e6fdb1-be51-4753-a7ec-bb5fa893c693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager">
+      <UniqueIdentifier>{3ebe8b3f-2190-4bc2-bf4c-e6639b097aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager">
+      <UniqueIdentifier>{1aceccaa-a99c-44dc-a2cb-e0f5d97215cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACModel">
+      <UniqueIdentifier>{527b7eec-c255-4693-9edb-1aa73db7a964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACModel">
+      <UniqueIdentifier>{6759b451-372a-4ec6-a5eb-bf25a43ba506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACLine">
+      <UniqueIdentifier>{88b10bfb-3efc-4508-8ab4-2e19a4297156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACLine">
+      <UniqueIdentifier>{580e82b6-970f-4be2-b092-223d132daae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACQuad">
+      <UniqueIdentifier>{31558bed-9435-4858-a7d6-2e049be1deeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACFont">
+      <UniqueIdentifier>{ecf49620-7adc-4dad-a59c-18a311ffc730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sprites">
+      <UniqueIdentifier>{1654c6a8-3771-4379-82cf-b6408d86273a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sprites">
+      <UniqueIdentifier>{bc8cf0e6-e38c-4912-afac-9106477b677e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\InputEngine">
+      <UniqueIdentifier>{d83e3f49-9f50-4f54-98a0-1b0a6d771dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\InputEngine">
+      <UniqueIdentifier>{cbe38bed-c6b1-422d-9d79-1f09ad14fcfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Particles">
+      <UniqueIdentifier>{8017ccf8-ed15-422e-8056-863bc2c8ebed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Particles">
+      <UniqueIdentifier>{15b71c10-a7c5-4cd7-b824-6d77fc2edffc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\NetworkEngine">
+      <UniqueIdentifier>{7d2dcb4b-0922-44da-9bf3-eaaedc7193ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\NetworkEngine">
+      <UniqueIdentifier>{c07132bc-a04c-40a6-b216-93c3c3cb269e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\AudioEngine">
+      <UniqueIdentifier>{bd3c4a96-5325-4d5d-b7b7-337f08b6f846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AudioEngine">
+      <UniqueIdentifier>{afa7af34-fee1-46ea-8bd8-2211589c3765}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACSkin">
+      <UniqueIdentifier>{07e42575-e85b-4af9-8d8b-5d7883f14a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACSkin">
+      <UniqueIdentifier>{2a23f929-df20-4493-9e5b-118dfac9a340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACSound">
+      <UniqueIdentifier>{1c364595-1a90-422b-8974-5daf2ea8b2d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACSound">
+      <UniqueIdentifier>{c8fb3fab-88c1-4526-9ded-92b0b9ac6e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACShader">
+      <UniqueIdentifier>{ab5c30a3-61d5-4294-8cca-d7912bf45819}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACBuffers">
+      <UniqueIdentifier>{d3245945-a89c-41be-b21a-17a35ea4b56d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACFont">
+      <UniqueIdentifier>{08ea42b2-bc29-4317-a9f2-bd9ea8483b3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ACRenderDevice.h">
+      <Filter>Header Files\Engine\RenderEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACRenderer.h">
+      <Filter>Header Files\Engine\RenderEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ACCamera.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ACModel.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ACTimeControl.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ACTimeAccum.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ACModelDefinition.h">
+      <Filter>Header Files\ContentManager\ACModel</Filter>
+    </ClInclude>
+    <ClInclude Include="ACLineManager.h">
+      <Filter>Header Files\ContentManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ACLineStruct.h">
+      <Filter>Header Files\ContentManager\ACLine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAMTStructs.h">
+      <Filter>Header Files\ContentManager\ACModel</Filter>
+    </ClInclude>
+    <ClInclude Include="ACLine.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ACLineList.h">
+      <Filter>Header Files\ContentManager\ACLine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACQuadStruct.h">
+      <Filter>Header Files\ContentManager\ACQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="ACSpriteBatch.h">
+      <Filter>Header Files\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="ACTimer.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ACInput.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACInputDevice.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACKeyboard.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACMouse.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACKeyboardState.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACMouseState.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACInputEnums.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACParticles.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ACRandom.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ACRenderDeviceEnums.h">
+      <Filter>Header Files\Engine\RenderEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACParticleTypes.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ACNetwork.h">
+      <Filter>Header Files\Engine\NetworkEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACNetworkDevice.h">
+      <Filter>Header Files\Engine\NetworkEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACPackage.h">
+      <Filter>Header Files\Engine\NetworkEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAudio.h">
+      <Filter>Header Files\Engine\AudioEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACTexture.h">
+      <Filter>Header Files\ContentManager\ACSkin</Filter>
+    </ClInclude>
+    <ClInclude Include="ACMaterial.h">
+      <Filter>Header Files\ContentManager\ACSkin</Filter>
+    </ClInclude>
+    <ClInclude Include="ACSkin.h">
+      <Filter>Header Files\ContentManager\ACSkin</Filter>
+    </ClInclude>
+    <ClInclude Include="ACContentManager.h">
+      <Filter>Header Files\ContentManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ACSoundSource.h">
+      <Filter>Header Files\ContentManager\ACSound</Filter>
+    </ClInclude>
+    <ClInclude Include="ACSound.h">
+      <Filter>Header Files\ContentManager\ACSound</Filter>
+    </ClInclude>
+    <ClInclude Include="ACShaders.h">
+      <Filter>Header Files\ContentManager\ACShader</Filter>
+    </ClInclude>
+    <ClInclude Include="ACVertexBuffer.h">
+      <Filter>Header Files\ContentManager\ACBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="ACVertexFormat.h">
+      <Filter>Header Files\ContentManager\ACBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAMTLoader.h">
+      <Filter>Header Files\ContentManager\ACModel</Filter>
+    </ClInclude>
+    <ClInclude Include="ACFont.h">
+      <Filter>Header Files\ContentManager\ACFont</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAFTLoader.h">
+      <Filter>Header Files\ContentManager\ACFont</Filter>
+    </ClInclude>
+    <ClInclude Include="ACUtils.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ACRenderer.cpp">
+      <Filter>Source Files\Engine\RenderEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACCamera.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="ACModel.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="ACTimeAccum.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ACTimeControl.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ACModelDefinition.cpp">
+      <Filter>Source Files\ContentManager\ACModel</Filter>
+    </ClCompile>
+    <ClCompile Include="ACLineManager.cpp">
+      <Filter>Source Files\ContentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ACLineStruct.cpp">
+      <Filter>Source Files\ContentManager\ACLine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACLine.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="ACLineList.cpp">
+      <Filter>Source Files\ContentManager\ACLine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACSpriteBatch.cpp">
+      <Filter>Source Files\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="ACInput.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACKeyboard.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACMouse.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACKeyboardState.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACMouseState.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACParticles.cpp">
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ACNetwork.cpp">
+      <Filter>Source Files\Engine\NetworkEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAudioDevice.h">
+      <Filter>Header Files\Engine\AudioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAudio.cpp">
+      <Filter>Source Files\Engine\AudioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACSkin.cpp">
+      <Filter>Source Files\ContentManager\ACSkin</Filter>
+    </ClCompile>
+    <ClCompile Include="ACContentManager.cpp">
+      <Filter>Source Files\ContentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ACSoundSource.cpp">
+      <Filter>Source Files\ContentManager\ACSound</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAMTLoader.cpp">
+      <Filter>Source Files\ContentManager\ACModel</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAFTLoader.cpp">
+      <Filter>Source Files\ContentManager\ACFont</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,1 @@
+copy ..\ActionEditor\Content\*.amt Demo\Contents\Models

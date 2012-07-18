@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D32BC7D9-98F2-4097-9241-230C832E3331}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\EngineMath;..\EngineCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+    <Lib>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\EngineMath;..\EngineCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EngineCommon\EngineCommon.vcxproj">
+      <Project>{44c56719-8796-4c81-a41e-22e0f317af30}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\EngineMath\EngineMath.vcxproj">
+      <Project>{a3e6756c-d2fe-4c94-ba66-de5c1e63e918}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ACAFTLoader.h" />
+    <ClInclude Include="ACAMTLoader.h" />
+    <ClInclude Include="ACAMTStructs.h" />
+    <ClInclude Include="ACAudio.h" />
+    <ClInclude Include="ACContentManager.h" />
+    <ClInclude Include="ACMaterial.h" />
+    <ClInclude Include="ACNetwork.h" />
+    <ClInclude Include="ACNetworkDevice.h" />
+    <ClInclude Include="ACPackage.h" />
+    <ClInclude Include="ACParticles.h" />
+    <ClInclude Include="ACInput.h" />
+    <ClInclude Include="ACInputDevice.h" />
+    <ClInclude Include="ACInputEnums.h" />
+    <ClInclude Include="ACKeyboard.h" />
+    <ClInclude Include="ACKeyboardState.h" />
+    <ClInclude Include="ACMouse.h" />
+    <ClInclude Include="ACMouseState.h" />
+    <ClInclude Include="ACRandom.h" />
+    <ClInclude Include="ACRenderDeviceEnums.h" />
+    <ClInclude Include="ACShaders.h" />
+    <ClInclude Include="ACSkin.h" />
+    <ClInclude Include="ACSound.h" />
+    <ClInclude Include="ACSoundSource.h" />
+    <ClInclude Include="ACFont.h" />
+    <ClInclude Include="ACLine.h" />
+    <ClInclude Include="ACLineList.h" />
+    <ClInclude Include="ACLineStruct.h" />
+    <ClInclude Include="ACLineManager.h" />
+    <ClInclude Include="ACModelDefinition.h" />
+    <ClInclude Include="ACQuadStruct.h" />
+    <ClInclude Include="ACRenderDevice.h" />
+    <ClInclude Include="ACRenderer.h" />
+    <ClInclude Include="ACSpriteBatch.h" />
+    <ClInclude Include="ACTexture.h" />
+    <ClInclude Include="ACCamera.h" />
+    <ClInclude Include="ACTimer.h" />
+    <ClInclude Include="ACUtils.h" />
+    <ClInclude Include="ACVertexBuffer.h" />
+    <ClInclude Include="ACVertexFormat.h" />
+    <ClInclude Include="EngineMain.h" />
+    <ClInclude Include="ACModel.h" />
+    <ClInclude Include="ACTimeAccum.h" />
+    <ClInclude Include="ACTimeControl.h" />
+    <ClInclude Include="ACParticleTypes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ACAFTLoader.cpp" />
+    <ClCompile Include="ACAMTLoader.cpp" />
+    <ClCompile Include="ACAudio.cpp" />
+    <ClCompile Include="ACAudioDevice.h" />
+    <ClCompile Include="ACContentManager.cpp" />
+    <ClCompile Include="ACInput.cpp" />
+    <ClCompile Include="ACKeyboard.cpp" />
+    <ClCompile Include="ACKeyboardState.cpp" />
+    <ClCompile Include="ACMouse.cpp" />
+    <ClCompile Include="ACMouseState.cpp" />
+    <ClCompile Include="ACNetwork.cpp" />
+    <ClCompile Include="ACParticles.cpp" />
+    <ClCompile Include="ACSkin.cpp" />
+    <ClCompile Include="ACSoundSource.cpp" />
+    <ClCompile Include="ACLine.cpp" />
+    <ClCompile Include="ACLineList.cpp" />
+    <ClCompile Include="ACLineStruct.cpp" />
+    <ClCompile Include="ACLineManager.cpp" />
+    <ClCompile Include="ACModelDefinition.cpp" />
+    <ClCompile Include="ACRenderer.cpp" />
+    <ClCompile Include="ACCamera.cpp" />
+    <ClCompile Include="ACModel.cpp" />
+    <ClCompile Include="ACSpriteBatch.cpp" />
+    <ClCompile Include="ACTimeAccum.cpp" />
+    <ClCompile Include="ACTimeControl.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
