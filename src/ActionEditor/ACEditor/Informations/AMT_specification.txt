@@ -1,0 +1,127 @@
+    public struct AMT_HEAD
+    {
+        public byte Version;
+        public uint NumVertices;
+        public uint NumIndices;
+        public uint NumFaces;
+        public uint NumMeshes;
+        public uint NumMaterials;
+        public uint NumJoints;
+        public float AnimationFPS;
+        public float CurrentTime;
+        public uint NumFrames;
+        public uint NumAnimations;
+    }
+
+    public struct AMT_VERTEX
+    {
+        public Vector3 Position;
+        public Vector2 TexCoord1;                 // UV 0 Texturescoor.
+        public Vector2 TexCoord2;                 // UV 1 Texturescoor.
+        public Vector3 Normal;                    // Normalvector
+        public uint BoneCount;                     // Numero de bones
+        public List<uint> BoneID;                  // Id dos bones q influenciam o vertice
+        public List<float> BoneWeight;              // peso do bone sobre o vertices
+        public byte Flag;                          // flag para objetivos diversos
+
+        public static bool operator ==(AMT_VERTEX v1, AMT_VERTEX v2)
+        {
+            if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 || 
+                v1.Normal != v2.Normal || v1.BoneCount != v2.BoneCount ||
+                v1.BoneID != v2.BoneID || v1.BoneWeight != v2.BoneWeight)
+                return false;
+
+            return (v1.Flag == v2.Flag);
+        }
+
+        public static bool operator !=(AMT_VERTEX v1, AMT_VERTEX v2)
+        {
+            if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 ||
+                v1.Normal != v2.Normal || v1.BoneCount != v2.BoneCount ||
+                v1.BoneID != v2.BoneID || v1.BoneWeight != v2.BoneWeight)
+                return true;
+
+            return (v1.Flag != v2.Flag);
+        }
+    }
+
+    public struct AMT_FACE
+    {
+        public List<int> Indices;            // Indices
+        public Vector3 Normal;              // Normalvector
+        public uint MeshID;             // MeshID
+        public uint MaterialID;         // MaterialID
+        public byte Flag;              // Flags
+    }
+
+    public struct AMT_MATERIAL
+    {
+        public string Name;                         // Name
+        public Vector4 Ambient;                       // Color Ambient
+        public Vector4 Diffuse;                       // Color Diffuse
+        public Vector4 Specular;                      // Color Specular
+        public Vector4 Emissive;                      // Color Emissive
+        public float SpecularPower;                      // Specular Power
+        public float Transparency;                       // Transparency
+        public uint TextureCount;
+        public List<string> TextureNames;
+        public byte Flag;                             // Flags
+    }
+
+    public struct AMT_MESH
+    {
+        public string Name;                         // Name
+        public int NumFaces;                         // Number of Faces
+        public List<int> Indices;                     // Faceindex
+        public uint MaterialID;                        // MaterialID
+        public byte Flag;                             // Flags
+    }
+
+    public struct AMT_KF_ROT
+    {
+        public float Time;                               // Time
+        public Vector3 Rotation;                           // Rotation
+    }
+
+    public struct AMT_KF_POS
+    {
+        public float Time;                               // Time
+        public Vector3 Position;                           // Position
+    }
+
+    public struct AMT_JOINT
+    {
+        public string Name;                         // Descriptor
+        public string ParentName;                   // Parentdescriptor
+        public uint ParentID;                           // ParentID
+        public Vector4 Rotation;                           // Rotation
+        public Vector4 Position;                           // Position
+        public uint NumKFRotation;                     // Number of KF_Rots
+        public uint NumKFPosition;                     // Number of KF_Pos
+        public List<AMT_KF_ROT> KFRotation;                        // KF Rotations
+        public List<AMT_KF_POS> KFPosition;                        // Position
+        public bool IsAnimated;                           // Animiert
+        public byte Flag;                             // Flags
+        public Matrix Matrix;                             // Matrix
+        public Matrix MatrixAbsolute;                    // Matrix absolute
+        public Matrix MatrixRelative;                    // Matrix relativ
+    }
+
+    public struct AMT_ANIMATION
+    {
+        public string Name;                         
+        public float StartFrame;                    
+        public float EndFrame;                      
+        public bool Active;                         
+    }
+
+    public struct AMT_MODEL
+    {
+        public AMT_HEAD Head;                 // Header
+        public List<AMT_VERTEX> Vertices;             // Vertices
+        public List<AMT_FACE> Faces;                // Faces
+        public List<AMT_MESH> Meshes;                // Meshs
+        public List<AMT_MATERIAL> Materials;            // Materials
+        public List<AMT_JOINT> Joints;               // Joints
+        public List<AMT_ANIMATION> Animation;            // Animations
+    } 
