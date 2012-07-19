@@ -1,0 +1,4 @@
+- Instalar o OpenalSDK dentro da pasta instalacoes
+- Colocar as referencias para Openal no projeto acopenal
+- Referenciar a pasta lib e include do OggVorbis-win32sdk-1.0
+- Copiar da pasta bin as dlls para dentro da pasta debug do projeto
