@@ -15,9 +15,9 @@ LinePointTest::LinePointTest(ACRenderDevice* gDevice, ACContentManager* cManager
 	bbLines = ACUtils::CreateBBLines(bb, Vector4(1,0,1,1));
 
 	//cria um BS com 360 vertices strip
-	Vector3 center(200,100,0);
+	Vector3 center(200,150,0);
 	BoundingSphere bs(&center, 50);
-	bsLines = ACUtils::CreateSphereLines(bs, Vector4(1,1,0,1));
+	bsLines = ACUtils::CreateSphereLines(bs, Vector4(1,0,0,1), Vector4(0,1,0,1), Vector4(0,0,1,1));
 
 	//cria trocentos pontos
 	points = new ACVertexPositionColored[40];
@@ -71,7 +71,7 @@ void LinePointTest::Render(ACCamera* camera)
 
 	mpGDevice->RenderLines(2,0,lines,nullptr,true);
 	mpGDevice->RenderLines(24,0,bbLines,nullptr,false);
-	mpGDevice->RenderLines(360,0,bsLines,nullptr,true);
+	mpGDevice->RenderLines(360,0,bsLines,nullptr,false);
 
 	mpGDevice->RenderPoints(40,points);
 };

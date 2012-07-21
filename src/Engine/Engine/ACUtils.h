@@ -15,7 +15,7 @@ class ACUtils
 public:
 	static ACVertexPositionColored* CreateLine(const Vector3& init, const Vector4& initColor, const Vector3& final, const Vector4& finalColor);
 	static ACVertexPositionColored* CreateBBLines(const BoundingBox& bb, const Vector4& color);
-	static ACVertexPositionColored* CreateSphereLines(const BoundingSphere& bs, const Vector4& color);
+	static ACVertexPositionColored* CreateSphereLines(const BoundingSphere& bs, const Vector4& color1, const Vector4& color2, const Vector4& color3);
 
 };
 
@@ -94,35 +94,103 @@ inline ACVertexPositionColored* ACUtils::CreateBBLines(const BoundingBox& bb, co
 };
 
 //Return 360 vertices, USE Strip
-inline ACVertexPositionColored* ACUtils::CreateSphereLines(const BoundingSphere& bs, const Vector4& color)
+inline ACVertexPositionColored* ACUtils::CreateSphereLines(const BoundingSphere& bs, const Vector4& color1, const Vector4& color2, const Vector4& color3)
 {
 	int i = 0;
+	int angle = 0;
 	ACVertexPositionColored* circle = new ACVertexPositionColored[360];
 
-	Vector3 p =  Vector3(bs.Center.X + cos(MathHelper::ToRadians((float)0)) * bs.Radius, 
-						 bs.Center.Y + sin(MathHelper::ToRadians((float)0)) * bs.Radius, 
-						 bs.Center.Z);
-	circle[0].position = p;
-	circle[0].color = color;
+	Vector3 p;
 
-	for (i = 1; i < 360; i++)
+	//circulo 1
+	for (i = 0; i < 119; i++)
 	{
-		if (i < 180)
-		{
-			p.X = bs.Center.X + cos(MathHelper::ToRadians((float)i * 2)) * bs.Radius;
-			p.Y = bs.Center.Y + sin(MathHelper::ToRadians((float)i * 2)) * bs.Radius;
-			p.Z = bs.Center.Z;
-		} else if (i >= 180 && i < 360)
-		{
-			p.X = bs.Center.X + cos(MathHelper::ToRadians((float)(i - 180) * 2)) * bs.Radius;
-			p.Y = bs.Center.Y;
-			p.Z = bs.Center.Z + sin(MathHelper::ToRadians((float)(i - 180) * 2)) * bs.Radius;
-		}
+		p.X = bs.Center.X + cos(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+		p.Y = bs.Center.Y + sin(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+		p.Z = bs.Center.Z;
 
 		circle[i].position = p;
-		circle[i].color = color;
+		circle[i].color = color1;
+
+		angle++;
+
+		//o ultimo vertice junta com o primeiro
+		if (i < 118)
+		{
+			p.X = bs.Center.X + cos(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+			p.Y = bs.Center.Y + sin(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+			p.Z = bs.Center.Z;
+
+			i++;
+			circle[i].position = p;
+			circle[i].color = color1;
+		}
+		else
+			circle[119] = circle[0];
+
+		angle++;
+	}
+	
+	//circulo2
+	angle = 0;
+	for (i = 120; i < 239; i++)
+	{
+		p.X = bs.Center.X + cos(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+		p.Y = bs.Center.Y;
+		p.Z = bs.Center.Z + sin(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+
+		circle[i].position = p;
+		circle[i].color = color2;
+
+		angle++;
+
+		//o ultimo vertice junta com o primeiro
+		if (i < 238)
+		{
+			p.X = bs.Center.X + cos(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+			p.Y = bs.Center.Y;
+			p.Z = bs.Center.Z + sin(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+
+			i++;
+			circle[i].position = p;
+			circle[i].color = color2;
+		}
+		else
+			circle[239] = circle[120];
+
+		angle++;
 	}
 
+	//circulo3
+	angle = 0;
+	for (i = 240; i < 359; i++)
+	{
+		p.X = bs.Center.X;
+		p.Y = bs.Center.Y + cos(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+		p.Z = bs.Center.Z + sin(MathHelper::ToRadians((float)angle * 3)) * bs.Radius;
+
+		circle[i].position = p;
+		circle[i].color = color3;
+
+		angle++;
+
+		//o ultimo vertice junta com o primeiro
+		if (i < 358)
+		{
+			p.X = bs.Center.X;
+			p.Y = bs.Center.Y + cos(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+			p.Z = bs.Center.Z + sin(MathHelper::ToRadians((float)(angle+1) * 3)) * bs.Radius;
+
+			i++;
+			circle[i].position = p;
+			circle[i].color = color3;
+		}
+		else
+			circle[359] = circle[240];
+
+		angle++;
+	}
+	
 	return circle;
 };
 
