@@ -8,6 +8,7 @@ ACOpenAL.txt
 NetworkLOG.txt
 RenderLOG.txt
 XAudioLOG.txt
+Log.txt
 
 #Visual Studio files
 *.[Oo]bj

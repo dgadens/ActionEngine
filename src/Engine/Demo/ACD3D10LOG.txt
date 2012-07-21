@@ -1,6 +1,0 @@
-Begin Init
-Create device success.
-VideoCardMemory: 64 (in megabytes).
-Add viewport
-Init Success
-Goto Fullscreen success. GoFullscreen()
