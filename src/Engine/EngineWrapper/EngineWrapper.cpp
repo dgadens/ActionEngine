@@ -6,32 +6,33 @@ DLLEXPORT HRESULT InitWrapper(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL save
 	ACGlobals::ENABLE_LOG = saveLog;
 	ACGlobals::EDITOR_MODE = true;
 
-	pRendererWrapper = CreateRenderer(hInst);
-
-	//cria o dispositivo grafico
-	if (FAILED(pRendererWrapper->CreateDevice(chAPI)))
+	#pragma region CRIA GRAPHICSDEVICE
+	//*** CRIA O PONTEIRO PARA O GRAPHICSDEVICE ***
+	//cria o objeto renderizador
+	pRenderer = new ACRenderer(hInst);
+	if (FAILED(pRenderer->CreateDevice(chAPI)))
 		return E_FAIL;
+	pRenderDevice = pRenderer->GetDevice();
+	if (pRenderDevice == nullptr) 
+		return E_FAIL;
+	if (FAILED(pRenderDevice->Init(hWnd, false, true)))
+		return AC_FAIL;
+	//ativa a janela principal
+	pRenderDevice->SetActiveViewport(hWnd);
+	#pragma endregion
 
-	//salva o ponteiro para o graphicsdevice
-	pDeviceWrapper = pRendererWrapper->GetDevice();
-
-	if (pDeviceWrapper == nullptr) return E_FAIL;
-
+	#pragma region CRIA CAMERA
 	RECT rcWnd;
 	//pega a area do cliente
 	GetClientRect(hWnd, &rcWnd);
 
-	//inicializa a vp principal
-	pDeviceWrapper->Init(hWnd, false, false);	
-	
-	mapSceneManagerWrapper.insert(std::pair<HWND, PACSCENEMANAGER>(hWnd,new ACSCENEMANAGER()));
-
-	PACCAMERA pCamera = new ACCAMERA();
+	ACCamera* pCamera = new ACCamera();
 	pCamera->SetWidth(rcWnd.right - rcWnd.left);
 	pCamera->SetHeight(rcWnd.bottom - rcWnd.top);
 	pCamera->ResetCamera();
 
-	mapCamerasWrapper.insert(std::pair<HWND, PACCAMERA>(hWnd, pCamera));
+	mapCameras.insert(std::pair<HWND, ACCamera*>(hWnd, pCamera));
+	#pragma endregion
 
 	mActiveWnd = hWnd;
 
@@ -44,16 +45,14 @@ DLLEXPORT HRESULT AddViewportWrapper(HWND hWnd)
 	GetClientRect(hWnd, &rcWnd);
 
 	//adiciona uma nova vp
-	pDeviceWrapper->AddViewport(hWnd, false);	
+	pRenderDevice->AddViewport(hWnd, false);
 
-	mapSceneManagerWrapper.insert(std::pair<HWND, PACSCENEMANAGER>(hWnd,new ACSCENEMANAGER()));
-
-	PACCAMERA pCamera = new ACCAMERA();
+	ACCamera* pCamera = new ACCamera();
 	pCamera->SetWidth(rcWnd.right - rcWnd.left);
 	pCamera->SetHeight(rcWnd.bottom - rcWnd.top);
 	pCamera->ResetCamera();
 
-	mapCamerasWrapper.insert(std::pair<HWND, PACCAMERA>(hWnd, pCamera));
+	mapCameras.insert(std::pair<HWND, ACCamera*>(hWnd, pCamera));
 
 	mActiveWnd = hWnd;
 
@@ -68,7 +67,7 @@ DLLEXPORT void DropViewportWrapper(HWND hWnd)
 
 DLLEXPORT void SetWindowSizeWrapper(HWND hWnd, int width, int height)
 {
-	PACCAMERA pCamera = mapCamerasWrapper[hWnd];
+	ACCamera* pCamera = mapCameras[hWnd];
 	pCamera->SetWidth(width);
 	pCamera->SetHeight(height);
 };
@@ -76,43 +75,32 @@ DLLEXPORT void SetWindowSizeWrapper(HWND hWnd, int width, int height)
 DLLEXPORT void ActiveViewportWrapper(HWND hWnd)
 {
 	mActiveWnd = hWnd;
-	pDeviceWrapper->SetActiveViewport(mActiveWnd);
+	pRenderDevice->SetActiveViewport(mActiveWnd);
 };
 
 DLLEXPORT void SetClearColorWrapper(float r, float g, float b)
 {
-	pDeviceWrapper->SetClearColor(r, g, b);
+	pRenderDevice->SetClearColor(Vector4(r, g, b, 1));
 };
 DLLEXPORT void LockWrapper()
 {
-	pDeviceWrapper->IsRunning = false;
+	pRenderDevice->IsRunning = false;
 };
 DLLEXPORT void UnlockWrapper()
 {
-	pDeviceWrapper->IsRunning = true;
+	pRenderDevice->IsRunning = true;
 };
 
 //update
 DLLEXPORT void UpdateWrapper()
 {
 	ACTimeControl::Update();
-	if (pDeviceWrapper->IsRunning)
+	if (pRenderDevice->IsRunning)
 	{
-		typedef std::map<HWND, PACCAMERA>::const_iterator It; 
-		for(It i = mapCamerasWrapper.begin(); i != mapCamerasWrapper.end(); ++i)
+		for(auto i = mapCameras.begin(); i != mapCameras.end(); ++i)
 		{
-			PACCAMERA pCamera = i->second;
+			ACCamera* pCamera = i->second;
 			pCamera->Update();
-
-			for (int j = 0; j < mapSceneManagerWrapper[i->first]->GetModelCount(); j++)
-			{
-				PACMODEL m = mapSceneManagerWrapper[i->first]->GetModel(j);
-				m->SetAbsolutePosition(0, 0, -200);
-				m->SetAbsoluteScale(200.0f,200.0f,200.0f);
-				m->AddToRotation(0, ACTimeControl::GetFElapsedTime()*3, 0);
-			}
-
-			mapSceneManagerWrapper[i->first]->Update(ACTimeControl::GetFElapsedTime());
 		}
 	}
 };
@@ -121,72 +109,42 @@ DLLEXPORT void UpdateWrapper()
 DLLEXPORT void RenderWrapper()
 {
 	//render
-	if (pDeviceWrapper->IsRunning)
+	if (pRenderDevice->IsRunning)
 	{
-		//percorre as vps e renderiza todas, como existe uma camera para cada cena entao ele usa pra renderizar a scena certa na vp certa
-		typedef std::map<HWND, PACCAMERA>::const_iterator It; 
-		for(It i = mapCamerasWrapper.begin(); i != mapCamerasWrapper.end(); ++i)
-		{
-			PACCAMERA pCamera = i->second;
-			pDeviceWrapper->SetActiveRenderingViewport(i->first);
-			pDeviceWrapper->BeginRendering();
-			mapSceneManagerWrapper[i->first]->RenderAllModels(pCamera);
-			pDeviceWrapper->EndRendering();
-		}
+		////percorre as vps e renderiza todas, como existe uma camera para cada cena entao ele usa pra renderizar a scena certa na vp certa
+		//typedef std::map<HWND, ACCamera*>::const_iterator It; 
+		//for(It i = mapCameras.begin(); i != mapCameras.end(); ++i)
+		//{
+		//	ACCamera* pCamera = i->second;
+		//	pRenderDevice->SetActiveRenderingViewport(i->first);
+		//	pRenderDevice->BeginRendering();
+		//	mapSceneManagerWrapper[i->first]->RenderAllModels(pCamera);
+		//	pRenderDevice->EndRendering();
+		//}
 	}
 
 	VerifyDropViews();
 };
 DLLEXPORT void ReleaseWrapper()
 {
-	delete pRendererWrapper;
-	pRendererWrapper = nullptr;
+	SAFE_DELETE(pRenderer);
 };
 //fim engine methods
-
-
-// Model methods
-DLLEXPORT void AddModelWrapper(char* name)
-{
-	//MessageBoxA(nullptr, "Foi", "abc", 0);
-	PACMODEL model = new ACMODEL(pDeviceWrapper);
-	model->Load(name, ET_Textured);
-	pDeviceWrapper->AddModel(model);
-	mapSceneManagerWrapper[mActiveWnd]->AddModel(model);
-};
-DLLEXPORT void ShowNormalsWrapper(char* name, bool value)
-{
-	mapSceneManagerWrapper[mActiveWnd]->GetModel(0)->SetRenderNormals(value);
-};
-
-DLLEXPORT void ShowBBsWrapper(char* name, bool value)
-{
-	mapSceneManagerWrapper[mActiveWnd]->GetModel(0)->SetRenderBB(value);
-};
-
-DLLEXPORT void ShowBonesWrapper(char* name, bool value)
-{
-	mapSceneManagerWrapper[mActiveWnd]->GetModel(0)->SetRenderBones(value);
-};
-//fim model methods
 
 
 
 //verifica se alguma vp foi deletada
 void VerifyDropViews()
 {
-	pDeviceWrapper->IsRunning = false;
+	pRenderDevice->IsRunning = false;
 	for ( int i = 0; i < vecDropVpList.size(); i++)
 	{
 		HWND hWnd = vecDropVpList[i];
-		pDeviceWrapper->DropViewport(hWnd);	
+		pRenderDevice->DropViewport(hWnd);	
 		
-		mapCamerasWrapper[hWnd]->Release();
-		mapCamerasWrapper.erase(hWnd);
-		
-		mapSceneManagerWrapper[hWnd]->ReleaseAll();
-		mapSceneManagerWrapper.erase(hWnd);
+		mapCameras[hWnd]->Release();
+		mapCameras.erase(hWnd);
 	}
 	vecDropVpList.clear();
-	pDeviceWrapper->IsRunning = true;
+	pRenderDevice->IsRunning = true;
 };

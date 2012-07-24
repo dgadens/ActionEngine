@@ -14,7 +14,7 @@ LinePointTest::LinePointTest(ACRenderDevice* gDevice, ACContentManager* cManager
 	BoundingBox bb(&min, &max);
 	bbLines = ACUtils::CreateBBLines(bb, Vector4(1,0,1,1));
 
-	//cria um BS com 360 vertices strip
+	//cria um BS com 360 vertices nao strip
 	Vector3 center(200,150,0);
 	BoundingSphere bs(&center, 50);
 	bsLines = ACUtils::CreateSphereLines(bs, Vector4(1,0,0,1), Vector4(0,1,0,1), Vector4(0,0,1,1));

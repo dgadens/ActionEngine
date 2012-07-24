@@ -12,12 +12,11 @@
 #include "EngineMain.h"
 #include "EngineCommon.h"
 
-std::map<HWND, PACCAMERA>		mapCamerasWrapper;
-std::map<HWND, PACSCENEMANAGER>	mapSceneManagerWrapper;
+std::map<HWND, ACCamera*>		mapCameras;
 HWND							mActiveWnd; //janela ativa para manipulacao nao renderizacao a renderizacao sempre renderiza todas
 std::vector<HWND>               vecDropVpList;
-PACRENDERER						pRendererWrapper;
-PACRENDERDEVICE					pDeviceWrapper;
+ACRenderer*						pRenderer;
+ACRenderDevice*					pRenderDevice;	
 
 //engine methods
 DLLEXPORT HRESULT InitWrapper(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL saveLog);
@@ -32,13 +31,6 @@ DLLEXPORT void UpdateWrapper();
 DLLEXPORT void RenderWrapper();
 DLLEXPORT void ReleaseWrapper();
 //fim engine methods
-
-//model methods
-DLLEXPORT void AddModelWrapper(char* name);
-DLLEXPORT void ShowNormalsWrapper(char* name, bool value);
-DLLEXPORT void ShowBBsWrapper(char* name, bool value);
-DLLEXPORT void ShowBonesWrapper(char* name, bool value);
-//fim model methods
 
 //metodo q remove tudo q tem na pulha de vps
 void VerifyDropViews();
