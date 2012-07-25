@@ -19,17 +19,17 @@ ACRenderer*						pRenderer;
 ACRenderDevice*					pRenderDevice;	
 
 //engine methods
-DLLEXPORT HRESULT InitWrapper(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL saveLog);
-DLLEXPORT HRESULT AddViewportWrapper(HWND hWnd);
-DLLEXPORT void DropViewportWrapper(HWND);
-DLLEXPORT void SetWindowSizeWrapper(HWND hWnd, int width, int height);
-DLLEXPORT void SetClearColorWrapper(float r, float g, float b);
-DLLEXPORT void ActiveViewportWrapper(HWND);
-DLLEXPORT void LockWrapper();
-DLLEXPORT void UnlockWrapper();
-DLLEXPORT void UpdateWrapper();
-DLLEXPORT void RenderWrapper();
-DLLEXPORT void ReleaseWrapper();
+DLLEXPORT HRESULT InitializeGraphicsDevice(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL saveLog);
+DLLEXPORT HRESULT AddViewport(HWND hWnd);
+DLLEXPORT void DropViewport(HWND);
+DLLEXPORT void SetWindowSize(HWND hWnd, int width, int height);
+DLLEXPORT void SetClearColor(float r, float g, float b);
+DLLEXPORT void ActiveViewport(HWND);
+DLLEXPORT void Lock();
+DLLEXPORT void Unlock();
+DLLEXPORT void Update();
+DLLEXPORT void Render();
+DLLEXPORT void Release();
 //fim engine methods
 
 //metodo q remove tudo q tem na pulha de vps

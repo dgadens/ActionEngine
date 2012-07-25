@@ -12,45 +12,47 @@ namespace ACFramework
     public class ACGraphics
     {
         #region Metodos externos
-        [DllImport(ACGlobals.dllPath, EntryPoint = "InitWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr InitW(IntPtr hInst,
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "InitializeGraphicsDevice", CallingConvention = CallingConvention.Cdecl)]
+        static extern IntPtr __InitializeGraphicsDevice(IntPtr hInst,
                                    [MarshalAs(UnmanagedType.LPStr)] string chAPI,
                                    IntPtr hWnd,
                                    [MarshalAs(UnmanagedType.Bool)] bool saveLog);
 
-        [DllImport(ACGlobals.dllPath, EntryPoint = "AddViewportWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr AddViewportW(IntPtr hWnd);
-        [DllImport(ACGlobals.dllPath, EntryPoint = "DropViewportWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void DropViewportW(IntPtr hWnd);
-        [DllImport(ACGlobals.dllPath, EntryPoint = "ActiveViewportWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void ActiveViewportW(IntPtr hWnd);
-        [DllImport(ACGlobals.dllPath, EntryPoint = "LockWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void LockW();
-        [DllImport(ACGlobals.dllPath, EntryPoint = "UnlockWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void UnlockW();
+        [DllImport(ACGlobals.dllPath, EntryPoint = "AddViewport", CallingConvention = CallingConvention.Cdecl)]
+        static extern IntPtr __AddViewport(IntPtr hWnd);
 
-        //usar o mesmo nome do methodo dentro da dll pra nao precisar do entrypoint
-        //[return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport(ACGlobals.dllPath, EntryPoint = "DropViewport", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __DropViewport(IntPtr hWnd);
 
-        [DllImport(ACGlobals.dllPath, EntryPoint = "AddModelWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void AddModelW([MarshalAs(UnmanagedType.LPStr)] string name);
-        [DllImport(ACGlobals.dllPath, EntryPoint = "ShowNormalsWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void ShowNormalsW([MarshalAs(UnmanagedType.LPStr)] string name);
-        [DllImport(ACGlobals.dllPath, EntryPoint = "ReleaseWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void ReleaseW();
-        [DllImport(ACGlobals.dllPath, EntryPoint = "SetWindowSizeWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void SetWindowSizeW(IntPtr hWnd,
+        [DllImport(ACGlobals.dllPath, EntryPoint = "SetWindowSize", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __SetWindowSize(IntPtr hWnd,
                                           [MarshalAs(UnmanagedType.I4)] int width,
                                           [MarshalAs(UnmanagedType.I4)] int height);
+        
+        [DllImport(ACGlobals.dllPath, EntryPoint = "ActiveViewport", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __ActiveViewport(IntPtr hWnd);
 
-        [DllImport(ACGlobals.dllPath, EntryPoint = "UpdateWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void UpdateW();
-        [DllImport(ACGlobals.dllPath, EntryPoint = "RenderWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void RenderW();
-        [DllImport(ACGlobals.dllPath, EntryPoint = "SetClearColorWrapper", CallingConvention = CallingConvention.Cdecl)]
-        static extern void SetClearColorW([MarshalAs(UnmanagedType.R4)] float r,
+        [DllImport(ACGlobals.dllPath, EntryPoint = "SetClearColor", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __SetClearColorW([MarshalAs(UnmanagedType.R4)] float r,
                                           [MarshalAs(UnmanagedType.R4)] float g,
                                           [MarshalAs(UnmanagedType.R4)] float b);
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "Lock", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __Lock();
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "Unlock", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __Unlock();
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "Update", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __Update();
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "Render", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __Render();
+
+        [DllImport(ACGlobals.dllPath, EntryPoint = "Release", CallingConvention = CallingConvention.Cdecl)]
+        static extern void __Release();
+
         #endregion
 
         public static bool MainInitialize = false;
@@ -72,7 +74,23 @@ namespace ACFramework
         {
             if (!MainInitialize)
             {
-                InitW(hInst, type.ToString(), mainHWND, saveLog);
+                string graphicsAPI = null;
+                switch (type)
+                {
+                    case APIType.DirectX9:   graphicsAPI = "ACD3D9Engine.dll";  break;
+                    case APIType.Direct3D10: graphicsAPI = "ACD3D10Engine.dll"; break;
+                    case APIType.Direct3D11: graphicsAPI = "ACD3D11Engine.dll"; break;
+                    case APIType.OpenGl2:    graphicsAPI = "OpenGl2Engine.dll"; break;
+                    case APIType.OpenGl3:    graphicsAPI = "OpenGl3Engine.dll"; break;
+                    case APIType.OpenGl4:    graphicsAPI = "OpenGl4Engine.dll"; break;
+                    default: throw new Exception("Graphics API not supported."); 
+                }
+
+                IntPtr hresult = __InitializeGraphicsDevice(hInst, graphicsAPI, mainHWND, saveLog);
+
+                if (hresult.ToInt32() != 0)
+                    throw new Exception("Error on graphics device initializer.");
+
                 MainInitialize = true;
                 hWndList.Add(mainHWND);
             }
@@ -81,58 +99,46 @@ namespace ACFramework
         public void AddViewport(IntPtr hWnd)
         {
             hWndList.Add(hWnd);
-            AddViewportW(hWnd);
+            __AddViewport(hWnd);
         }
 
         public void DropViewport(IntPtr hWnd)
         {
-            DropViewportW(hWnd);
+            __DropViewport(hWnd);
             hWndList.Remove(hWnd);
             if (hWndList.Count <= 0)
             {
-                ReleaseW();
+                __Release();
             }
         }
 
         public void DropAll()
         {
             for (int i = hWndList.Count - 1; i >= 0; i--)
-            {
-                DropViewport(hWndList[i]);
-            }
+                __DropViewport(hWndList[i]);
             hWndList.Clear();
         }
 
         public void ActiveViewport(IntPtr hWnd)
         {
-            ActiveViewportW(hWnd);
-        }
-
-        public void AddModel(string name)
-        {
-            AddModelW(name);
-        }
-
-        public void ShowNormals(string name)
-        {
-            ShowNormalsW(name);
+            __ActiveViewport(hWnd);
         }
 
         public void SetWindowSize(IntPtr hWnd, int width, int height)
         {
-            SetWindowSizeW(hWnd, width, height);
+            __SetWindowSize(hWnd, width, height);
         }
 
         public void SetClearColor(Vector3 value)
         {
-            SetClearColorW(value.X, value.Y, value.Z);
+            __SetClearColorW(value.X, value.Y, value.Z);
         }
 
         //renderiza
-        public void Draw()
+        public void Render()
         {
-            UpdateW();
-            RenderW();
+            __Update();
+            __Render();
         }
     }
 }

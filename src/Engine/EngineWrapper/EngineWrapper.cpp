@@ -1,7 +1,7 @@
 #include "EngineWrapper.h"
 
 //engine methods
-DLLEXPORT HRESULT InitWrapper(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL saveLog)
+DLLEXPORT HRESULT InitializeGraphicsDevice(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL saveLog)
 {
 	ACGlobals::ENABLE_LOG = saveLog;
 	ACGlobals::EDITOR_MODE = true;
@@ -38,7 +38,7 @@ DLLEXPORT HRESULT InitWrapper(HINSTANCE hInst, char *chAPI, HWND hWnd, BOOL save
 
 	return S_OK;
 };
-DLLEXPORT HRESULT AddViewportWrapper(HWND hWnd)
+DLLEXPORT HRESULT AddViewport(HWND hWnd)
 {
 	RECT rcWnd;
 	//pega a area do cliente
@@ -59,40 +59,40 @@ DLLEXPORT HRESULT AddViewportWrapper(HWND hWnd)
 	return S_OK;
 };
 
-DLLEXPORT void DropViewportWrapper(HWND hWnd)
+DLLEXPORT void DropViewport(HWND hWnd)
 {
 	//adiciona uma nova vp
 	vecDropVpList.push_back(hWnd);
 };
 
-DLLEXPORT void SetWindowSizeWrapper(HWND hWnd, int width, int height)
+DLLEXPORT void SetWindowSize(HWND hWnd, int width, int height)
 {
 	ACCamera* pCamera = mapCameras[hWnd];
 	pCamera->SetWidth(width);
 	pCamera->SetHeight(height);
 };
 
-DLLEXPORT void ActiveViewportWrapper(HWND hWnd)
+DLLEXPORT void ActiveViewport(HWND hWnd)
 {
 	mActiveWnd = hWnd;
 	pRenderDevice->SetActiveViewport(mActiveWnd);
 };
 
-DLLEXPORT void SetClearColorWrapper(float r, float g, float b)
+DLLEXPORT void SetClearColor(float r, float g, float b)
 {
 	pRenderDevice->SetClearColor(Vector4(r, g, b, 1));
 };
-DLLEXPORT void LockWrapper()
+DLLEXPORT void Lock()
 {
 	pRenderDevice->IsRunning = false;
 };
-DLLEXPORT void UnlockWrapper()
+DLLEXPORT void Unlock()
 {
 	pRenderDevice->IsRunning = true;
 };
 
 //update
-DLLEXPORT void UpdateWrapper()
+DLLEXPORT void Update()
 {
 	ACTimeControl::Update();
 	if (pRenderDevice->IsRunning)
@@ -106,7 +106,7 @@ DLLEXPORT void UpdateWrapper()
 };
 
 //draw
-DLLEXPORT void RenderWrapper()
+DLLEXPORT void Render()
 {
 	//render
 	if (pRenderDevice->IsRunning)
@@ -118,14 +118,14 @@ DLLEXPORT void RenderWrapper()
 		//	ACCamera* pCamera = i->second;
 		//	pRenderDevice->SetActiveRenderingViewport(i->first);
 		//	pRenderDevice->BeginRendering();
-		//	mapSceneManagerWrapper[i->first]->RenderAllModels(pCamera);
+		//	mapSceneManager[i->first]->RenderAllModels(pCamera);
 		//	pRenderDevice->EndRendering();
 		//}
 	}
 
 	VerifyDropViews();
 };
-DLLEXPORT void ReleaseWrapper()
+DLLEXPORT void Release()
 {
 	SAFE_DELETE(pRenderer);
 };

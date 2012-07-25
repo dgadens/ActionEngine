@@ -9,6 +9,9 @@ namespace ACFramework
     {
         DirectX9,
         Direct3D10,
-        OpenGl
+        Direct3D11,
+        OpenGl2,
+        OpenGl3,
+        OpenGl4
     }
 }

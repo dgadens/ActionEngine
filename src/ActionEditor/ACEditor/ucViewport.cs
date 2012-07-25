@@ -169,7 +169,7 @@ namespace ACEditor
 
         public void Draw()
         {
-            ACGraphics.Instance.Draw();
+            ACGraphics.Instance.Render();
         }
     }
 }
