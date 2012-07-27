@@ -102,6 +102,7 @@
     <ClInclude Include="ACD3D10ConstantBuffersStructs.h" />
     <ClInclude Include="ACD3D10Globals.h" />
     <ClInclude Include="ACD3D10Configurations.h" />
+    <ClInclude Include="ACD3D10RenderToTexture.h" />
     <ClInclude Include="ACD3D10Tools.h" />
     <ClInclude Include="ACD3D10VertexCache.h" />
     <ClInclude Include="ACD3D10VertexLayoutProvider.h" />
@@ -111,6 +112,7 @@
     <ClCompile Include="ACD3D10.cpp" />
     <ClCompile Include="ACD3D10Globals.cpp" />
     <ClCompile Include="ACD3D10Configurations.cpp" />
+    <ClCompile Include="ACD3D10RenderToTexture.cpp" />
     <ClCompile Include="ACD3D10VertexCache.cpp" />
     <ClCompile Include="ACD3D10VertexLayoutProvider.cpp" />
     <ClCompile Include="ACD3D10VertexManager.cpp" />

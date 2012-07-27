@@ -162,6 +162,9 @@ public:
 	virtual ACSHADEMODE GetShadeMode() = 0;
 	virtual void SetWireColor(const Vector3& color) = 0;
 
+	//tools
+	virtual HRESULT SaveScreenShoot(const std::string& path) = 0;
+
 	//render
 	virtual HRESULT BeginRendering() = 0;
 	//renderiza as linhas usando o vbdinamico

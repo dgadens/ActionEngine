@@ -102,6 +102,9 @@ public:
 	ACSHADEMODE GetShadeMode();
 	void SetWireColor(const Vector3& color);
 
+	//tools
+	HRESULT SaveScreenShoot(const std::string& path);
+
 	//Render
 	HRESULT BeginRendering();
 	void RenderLines(UINT numVertices, 

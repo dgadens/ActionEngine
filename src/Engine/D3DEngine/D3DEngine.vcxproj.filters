@@ -57,6 +57,9 @@
     <ClInclude Include="ACD3D10VertexCache.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="ACD3D10RenderToTexture.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACD3D10Configurations.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="ACD3D10VertexManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ACD3D10RenderToTexture.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>

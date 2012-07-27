@@ -1468,3 +1468,12 @@ void ACD3D10::ApplyConstants()
 };
 
 #pragma endregion
+
+#pragma region Tools
+
+HRESULT ACD3D10::SaveScreenShoot(const std::string& path)
+{
+
+};
+
+#pragma endregion
