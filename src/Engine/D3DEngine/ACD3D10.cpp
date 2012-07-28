@@ -329,9 +329,7 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	//pega o factory
 	IDXGIFactory* pDXGIFactory = ACD3D10Tools::GetDXGIFactory();
 
-	//********************
-	//  swapchain
-	//********************
+#pragma region CREATE SWAP CHAIN
 	IDXGISwapChain* pSwapChain;
 
 	//define o rendertargetview, define o buffer e coloca como backbuffer em cada swapchain
@@ -355,15 +353,9 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	pDXGIFactory = nullptr;
 
 	vpComponent->pSwapChain = pSwapChain;
+#pragma endregion
 
-	//******************
-	// fim swapchain
-	//******************
-
-
-	//******************
-	// render target
-	//******************
+#pragma region CREATE RENDERTARGETVIEW
 	//array de backbuffers, um pra cada janela
 	ID3D10Texture2D* pBackBuffer;
 	ID3D10RenderTargetView* pRenderTargetView;
@@ -387,14 +379,9 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	vpComponent->pRenderTargetView = pRenderTargetView;
 
 	pBackBuffer->Release(); //release na textura usando como backbuffer
-	//********************
-	//  fim render target
-	//********************
+#pragma endregion
 
-
-	//********************
-	// depth stencil view
-	//********************
+#pragma region CREATE DEPTHSTENCILVIEW
 	ID3D10Texture2D* pDepthStencil;
     ID3D10DepthStencilView* pDepthStencilView;
 
@@ -412,20 +399,20 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	vpComponent->pDepthStencilView = pDepthStencilView;
 
 	pDepthStencil->Release();
-	//**********************
-	//fim depth stencil view
-	//**********************
+#pragma endregion
 
-	//********************
-	//define a viewport
-	//*******************
+#pragma region CREATE VIEWPORT
 	D3D10_VIEWPORT vp;
 	ACD3D10Configurations::DefineViewPort(width, height, 0, 1, rc.left, rc.top, &vp);
 
 	vpComponent->Viewport = vp;
-	//*******************
-	// fim define a viewport
-	//*********************
+#pragma endregion
+
+#pragma region CREATERENDERTOTEXTURE
+	ACD3D10RenderToTexture* pRenderToTexture = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
+	pRenderToTexture->Initialize(width, height);
+	vpComponent->pRenderToTexture = pRenderToTexture;
+#pragma endregion 
 
 
 	//inser o objeto no map
@@ -446,14 +433,10 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 
 HRESULT ACD3D10::DropViewport(HWND hWnd)
 {
-	mpVpComponents[hWnd]->pDepthStencilView->Release();
-	mpVpComponents[hWnd]->pDepthStencilView = nullptr;
-
-	mpVpComponents[hWnd]->pRenderTargetView->Release();
-	mpVpComponents[hWnd]->pRenderTargetView = nullptr;
-
-	mpVpComponents[hWnd]->pSwapChain->Release();
-	mpVpComponents[hWnd]->pSwapChain = nullptr;
+	SAFE_RELEASE(mpVpComponents[hWnd]->pRenderToTexture);
+	SAFE_RELEASE(mpVpComponents[hWnd]->pDepthStencilView);
+	SAFE_RELEASE(mpVpComponents[hWnd]->pRenderTargetView);
+	SAFE_RELEASE(mpVpComponents[hWnd]->pSwapChain);
 
 	mpVpComponents.erase(hWnd);
 	return AC_OK;
@@ -478,21 +461,11 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	HRESULT hr;
 
 	//mata o anterior
-	ID3D10RenderTargetView* rtv = mpVpComponents[mActiveWnd]->pRenderTargetView;
-	if (rtv!=nullptr)
-	{
-		Log("Remove render target view. Resize()");
-		rtv->Release();
-	}
+	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pRenderToTexture);
+	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pRenderTargetView);
+	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pDepthStencilView);
 
-	ID3D10DepthStencilView* dsv = mpVpComponents[mActiveWnd]->pDepthStencilView;
-	if (dsv!=nullptr)
-	{
-		Log("Remove stencil view . Resize()");
-		dsv->Release();
-	}
-
-	//resize no backbuffer
+#pragma region RESIZE BACKBUFFER
 	IDXGISwapChain* pSwapChain = mpVpComponents[mActiveWnd]->pSwapChain;
 	hr = pSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
 	if( FAILED( hr ) )
@@ -501,10 +474,9 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 		Log("[ERROR] ResizeBuffer. Resize()");
 		return hr;
 	}
+#pragma endregion
 
-	//******************
-	// render target view
-	//******************
+#pragma region CREATE RENDERTARGETVIEW
 	//array de backbuffers, um pra cada janela
 	ID3D10Texture2D* pBackBuffer;
 	ID3D10RenderTargetView* pRenderTargetView;
@@ -527,13 +499,9 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	mpVpComponents[mActiveWnd]->pRenderTargetView = pRenderTargetView;
 
 	pBackBuffer->Release(); //release na textura usando como backbuffer
-	//********************
-	//  fim render target view
-	//********************
+#pragma endregion
 
-	//******************
-	// depth stencil view
-	//******************
+#pragma region CREATE DEPTHSTENCILVIEW
 	//cria outro com as novas configuracoes
 	ID3D10Texture2D* pDepthStencil;
 	ID3D10DepthStencilView* pDepthStencilView;
@@ -551,26 +519,24 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	mpVpComponents[mActiveWnd]->pDepthStencilView = pDepthStencilView;
 
 	pDepthStencil->Release();
-	//******************
-	// fim depth stencil view
-	//******************
+#pragma endregion
 
-	//********************
-	//define a viewport
-	//*******************
-
+#pragma region RESIZE VIEWPORT
 	mpVpComponents[mActiveWnd]->Viewport.Width = width;
 	mpVpComponents[mActiveWnd]->Viewport.Height = height;
+#pragma endregion
+
+#pragma region CREATE RENDERTOTEXTURE
+	ACD3D10RenderToTexture* pRenderToTexture = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
+	pRenderToTexture->Initialize(width, height);
+	mpVpComponents[mActiveWnd]->pRenderToTexture = pRenderToTexture;
+#pragma endregion
 
 	//seta a viewport
 	ACD3D10Globals::G_pD3dDevice->RSSetViewports( 1, &mpVpComponents[mActiveWnd]->Viewport );
 
 	//seta o render target e o depthstencil
 	ACD3D10Globals::G_pD3dDevice->OMSetRenderTargets( 1, &pRenderTargetView, pDepthStencilView );
-
-	//**********************
-	// fim define a viewport
-	//**********************
 
 	return AC_OK;
 };
@@ -606,15 +572,7 @@ void ACD3D10::Release()
 	if( ACD3D10Globals::G_pD3dDevice ) 
 		ACD3D10Globals::G_pD3dDevice->ClearState();
 
-	//percorre todo os itens e remove da memoria
-	typedef std::map<HWND, ACD3D10VpComponents*>::const_iterator It; 
-	for(It i = mpVpComponents.begin(); i != mpVpComponents.end(); ++i)
-	{
-		SAFE_RELEASE(i->second->pDepthStencilView);
-		SAFE_RELEASE(i->second->pRenderTargetView);
-		SAFE_RELEASE(i->second->pSwapChain);
-	}
-	mpVpComponents.clear();
+	SAFE_MAP_RELEASE_CLEAR(mpVpComponents);
 
 	SAFE_RELEASE(mpVSCBPerFrame);
 	SAFE_RELEASE(mpVSCBPerModel);
@@ -1471,8 +1429,13 @@ void ACD3D10::ApplyConstants()
 
 #pragma region Tools
 
-HRESULT ACD3D10::SaveScreenShoot(const std::string& path)
+void ACD3D10::SaveScreenShot(const std::string& path)
 {
+	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
+	ID3D10Texture2D* pTexture = vpComponent->pRenderToTexture->GetTexture();
+
+	if (pTexture!=nullptr)
+		D3DX10SaveTextureToFileA(pTexture, D3DX10_IMAGE_FILE_FORMAT::D3DX10_IFF_BMP, path.c_str());
 
 };
 

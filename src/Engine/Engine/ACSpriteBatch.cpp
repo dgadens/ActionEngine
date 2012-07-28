@@ -492,5 +492,5 @@ void ACSpriteBatch::EndRender()
 		mpGDevice->ActiveGS(nullptr);
 
 	//limpa os skins deste batch, uso o safe_clear pq eu quero q delete os skins
-	SAFE_MAP_CLEAR(mpSkins);
+	SAFE_MAP_DELETE_CLEAR(mpSkins);
 };

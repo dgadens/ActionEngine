@@ -10,7 +10,7 @@
 #include <d3d10.h>
 #include "GenericTools.h"
 
-class RenderToTexture
+class ACD3D10RenderToTexture
 {
 private:
 	ID3D10Device*				mpGDevice;
@@ -19,8 +19,8 @@ private:
 	ID3D10ShaderResourceView*	mpShaderResourceView;
 
 public:
-	RenderToTexture(ID3D10Device* gDevice);
-	~RenderToTexture();
+	ACD3D10RenderToTexture(ID3D10Device* gDevice);
+	~ACD3D10RenderToTexture();
 
 	bool Initialize(int width, int height);
 	void Release();
@@ -28,6 +28,7 @@ public:
 	void SetRenderTarget(ID3D10DepthStencilView* depthStencilView);
 	void ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, float red, float green, float blue, float alpha);
 	ID3D10ShaderResourceView* GetShaderResourceView();
+	ID3D10Texture2D* GetTexture();
 };
 
 #endif

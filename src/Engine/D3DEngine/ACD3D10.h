@@ -26,6 +26,7 @@
 #include "ACD3D10VertexLayoutProvider.h"
 #include "ACD3D10ConstantBuffersStructs.h"
 #include "ACD3D10VertexManager.h"
+#include "ACD3D10RenderToTexture.h"
 
 //herda da interface padrao
 class ACD3D10 : public ACRenderDevice
@@ -103,7 +104,7 @@ public:
 	void SetWireColor(const Vector3& color);
 
 	//tools
-	HRESULT SaveScreenShoot(const std::string& path);
+	void SaveScreenShot(const std::string& path);
 
 	//Render
 	HRESULT BeginRendering();

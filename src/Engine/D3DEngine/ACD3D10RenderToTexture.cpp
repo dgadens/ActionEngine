@@ -1,6 +1,6 @@
 #include "ACD3D10RenderToTexture.h"
 
-RenderToTexture::RenderToTexture(ID3D10Device* gDevice)
+ACD3D10RenderToTexture::ACD3D10RenderToTexture(ID3D10Device* gDevice)
 {
 	mpGDevice = gDevice;
 	mpRenderTargetTexture = nullptr;
@@ -8,19 +8,19 @@ RenderToTexture::RenderToTexture(ID3D10Device* gDevice)
 	mpShaderResourceView = nullptr;
 };
 
-RenderToTexture::~RenderToTexture()
+ACD3D10RenderToTexture::~ACD3D10RenderToTexture()
 {
 	Release();
 };
 
-void RenderToTexture::Release()
+void ACD3D10RenderToTexture::Release()
 {
 	SAFE_RELEASE(mpShaderResourceView);
 	SAFE_RELEASE(mpRenderTargetView);
 	SAFE_RELEASE(mpRenderTargetTexture);
 };
 
-bool RenderToTexture::Initialize(int width, int height)
+bool ACD3D10RenderToTexture::Initialize(int width, int height)
 {
 	D3D10_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
@@ -77,13 +77,13 @@ bool RenderToTexture::Initialize(int width, int height)
 	return true;
 };
 
-void RenderToTexture::SetRenderTarget(ID3D10DepthStencilView* depthStencilView)
+void ACD3D10RenderToTexture::SetRenderTarget(ID3D10DepthStencilView* depthStencilView)
 {
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	mpGDevice->OMSetRenderTargets(1, &mpRenderTargetView, depthStencilView);
 };
 
-void RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, 
+void ACD3D10RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, 
 					   float red, float green, float blue, float alpha)
 {
 	float color[4];
@@ -99,7 +99,12 @@ void RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthStencilView
 	mpGDevice->ClearDepthStencilView(depthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
 };
 
-ID3D10ShaderResourceView* RenderToTexture::GetShaderResourceView()
+ID3D10ShaderResourceView* ACD3D10RenderToTexture::GetShaderResourceView()
 {
 	return mpShaderResourceView;
 }
+
+ID3D10Texture2D* ACD3D10RenderToTexture::GetTexture()
+{
+	return mpRenderTargetTexture;
+};

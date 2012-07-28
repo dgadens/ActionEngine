@@ -14,10 +14,18 @@
 #define SAFE_RELEASE(p)  { if(p) { (p)->Release(); (p)=nullptr; } }
 
 //Usado para limpar os container, limpa ja a memoria
-template <typename T> void SAFE_MAP_CLEAR( T & amap ) 
+template <typename T> void SAFE_MAP_DELETE_CLEAR( T & amap ) 
 {
     for ( auto it = amap.begin(); it != amap.end(); ++it ) {
-        delete it->second;
+        SAFE_DELETE(it->second);
+    }
+    amap.clear();
+}
+
+template <typename T> void SAFE_MAP_RELEASE_CLEAR( T & amap ) 
+{
+    for ( auto it = amap.begin(); it != amap.end(); ++it ) {
+        SAFE_RELEASE(it->second);
     }
     amap.clear();
 }
