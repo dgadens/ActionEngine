@@ -22,6 +22,7 @@ public:
 	static ID3D10InputLayout* pVertexSpriteLayout;
 
 	static HRESULT CreateInputLayout(ID3D10Device* gDevice, ID3D10Blob* pVSBuf, VertexFormat vertexFormat);
+	static void ReleaseAll();
 };
 
 #endif

@@ -26,7 +26,6 @@
 #include "ACD3D10VertexLayoutProvider.h"
 #include "ACD3D10ConstantBuffersStructs.h"
 #include "ACD3D10VertexManager.h"
-#include "ACD3D10RenderToTexture.h"
 
 //herda da interface padrao
 class ACD3D10 : public ACRenderDevice

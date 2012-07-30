@@ -10,7 +10,8 @@
 #include <d3d10.h>
 #include <d3dx10.h>
 #include <DXGI.h>
-#include "ACD3D10RenderToTexture.h"
+
+#include "GenericTools.h"
 
 struct ACD3D10VpComponents
 {
@@ -18,23 +19,11 @@ struct ACD3D10VpComponents
 	ID3D10RenderTargetView*		pRenderTargetView; 
 	ID3D10DepthStencilView*		pDepthStencilView; 
 	D3D10_VIEWPORT 				Viewport;
-	ACD3D10RenderToTexture*		pRenderToTexture;
 
 	ACD3D10VpComponents();
-	~ACD3D10VpComponents()
-	{
-		Release();
-	};
+	~ACD3D10VpComponents();
 
 	void Release();
-};
-
-void inline ACD3D10VpComponents::Release()
-{
-	SAFE_RELEASE(pSwapChain); 
-	SAFE_RELEASE(pRenderTargetView);
-	SAFE_RELEASE(pDepthStencilView);
-	SAFE_RELEASE(pRenderToTexture);
 };
 
 #endif

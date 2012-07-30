@@ -162,3 +162,13 @@ HRESULT ACD3D10VertexLayoutProvider::CreateInputLayout(ID3D10Device* gDevice, ID
 
 	return AC_OK;
 };
+
+void ACD3D10VertexLayoutProvider::ReleaseAll()
+{
+	SAFE_RELEASE(pVertexPositionLayout);
+	SAFE_RELEASE(pVertexPositionColoredLayout);
+	SAFE_RELEASE(pVertexPositionTexturedLayout);
+	SAFE_RELEASE(pVertexPositionNormalTexturedLayout);
+	SAFE_RELEASE(pVertexPositionTexturedExtraInfoLayout);
+	SAFE_RELEASE(pVertexSpriteLayout);
+};

@@ -329,7 +329,7 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	//pega o factory
 	IDXGIFactory* pDXGIFactory = ACD3D10Tools::GetDXGIFactory();
 
-#pragma region CREATE SWAP CHAIN
+	#pragma region CREATE SWAP CHAIN
 	IDXGISwapChain* pSwapChain;
 
 	//define o rendertargetview, define o buffer e coloca como backbuffer em cada swapchain
@@ -353,9 +353,9 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	pDXGIFactory = nullptr;
 
 	vpComponent->pSwapChain = pSwapChain;
-#pragma endregion
+	#pragma endregion
 
-#pragma region CREATE RENDERTARGETVIEW
+	#pragma region CREATE RENDERTARGETVIEW
 	//array de backbuffers, um pra cada janela
 	ID3D10Texture2D* pBackBuffer;
 	ID3D10RenderTargetView* pRenderTargetView;
@@ -379,9 +379,9 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	vpComponent->pRenderTargetView = pRenderTargetView;
 
 	pBackBuffer->Release(); //release na textura usando como backbuffer
-#pragma endregion
+	#pragma endregion
 
-#pragma region CREATE DEPTHSTENCILVIEW
+	#pragma region CREATE DEPTHSTENCILVIEW
 	ID3D10Texture2D* pDepthStencil;
     ID3D10DepthStencilView* pDepthStencilView;
 
@@ -399,21 +399,14 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 	vpComponent->pDepthStencilView = pDepthStencilView;
 
 	pDepthStencil->Release();
-#pragma endregion
+	#pragma endregion
 
-#pragma region CREATE VIEWPORT
+	#pragma region CREATE VIEWPORT
 	D3D10_VIEWPORT vp;
 	ACD3D10Configurations::DefineViewPort(width, height, 0, 1, rc.left, rc.top, &vp);
 
 	vpComponent->Viewport = vp;
-#pragma endregion
-
-#pragma region CREATERENDERTOTEXTURE
-	ACD3D10RenderToTexture* pRenderToTexture = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
-	pRenderToTexture->Initialize(width, height);
-	vpComponent->pRenderToTexture = pRenderToTexture;
-#pragma endregion 
-
+	#pragma endregion
 
 	//inser o objeto no map
 	mpVpComponents.insert(std::pair<HWND, ACD3D10VpComponents*>(hWnd, vpComponent));
@@ -433,7 +426,6 @@ HRESULT ACD3D10::AddViewport(HWND hWnd, BOOL enableVSync)
 
 HRESULT ACD3D10::DropViewport(HWND hWnd)
 {
-	SAFE_RELEASE(mpVpComponents[hWnd]->pRenderToTexture);
 	SAFE_RELEASE(mpVpComponents[hWnd]->pDepthStencilView);
 	SAFE_RELEASE(mpVpComponents[hWnd]->pRenderTargetView);
 	SAFE_RELEASE(mpVpComponents[hWnd]->pSwapChain);
@@ -461,7 +453,6 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	HRESULT hr;
 
 	//mata o anterior
-	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pRenderToTexture);
 	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pRenderTargetView);
 	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pDepthStencilView);
 
@@ -526,12 +517,6 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	mpVpComponents[mActiveWnd]->Viewport.Height = height;
 #pragma endregion
 
-#pragma region CREATE RENDERTOTEXTURE
-	ACD3D10RenderToTexture* pRenderToTexture = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
-	pRenderToTexture->Initialize(width, height);
-	mpVpComponents[mActiveWnd]->pRenderToTexture = pRenderToTexture;
-#pragma endregion
-
 	//seta a viewport
 	ACD3D10Globals::G_pD3dDevice->RSSetViewports( 1, &mpVpComponents[mActiveWnd]->Viewport );
 
@@ -572,6 +557,7 @@ void ACD3D10::Release()
 	if( ACD3D10Globals::G_pD3dDevice ) 
 		ACD3D10Globals::G_pD3dDevice->ClearState();
 
+	ACD3D10VertexLayoutProvider::ReleaseAll();
 	SAFE_MAP_RELEASE_CLEAR(mpVpComponents);
 
 	SAFE_RELEASE(mpVSCBPerFrame);
@@ -1433,9 +1419,9 @@ void ACD3D10::SaveScreenShot(const std::string& path)
 {
 	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
 
-    ID3D11Resource* backbufferRes;
-    mpRenderTargetView->GetResource(&backbufferRes);
-    D3D11_TEXTURE2D_DESC texDesc;
+    ID3D10Resource* backbufferRes;
+    vpComponent->pRenderTargetView->GetResource(&backbufferRes);
+    D3D10_TEXTURE2D_DESC texDesc;
     texDesc.ArraySize = 1;
     texDesc.BindFlags = 0;
     texDesc.CPUAccessFlags = 0;
@@ -1446,12 +1432,12 @@ void ACD3D10::SaveScreenShot(const std::string& path)
     texDesc.MiscFlags = 0;
     texDesc.SampleDesc.Count = 1;
     texDesc.SampleDesc.Quality = 0;
-    texDesc.Usage = D3D11_USAGE_DEFAULT;
-    ID3D11Texture2D* texture;
-    if (FAILED(mpGDevice->CreateTexture2D(&texDesc, 0, &texture)))
+    texDesc.Usage = D3D10_USAGE_DEFAULT;
+    ID3D10Texture2D* texture;
+    if (FAILED(ACD3D10Globals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
 		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
 
-    mpContext->CopyResource(texture, backbufferRes);
+	ACD3D10Globals::G_pD3dDevice->CopyResource(texture, backbufferRes);
     if (FAILED(D3DX10SaveTextureToFileA(texture, D3DX10_IFF_BMP, path.c_str())))
 		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
 
