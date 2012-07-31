@@ -116,7 +116,6 @@
     <ClCompile Include="ACD3D10VertexCache.cpp" />
     <ClCompile Include="ACD3D10VertexLayoutProvider.cpp" />
     <ClCompile Include="ACD3D10VertexManager.cpp" />
-    <ClCompile Include="ACD3D10VpComponents.cpp" />
     <ClCompile Include="ACD3D10VpComponents.h" />
   </ItemGroup>
   <ItemGroup>

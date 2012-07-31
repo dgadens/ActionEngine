@@ -456,7 +456,7 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pRenderTargetView);
 	SAFE_RELEASE(mpVpComponents[mActiveWnd]->pDepthStencilView);
 
-#pragma region RESIZE BACKBUFFER
+	#pragma region RESIZE BACKBUFFER
 	IDXGISwapChain* pSwapChain = mpVpComponents[mActiveWnd]->pSwapChain;
 	hr = pSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
 	if( FAILED( hr ) )
@@ -465,9 +465,9 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 		Log("[ERROR] ResizeBuffer. Resize()");
 		return hr;
 	}
-#pragma endregion
+	#pragma endregion
 
-#pragma region CREATE RENDERTARGETVIEW
+	#pragma region CREATE RENDERTARGETVIEW
 	//array de backbuffers, um pra cada janela
 	ID3D10Texture2D* pBackBuffer;
 	ID3D10RenderTargetView* pRenderTargetView;
@@ -490,9 +490,9 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	mpVpComponents[mActiveWnd]->pRenderTargetView = pRenderTargetView;
 
 	pBackBuffer->Release(); //release na textura usando como backbuffer
-#pragma endregion
+	#pragma endregion
 
-#pragma region CREATE DEPTHSTENCILVIEW
+	#pragma region CREATE DEPTHSTENCILVIEW
 	//cria outro com as novas configuracoes
 	ID3D10Texture2D* pDepthStencil;
 	ID3D10DepthStencilView* pDepthStencilView;
@@ -510,12 +510,12 @@ HRESULT ACD3D10::Resize(UINT width, UINT height)
 	mpVpComponents[mActiveWnd]->pDepthStencilView = pDepthStencilView;
 
 	pDepthStencil->Release();
-#pragma endregion
+	#pragma endregion
 
-#pragma region RESIZE VIEWPORT
+	#pragma region RESIZE VIEWPORT
 	mpVpComponents[mActiveWnd]->Viewport.Width = width;
 	mpVpComponents[mActiveWnd]->Viewport.Height = height;
-#pragma endregion
+	#pragma endregion
 
 	//seta a viewport
 	ACD3D10Globals::G_pD3dDevice->RSSetViewports( 1, &mpVpComponents[mActiveWnd]->Viewport );
@@ -553,11 +553,11 @@ UINT ACD3D10::GetVPHeight()
 void ACD3D10::Release()
 {
 	ACD3D10Configurations::Release();
+	ACD3D10VertexLayoutProvider::ReleaseAll();
 
 	if( ACD3D10Globals::G_pD3dDevice ) 
 		ACD3D10Globals::G_pD3dDevice->ClearState();
 
-	ACD3D10VertexLayoutProvider::ReleaseAll();
 	SAFE_MAP_RELEASE_CLEAR(mpVpComponents);
 
 	SAFE_RELEASE(mpVSCBPerFrame);
@@ -1413,36 +1413,36 @@ void ACD3D10::ApplyConstants()
 
 #pragma endregion
 
-#pragma region Tools
-
-void ACD3D10::SaveScreenShot(const std::string& path)
-{
-	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
-
-    ID3D10Resource* backbufferRes;
-    vpComponent->pRenderTargetView->GetResource(&backbufferRes);
-    D3D10_TEXTURE2D_DESC texDesc;
-    texDesc.ArraySize = 1;
-    texDesc.BindFlags = 0;
-    texDesc.CPUAccessFlags = 0;
-    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    texDesc.Width = vpComponent->Viewport.Width;
-    texDesc.Height = vpComponent->Viewport.Height; 
-    texDesc.MipLevels = 1;
-    texDesc.MiscFlags = 0;
-    texDesc.SampleDesc.Count = 1;
-    texDesc.SampleDesc.Quality = 0;
-    texDesc.Usage = D3D10_USAGE_DEFAULT;
-    ID3D10Texture2D* texture;
-    if (FAILED(ACD3D10Globals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
-		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
-
-	ACD3D10Globals::G_pD3dDevice->CopyResource(texture, backbufferRes);
-    if (FAILED(D3DX10SaveTextureToFileA(texture, D3DX10_IFF_BMP, path.c_str())))
-		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
-
-    SAFE_RELEASE( texture );
-    SAFE_RELEASE( backbufferRes );
-};
-
-#pragma endregion
+//#pragma region Tools
+//
+//void ACD3D10::SaveScreenShot(const std::string& path)
+//{
+//	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
+//
+//    ID3D10Resource* backbufferRes;
+//    vpComponent->pRenderTargetView->GetResource(&backbufferRes);
+//    D3D10_TEXTURE2D_DESC texDesc;
+//    texDesc.ArraySize = 1;
+//    texDesc.BindFlags = 0;
+//    texDesc.CPUAccessFlags = 0;
+//    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+//    texDesc.Width = vpComponent->Viewport.Width;
+//    texDesc.Height = vpComponent->Viewport.Height; 
+//    texDesc.MipLevels = 1;
+//    texDesc.MiscFlags = 0;
+//    texDesc.SampleDesc.Count = 1;
+//    texDesc.SampleDesc.Quality = 0;
+//    texDesc.Usage = D3D10_USAGE_DEFAULT;
+//    ID3D10Texture2D* texture;
+//    if (FAILED(ACD3D10Globals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
+//		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
+//
+//	ACD3D10Globals::G_pD3dDevice->CopyResource(texture, backbufferRes);
+//    if (FAILED(D3DX10SaveTextureToFileA(texture, D3DX10_IFF_BMP, path.c_str())))
+//		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
+//
+//    SAFE_RELEASE( texture );
+//    SAFE_RELEASE( backbufferRes );
+//};
+//
+//#pragma endregion

@@ -83,8 +83,5 @@
     <ClCompile Include="ACD3D10VpComponents.h">
       <Filter>Header Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10VpComponents.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

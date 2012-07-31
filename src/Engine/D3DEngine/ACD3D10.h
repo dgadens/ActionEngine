@@ -103,7 +103,7 @@ public:
 	void SetWireColor(const Vector3& color);
 
 	//tools
-	void SaveScreenShot(const std::string& path);
+	//void SaveScreenShot(const std::string& path);
 
 	//Render
 	HRESULT BeginRendering();
