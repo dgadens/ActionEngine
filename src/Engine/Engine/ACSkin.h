@@ -15,7 +15,7 @@
 class ACContentManager;
 class ACRenderDevice;
 
-struct ACSkin
+class ACSkin
 {
 
 private:
