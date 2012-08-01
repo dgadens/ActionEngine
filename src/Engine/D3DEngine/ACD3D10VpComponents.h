@@ -25,6 +25,8 @@ struct ACD3D10VpComponents
 		pSwapChain = nullptr; 
 		pRenderTargetView = nullptr; 
 		pDepthStencilView = nullptr; 
+
+		ZeroMemory(&Viewport, sizeof ( D3D10_VIEWPORT ));
 	};
 
 	~ACD3D10VpComponents()
