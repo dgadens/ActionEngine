@@ -16,6 +16,7 @@ ACInput*				pInput = nullptr;
 ACNetwork*				pNetwork = nullptr;
 ACAudio*				pAudio = nullptr;
 
+ACContentManager*		pContentManager = nullptr;
 Game*					pGame = nullptr;
 
 std::string				Messages;
@@ -369,11 +370,11 @@ HRESULT EngineStartup()
 	#pragma endregion
 
 	#pragma region CRIA O CONTENT MANAGER
-	Globals::pContentManager = new ACContentManager(Globals::pRenderDevice, Globals::pAudioDevice);
+	pContentManager = new ACContentManager(Globals::pRenderDevice, Globals::pAudioDevice);
 	#pragma endregion
 
 	#pragma region CRIA O GAME
-	pGame = new Game(Globals::pRenderDevice, Globals::pContentManager);
+	pGame = new Game(Globals::pRenderDevice, pContentManager);
 	pGame->Initialize();
 	pGame->Active(TRUE);
 	pGame->LoadContents();
@@ -387,6 +388,7 @@ void CleanupDevice()
 {
 	//remover nesta ordem pq senao ele tenta remover os conteudos depois de remover o ponteiro do contentmanager ai fudeu
 	SAFE_DELETE(pGame);
+	SAFE_DELETE(pContentManager);
 	SAFE_DELETE(pRenderer);
 	SAFE_DELETE(pInput);
 	SAFE_DELETE(pNetwork);

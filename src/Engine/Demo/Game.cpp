@@ -17,7 +17,6 @@ Game::~Game()
 	SAFE_DELETE(mpLinePointTest);
 	SAFE_DELETE(mpCamera);
 	SAFE_DELETE(mpSpriteBatch);
-	SAFE_DELETE(mpCManager);
 };
 
 //Ativa o game ou desativa, quando a janela perde o foco ele desativa quando ganyha ativa

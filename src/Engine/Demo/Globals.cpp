@@ -8,7 +8,6 @@ ACAudioDevice*		Globals::pAudioDevice = nullptr;
 ACKeyboard*			Globals::pKeyboard = nullptr;
 ACMouse*			Globals::pMouse = nullptr;
 
-ACContentManager*   Globals::pContentManager = nullptr;
 ACCamera*			Globals::pCamera = nullptr;
 INT					Globals::MainWndWidth = 1024;
 INT					Globals::MainWndHeight = 768;
