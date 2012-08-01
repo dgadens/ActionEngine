@@ -80,6 +80,13 @@ void Game::Update()
 {
 	if (Globals::IsRunning)
 	{
+		////SS
+		//ACKeyboardState keysState[256];
+		//Globals::pKeyboard->GetState(keysState);
+		//if (keysState->IsPressed(ACKEYS::ACKEY_S))
+		//	mpGDevice->SaveScreenShot("c:\\acSS.jpg");
+
+
 		ACTimeControl::Update();
 		mpCamera->Update();
 

@@ -1413,36 +1413,36 @@ void ACD3D10::ApplyConstants()
 
 #pragma endregion
 
-//#pragma region Tools
-//
-//void ACD3D10::SaveScreenShot(const std::string& path)
-//{
-//	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
-//
-//    ID3D10Resource* backbufferRes;
-//    vpComponent->pRenderTargetView->GetResource(&backbufferRes);
-//    D3D10_TEXTURE2D_DESC texDesc;
-//    texDesc.ArraySize = 1;
-//    texDesc.BindFlags = 0;
-//    texDesc.CPUAccessFlags = 0;
-//    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-//    texDesc.Width = vpComponent->Viewport.Width;
-//    texDesc.Height = vpComponent->Viewport.Height; 
-//    texDesc.MipLevels = 1;
-//    texDesc.MiscFlags = 0;
-//    texDesc.SampleDesc.Count = 1;
-//    texDesc.SampleDesc.Quality = 0;
-//    texDesc.Usage = D3D10_USAGE_DEFAULT;
-//    ID3D10Texture2D* texture;
-//    if (FAILED(ACD3D10Globals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
-//		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
-//
-//	ACD3D10Globals::G_pD3dDevice->CopyResource(texture, backbufferRes);
-//    if (FAILED(D3DX10SaveTextureToFileA(texture, D3DX10_IFF_BMP, path.c_str())))
-//		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
-//
-//    SAFE_RELEASE( texture );
-//    SAFE_RELEASE( backbufferRes );
-//};
-//
-//#pragma endregion
+#pragma region Tools
+
+void ACD3D10::SaveScreenShot(const std::string& path)
+{
+	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
+
+    ID3D10Resource* backbufferRes;
+    vpComponent->pRenderTargetView->GetResource(&backbufferRes);
+    D3D10_TEXTURE2D_DESC texDesc;
+    texDesc.ArraySize = 1;
+    texDesc.BindFlags = 0;
+    texDesc.CPUAccessFlags = 0;
+    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    texDesc.Width = vpComponent->Viewport.Width;
+    texDesc.Height = vpComponent->Viewport.Height; 
+    texDesc.MipLevels = 1;
+    texDesc.MiscFlags = 0;
+    texDesc.SampleDesc.Count = 1;
+    texDesc.SampleDesc.Quality = 0;
+    texDesc.Usage = D3D10_USAGE_DEFAULT;
+    ID3D10Texture2D* texture;
+    if (FAILED(ACD3D10Globals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
+		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
+
+	ACD3D10Globals::G_pD3dDevice->CopyResource(texture, backbufferRes);
+    if (FAILED(D3DX10SaveTextureToFileA(texture, D3DX10_IFF_BMP, path.c_str())))
+		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
+
+    SAFE_RELEASE( texture );
+    SAFE_RELEASE( backbufferRes );
+};
+
+#pragma endregion

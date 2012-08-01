@@ -30,6 +30,22 @@ template <typename T> void SAFE_MAP_RELEASE_CLEAR( T & amap )
     amap.clear();
 }
 
+template <typename T> void SAFE_VECTOR_RELEASE_CLEAR( T & vec ) 
+{
+    for ( auto it = vec.begin(); it != vec.end(); ++it ) {
+        SAFE_RELEASE(*it);
+    }
+    vec.clear();
+}
+
+template <typename T> void SAFE_VECTOR_DELETE_CLEAR( T & vec ) 
+{
+    for ( auto it = vec.begin(); it != vec.end(); ++it ) {
+        SAFE_DELETE(*it);
+    }
+    vec.clear();
+}
+
 class GenericTools
 {
 public:

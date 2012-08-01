@@ -163,7 +163,7 @@ public:
 	virtual void SetWireColor(const Vector3& color) = 0;
 
 	//tools
-	//virtual void SaveScreenShot(const std::string& path) = 0;
+	virtual void SaveScreenShot(const std::string& path) = 0;
 
 	//render
 	virtual HRESULT BeginRendering() = 0;
