@@ -55,6 +55,9 @@ void Game::Initialize()
 	mpGDevice->SetWireColor(Vector3(1,1,0));
 	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullCCW);
 	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_LineList);
+
+	mRenderTargetID = mpGDevice->CreateRenderTarget(300,300);
+
 };
 
 //quando a tela for redimensionada eu preciso passa isso pra tudo q é lado
@@ -107,12 +110,23 @@ void Game::Draw()
 		SetPerframeData();
 
 		//Mandar renderizar daqui 
+		//ativa o rendertarget pra textura
+		mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(1,0,0,1));
+		mpGDevice->RenderTargetActivate(mRenderTargetID);
 
 		//mpDynamicTest->Render(mpCamera);
-		//mpSpriteTest->Draw();
+		mpSpriteTest->Draw();
 		//mpPowerCube->Render(mpCamera);
 		mpLinePointTest->Render(mpCamera);
 		//ate aqui
+
+		//seta o render target para screen
+		mpGDevice->RenderTargetActivate(0);
+		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
+
+		mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_NonPremultiplied);
+		mpSpriteBatch->Render(rtTexture, Vector2(100,100), Vector4(1,1,1,1));
+		mpSpriteBatch->EndRender();
 
 		DrawTexts();
 		mpGDevice->EndRendering();

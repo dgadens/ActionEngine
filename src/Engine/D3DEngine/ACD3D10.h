@@ -26,6 +26,7 @@
 #include "ACD3D10VertexLayoutProvider.h"
 #include "ACD3D10ConstantBuffersStructs.h"
 #include "ACD3D10VertexManager.h"
+#include "ACD3D10RenderToTexture.h"
 
 //herda da interface padrao
 class ACD3D10 : public ACRenderDevice
@@ -36,6 +37,7 @@ private:
 	
 	std::map<HWND, ACD3D10VpComponents*>        mpVpComponents; //mantem os buffers
 	ACD3D10VpComponents*					    mpCurrentVpComponents;
+	std::vector<ACD3D10RenderToTexture*>        mpRenderTargets; //lista de rendertargets criados pelo cliente, retorna o id
 	BOOL										mStencil;
 	BOOL										mIsSceneRunning;
 	FLOAT										mClearColor[4];
@@ -101,6 +103,14 @@ public:
 	void SetShadeMode(ACSHADEMODE value);
 	ACSHADEMODE GetShadeMode();
 	void SetWireColor(const Vector3& color);
+
+	//RenderTargetManager
+	UINT CreateRenderTarget(UINT width, UINT height);
+	void RenderTargetClear(UINT id, const Vector4& color);
+	void RenderTargetClearAll(const Vector4& color);
+	void RenderTargetActivate(UINT id); //0 é o defaut ou seja a tela
+	ACTexture* RenderTargetGetTexture(UINT id);
+	void ResizeRenderTarget(UINT id, UINT width, UINT height);
 
 	//tools
 	void SaveScreenShot(const std::string& path);

@@ -34,6 +34,8 @@ class Game
 	SpriteTest*			mpSpriteTest;
 	//teste linhas e pontos
 	LinePointTest*		mpLinePointTest;
+	//RenderTarget
+	UINT				mRenderTargetID;
 
 	void DrawTexts();
 	void SetPerframeData();

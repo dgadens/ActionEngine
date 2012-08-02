@@ -9,6 +9,8 @@
 
 #include <d3d10.h>
 #include "GenericTools.h"
+#include "EngineMath.h"
+#include "ACTexture.h"
 
 class ACD3D10RenderToTexture
 {
@@ -18,6 +20,8 @@ private:
 	ID3D10RenderTargetView*		mpRenderTargetView;
 	ID3D10ShaderResourceView*	mpShaderResourceView;
 
+	ACTexture*					mpTexture;
+
 public:
 	ACD3D10RenderToTexture(ID3D10Device* gDevice);
 	~ACD3D10RenderToTexture();
@@ -26,9 +30,9 @@ public:
 	void Release();
 
 	void SetRenderTarget(ID3D10DepthStencilView* depthStencilView);
-	void ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, float red, float green, float blue, float alpha);
+	void ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, const Vector4& color);
 	ID3D10ShaderResourceView* GetShaderResourceView();
-	ID3D10Texture2D* GetTexture();
+	ACTexture* GetTexture();
 };
 
 #endif

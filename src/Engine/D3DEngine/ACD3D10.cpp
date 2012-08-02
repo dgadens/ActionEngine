@@ -559,6 +559,7 @@ void ACD3D10::Release()
 		ACD3D10Globals::G_pD3dDevice->ClearState();
 
 	SAFE_MAP_RELEASE_CLEAR(mpVpComponents);
+	SAFE_VECTOR_RELEASE_CLEAR(mpRenderTargets);
 
 	SAFE_RELEASE(mpVSCBPerFrame);
 	SAFE_RELEASE(mpVSCBPerModel);
@@ -850,6 +851,7 @@ HRESULT ACD3D10::LoadTexture(std::string name, ACTexture** ppOutTexturePtr)
 	currentPath.append(name);
 
 	*ppOutTexturePtr = new ACTexture();
+	ZeroMemory(*ppOutTexturePtr, sizeof ( ACTexture ));
 
 	ID3D10Resource* pTexture = nullptr;
 
@@ -1417,7 +1419,7 @@ void ACD3D10::ApplyConstants()
 
 void ACD3D10::SaveScreenShot(const std::string& path)
 {
-	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents = mpVpComponents[mActiveWnd];
+	ACD3D10VpComponents* vpComponent = mpCurrentVpComponents;
 
     ID3D10Resource* backbufferRes;
     vpComponent->pRenderTargetView->GetResource(&backbufferRes);
@@ -1443,6 +1445,55 @@ void ACD3D10::SaveScreenShot(const std::string& path)
 
     SAFE_RELEASE( texture );
     SAFE_RELEASE( backbufferRes );
+};
+
+#pragma endregion
+
+#pragma region RENDER TARGET MANAGER
+
+//Cria um render target
+//return: ID do rt no vetor
+UINT ACD3D10::CreateRenderTarget(UINT width, UINT height)
+{
+	ACD3D10RenderToTexture* rtt = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
+	rtt->Initialize(width, height);
+	mpRenderTargets.push_back(rtt);
+	return mpRenderTargets.size();
+};
+
+void ACD3D10::ResizeRenderTarget(UINT id, UINT width, UINT height)
+{
+	//remove o atual e coloca o redimensionado
+	SAFE_RELEASE(mpRenderTargets[id-1]);
+	ACD3D10RenderToTexture* rtt = new ACD3D10RenderToTexture(ACD3D10Globals::G_pD3dDevice);
+	rtt->Initialize(width, height);
+	mpRenderTargets[id-1] = rtt;
+};
+
+void ACD3D10::RenderTargetClear(UINT id, const Vector4& color)
+{
+	mpRenderTargets[id-1]->ClearRenderTarget(mpCurrentVpComponents->pDepthStencilView, color);
+};
+
+void ACD3D10::RenderTargetClearAll(const Vector4& color)
+{
+	for (auto it = mpRenderTargets.begin(); it != mpRenderTargets.end(); ++it)
+		(*it)->ClearRenderTarget(mpCurrentVpComponents->pDepthStencilView, color);
+};
+
+//Zero é o default (screen)
+void ACD3D10::RenderTargetActivate(UINT id)
+{
+	//se for zero entao ele seta a tela como rendertarget
+	if (id == 0)
+		ACD3D10Globals::G_pD3dDevice->OMSetRenderTargets(1, &mpCurrentVpComponents->pRenderTargetView, mpCurrentVpComponents->pDepthStencilView);
+	else
+		mpRenderTargets[id-1]->SetRenderTarget(mpCurrentVpComponents->pDepthStencilView);
+};
+
+ACTexture* ACD3D10::RenderTargetGetTexture(UINT id)
+{
+	return mpRenderTargets[id-1]->GetTexture();
 };
 
 #pragma endregion

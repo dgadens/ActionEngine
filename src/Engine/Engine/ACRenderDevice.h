@@ -162,6 +162,14 @@ public:
 	virtual ACSHADEMODE GetShadeMode() = 0;
 	virtual void SetWireColor(const Vector3& color) = 0;
 
+	//RenderTargetManager
+	virtual UINT CreateRenderTarget(UINT width, UINT height) = 0;
+	virtual void RenderTargetClear(UINT id, const Vector4& color) = 0;
+	virtual void RenderTargetClearAll(const Vector4& color) = 0;
+	virtual void RenderTargetActivate(UINT id) = 0; //0 é o defaut ou seja a tela
+	virtual ACTexture* RenderTargetGetTexture(UINT id) = 0;
+	virtual void ResizeRenderTarget(UINT id, UINT width, UINT height) = 0;
+
 	//tools
 	virtual void SaveScreenShot(const std::string& path) = 0;
 

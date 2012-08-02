@@ -6,6 +6,7 @@ ACD3D10RenderToTexture::ACD3D10RenderToTexture(ID3D10Device* gDevice)
 	mpRenderTargetTexture = nullptr;
 	mpRenderTargetView = nullptr;
 	mpShaderResourceView = nullptr;
+	mpTexture = nullptr;
 };
 
 ACD3D10RenderToTexture::~ACD3D10RenderToTexture()
@@ -22,6 +23,7 @@ void ACD3D10RenderToTexture::Release()
 
 bool ACD3D10RenderToTexture::Initialize(int width, int height)
 {
+	//cria a textura dx10
 	D3D10_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
 	D3D10_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -74,6 +76,15 @@ bool ACD3D10RenderToTexture::Initialize(int width, int height)
 		return false;
 	}
 
+	//cria a textura AC
+	mpTexture = new ACTexture();
+	ZeroMemory(mpTexture, sizeof ( ACTexture ));
+	mpTexture->Alpha = 1.0f;
+	mpTexture->Width = width;
+	mpTexture->Height = height;
+	mpTexture->TextureType = ACTEXTURETYPE::ACTT_Texture2D;
+	mpTexture->pData = mpShaderResourceView;
+
 	return true;
 };
 
@@ -83,17 +94,16 @@ void ACD3D10RenderToTexture::SetRenderTarget(ID3D10DepthStencilView* depthStenci
 	mpGDevice->OMSetRenderTargets(1, &mpRenderTargetView, depthStencilView);
 };
 
-void ACD3D10RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, 
-					   float red, float green, float blue, float alpha)
+void ACD3D10RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthStencilView, const Vector4& color)
 {
-	float color[4];
-	color[0] = red;
-	color[1] = green;
-	color[2] = blue;
-	color[3] = alpha;
+	float c[4];
+	c[0] = color.X;
+	c[1] = color.Y;
+	c[2] = color.Z;
+	c[3] = color.W;
 
 	// Clear the back buffer.
-	mpGDevice->ClearRenderTargetView(mpRenderTargetView, color);
+	mpGDevice->ClearRenderTargetView(mpRenderTargetView, c);
     
 	// Clear the depth buffer.
 	mpGDevice->ClearDepthStencilView(depthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
@@ -102,9 +112,9 @@ void ACD3D10RenderToTexture::ClearRenderTarget(ID3D10DepthStencilView* depthSten
 ID3D10ShaderResourceView* ACD3D10RenderToTexture::GetShaderResourceView()
 {
 	return mpShaderResourceView;
-}
+};
 
-ID3D10Texture2D* ACD3D10RenderToTexture::GetTexture()
+ACTexture* ACD3D10RenderToTexture::GetTexture()
 {
-	return mpRenderTargetTexture;
+	return mpTexture;
 };
