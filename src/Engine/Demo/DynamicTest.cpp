@@ -114,20 +114,11 @@ void DynamicTest::Render(ACCamera* camera)
 
 void DynamicTest::Release()
 {
+	mpCManager->RemoveVertexShader(mpVS);
+	mpCManager->RemovePixelShader(mpPS);
+
 	SAFE_DELETE_A(vertices1);
 	SAFE_DELETE_A(vertices2);
 	SAFE_DELETE_A(vertices3);
 	SAFE_DELETE_A(indices);
-
-	if (mpVS!=nullptr)
-	{
-		mpCManager->RemoveVertexShader(mpVS);
-		mpVS = nullptr;
-	}
-
-	if (mpPS!=nullptr)
-	{
-		mpCManager->RemovePixelShader(mpPS);
-		mpPS = nullptr;
-	}
 };

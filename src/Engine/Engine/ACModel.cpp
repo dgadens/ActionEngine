@@ -25,30 +25,12 @@ ACModel::~ACModel()
 
 void ACModel::Release()
 {
-	if (mpVS != nullptr)
-	{
-		mpCManager->RemoveVertexShader(mpVS);
-		mpVS = nullptr;
-	}
-
-	if (mpPS != nullptr)
-	{
-		mpCManager->RemovePixelShader(mpPS);
-		mpPS = nullptr;
-	}
-
-	if (mpGS != nullptr)
-	{
-		mpCManager->RemoveGeometryShader(mpGS);
-		mpGS = nullptr;
-	}
+	mpCManager->RemoveVertexShader(mpVS);
+	mpCManager->RemovePixelShader(mpPS);
+	mpCManager->RemoveGeometryShader(mpGS);
 
 	//remove do contentmanager
-	if (pModelDefinition!=nullptr)
-	{
-		mpCManager->RemoveModel(pModelDefinition);
-		pModelDefinition = nullptr;
-	}
+	mpCManager->RemoveModel(pModelDefinition);
 };
 
 #pragma region SKIN

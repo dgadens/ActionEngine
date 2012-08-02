@@ -59,15 +59,6 @@ void BasicTest::Render(ACCamera* camera)
 
 void BasicTest::Release()
 {
-	if (mpVS!=nullptr)
-	{
-		mpCManager->RemoveVertexShader(mpVS);
-		mpVS = nullptr;
-	}
-
-	if (mpPS!=nullptr)
-	{
-		mpCManager->RemovePixelShader(mpPS);
-		mpPS = nullptr;
-	}
+	mpCManager->RemoveVertexShader(mpVS);
+	mpCManager->RemovePixelShader(mpPS);
 };
