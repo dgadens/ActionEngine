@@ -16,7 +16,7 @@ struct ACTexture
 	UINT			ID;             //id dentro do contentmanager
 	UINT			Instance;       //numero de instancias q usam esse cara
 	std::string		Name;
-	BOOL            IsRenderTarget;
+	BOOL            IsRenderTarget; //se for rendertarget entao ele nao deleta no contentmanager pq o proprio renderdevice vai deletar
 	FLOAT			Alpha;
 	int				Width;
 	int				Height;

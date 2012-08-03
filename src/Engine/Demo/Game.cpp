@@ -65,7 +65,7 @@ void Game::ReziseWindow(INT width, INT height)
 	mpGDevice->Resize(width, height);
 	mpCamera->SetWidth(width);
 	mpCamera->SetHeight(height);
-	mpGDevice->ResizeRenderTarget(mRenderTargetID, width, height);
+	mpGDevice->ResizeRenderTarget(mRenderTargetID, mpGDevice->GetVPWidth(), mpGDevice->GetVPHeight());
 };
 
 //carrega os conteudos necessarios
@@ -124,7 +124,7 @@ void Game::Draw()
 		mpGDevice->RenderTargetActivate(0);
 		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
 
-		mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_NonPremultiplied);
+		mpSpriteBatch->BeginRender();
 		mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
 		mpSpriteBatch->EndRender();
 
