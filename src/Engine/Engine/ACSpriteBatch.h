@@ -42,8 +42,8 @@ public:
 	ACSpriteBatch(ACRenderDevice* gDevice, ACContentManager* cManager);
 	~ACSpriteBatch();
 
-	void BeginRender();
-	void BeginRender(ACBLENDSTATE blendState);
+	void BeginRender(ACPixelShader* customPixelShader = nullptr);
+	void BeginRender(ACBLENDSTATE blendState, ACPixelShader* customPixelShader = nullptr);
 
 	void Render(ACTexture* texture, Vector2& position, const Vector4& color);
 	void Render(ACTexture* texture, Vector2& position, const Vector4& color, float rotation);

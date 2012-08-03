@@ -116,6 +116,7 @@ ACTexture* ACContentManager::LoadTexture(std::string name)
 	pTexture->Name = name;
 	pTexture->Instance = 1;
 	pTexture->ID = ACGlobals::GlobalID++;
+	pTexture->IsRenderTarget = false;
 
 	//adiciona a textura
 	textures.insert(std::pair<UINT, ACTexture*>(pTexture->ID, pTexture));

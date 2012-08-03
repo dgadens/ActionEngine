@@ -42,8 +42,13 @@ ACSkin* ACSpriteBatch::GetSkin(ACTexture* texture)
 	{
 		skin = mpCManager->CreateSkin(false);
 		skin->Textures[0] = texture;
-		texture->Instance++;
-		mpSkins.insert(std::pair<UINT, ACSkin*>(texture->ID, skin));
+
+		//se nao for rendertarget entao ele adiciona 1 na instancia pq no endrendering ele vai diminuir
+		if (!texture->IsRenderTarget)
+		{
+			texture->Instance++;
+			mpSkins.insert(std::pair<UINT, ACSkin*>(texture->ID, skin));
+		}
 	}
 	else
 		skin = reg->second;
@@ -75,14 +80,14 @@ void ACSpriteBatch::ToHomogenousClipSpace(const ACTexture* texture, const Vector
 	outVertex.dimension.Y = GenericTools::ConvertPixelsToClipSpaceDistance(mpGDevice->GetVPHeight(), (float)texture->Height * scale.Y);
 };
 
-void ACSpriteBatch::BeginRender(ACBLENDSTATE blendState)
+void ACSpriteBatch::BeginRender(ACBLENDSTATE blendState, ACPixelShader* customPixelShader)
 {
 	//desabilita a escrita do depthbuffer
 	mpGDevice->SetBlendState(blendState);;
-	BeginRender();	
+	BeginRender(customPixelShader);	
 };
 
-void ACSpriteBatch::BeginRender()
+void ACSpriteBatch::BeginRender(ACPixelShader* customPixelShader)
 {
 	//pega o shademode atual depois restaura
 	mCurrentShadeMode = mpGDevice->GetShadeMode();
@@ -92,7 +97,12 @@ void ACSpriteBatch::BeginRender()
 
 	//ativa os shaders necessarios
 	mpGDevice->ActiveVS(mpVS);
-	mpGDevice->ActivePS(mpPS);
+
+	if (customPixelShader == nullptr)
+		mpGDevice->ActivePS(mpPS);
+	else
+		mpGDevice->ActivePS(customPixelShader);
+
 	if (mpGDevice->GeometryShaderSupport)
 		mpGDevice->ActiveGS(mpGS);
 
@@ -101,6 +111,7 @@ void ACSpriteBatch::BeginRender()
 
 void ACSpriteBatch::Render(ACTexture* texture, Vector2& position, const Vector4& color)
 {
+	//preciso criar um skin pq o gerenciador de vertices usa ele pra renderizar
 	ACSkin* skin = GetSkin(texture);
 
 	//seta os dados conforme os parametros e ja converte para o espaço homogeneo

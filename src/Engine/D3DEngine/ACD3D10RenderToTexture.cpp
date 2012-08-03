@@ -84,6 +84,7 @@ bool ACD3D10RenderToTexture::Initialize(int width, int height)
 	mpTexture->Height = height;
 	mpTexture->TextureType = ACTEXTURETYPE::ACTT_Texture2D;
 	mpTexture->pData = mpShaderResourceView;
+	mpTexture->IsRenderTarget = true;
 
 	return true;
 };

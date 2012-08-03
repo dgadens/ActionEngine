@@ -47,6 +47,9 @@ void ACSkin::Release()
 	for(char i = 0; i < NUM_TEXTURES; i++)
 	{
 		if (Textures[i] != nullptr)
-			mpCManager->RemoveTexture(Textures[i]);
+		{
+			if (!Textures[i]->IsRenderTarget)
+				mpCManager->RemoveTexture(Textures[i]);
+		}
 	}
 };

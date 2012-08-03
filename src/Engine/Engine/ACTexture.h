@@ -15,7 +15,8 @@ struct ACTexture
 {
 	UINT			ID;             //id dentro do contentmanager
 	UINT			Instance;       //numero de instancias q usam esse cara
-	std::string		Name;      
+	std::string		Name;
+	BOOL            IsRenderTarget;
 	FLOAT			Alpha;
 	int				Width;
 	int				Height;

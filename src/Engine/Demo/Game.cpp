@@ -8,8 +8,7 @@ Game::Game(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 Game::~Game()
 {
-	if (mpFont !=nullptr)
-		mpCManager->RemoveFont(mpFont);
+	mpCManager->RemoveFont(mpFont);
 
 	SAFE_DELETE(mpPowerCube);
 	SAFE_DELETE(mpDynamicTest);
@@ -56,7 +55,7 @@ void Game::Initialize()
 	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullCCW);
 	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_LineList);
 
-	mRenderTargetID = mpGDevice->CreateRenderTarget(300,300);
+	mRenderTargetID = mpGDevice->CreateRenderTarget(mpGDevice->GetVPWidth(), mpGDevice->GetVPHeight());
 
 };
 
@@ -66,6 +65,7 @@ void Game::ReziseWindow(INT width, INT height)
 	mpGDevice->Resize(width, height);
 	mpCamera->SetWidth(width);
 	mpCamera->SetHeight(height);
+	mpGDevice->ResizeRenderTarget(mRenderTargetID, width, height);
 };
 
 //carrega os conteudos necessarios
@@ -111,7 +111,7 @@ void Game::Draw()
 
 		//Mandar renderizar daqui 
 		//ativa o rendertarget pra textura
-		mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(1,0,0,1));
+		mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
 		mpGDevice->RenderTargetActivate(mRenderTargetID);
 
 		//mpDynamicTest->Render(mpCamera);
@@ -125,7 +125,7 @@ void Game::Draw()
 		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
 
 		mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_NonPremultiplied);
-		mpSpriteBatch->Render(rtTexture, Vector2(100,100), Vector4(1,1,1,1));
+		mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
 		mpSpriteBatch->EndRender();
 
 		DrawTexts();
