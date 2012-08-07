@@ -8,7 +8,6 @@
 #ifndef __ACTIMECONTROL_H
 #define __ACTIMECONTROL_H
 
-#include <windows.h>
 #include "EngineCommon.h"
 
 class ACTimer;

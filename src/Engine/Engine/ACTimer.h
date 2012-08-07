@@ -2,7 +2,7 @@
 #ifndef __ACTIMER_H
 #define __ACTIMER_H
 
-#include <windows.h>
+#include <WinBase.h>
 
 class ACTimer 
 {
