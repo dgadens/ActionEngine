@@ -111,22 +111,22 @@ void Game::Draw()
 
 		//Mandar renderizar daqui 
 		//ativa o rendertarget pra textura
-		/*mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
-		mpGDevice->RenderTargetActivate(mRenderTargetID);*/
+		//mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
+		//mpGDevice->RenderTargetActivate(mRenderTargetID);
 
 		//mpDynamicTest->Render(mpCamera);
 		mpSpriteTest->Draw();
-		//mpPowerCube->Render(mpCamera);
+		mpPowerCube->Render(mpCamera);
 		mpLinePointTest->Render(mpCamera);
 		//ate aqui
 
 		//seta o render target para screen
-	/*	mpGDevice->RenderTargetActivate(0);
-		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
+		//mpGDevice->RenderTargetActivate(0);
+		//ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
 
-		mpSpriteBatch->BeginRender();
-		mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
-		mpSpriteBatch->EndRender();*/
+		//mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_Opaque);
+		//mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
+		//mpSpriteBatch->EndRender();
 
 		DrawTexts();
 		mpGDevice->EndRendering();
@@ -151,6 +151,9 @@ void Game::SetPerframeData()
 void Game::DrawTexts()
 {
 	mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_NonPremultiplied);
-	mpSpriteBatch->RenderString(mpFont, "FPS: " + GenericTools::IntToString(ACTimeControl::GetFPS()), Vector2(0,0), Vector4(1,1,0,1));
+	std::string text = "FPS: " + GenericTools::IntToString(ACTimeControl::GetFPS()) +"\n";
+	text += "GPU: " + std::string(mpGDevice->VideoCardDescription) +"\n";
+	text += "Res: " + GenericTools::IntToString(mpGDevice->GetVPWidth()) + " x " +  GenericTools::IntToString(mpGDevice->GetVPHeight()) +"\n";
+	mpSpriteBatch->RenderString(mpFont, text, Vector2(0,0), Vector4(1,1,0,1));
 	mpSpriteBatch->EndRender();
 };

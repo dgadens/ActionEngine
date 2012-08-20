@@ -141,7 +141,6 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
     };
 	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
-
 	//********************************
 	//  cria do dispositivo grafico
 	//********************************
@@ -168,8 +167,8 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 	//*********************************
 	// fim da criacao do dispositivo grafico
 	//*********************************
-	IDXGIAdapter* pDXGIAdapter = ACD3DTools::GetDXGIAdapter();
 	IDXGIFactory* pDXGIFactory = ACD3DTools::GetDXGIFactory();
+	IDXGIAdapter* pDXGIAdapter = ACD3DTools::GetDXGIAdapter();
 
 	//usando os objetos acima ele retorna algumas configuracoes
 	IDXGIOutput*  pAdapterOutput;
