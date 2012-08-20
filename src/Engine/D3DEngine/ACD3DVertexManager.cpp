@@ -1,16 +1,17 @@
-#include "ACD3D10VertexManager.h"
-#include "ACD3D10.h"
+#include "ACD3DVertexManager.h"
+#include "ACD3D.h"
 
-ACD3D10VertexManager::ACD3D10VertexManager(ACD3D10* pACD3D10, 
-										   ID3D10Device* gDevice, 
-										   UINT maxVertices, 
-										   UINT maxIndices, 
-										   FILE* log)
+ACD3DVertexManager::ACD3DVertexManager(ACD3D* pACD3D, 
+									   ID3D11Device* gDevice, 
+									   UINT maxVertices, 
+									   UINT maxIndices, 
+									   FILE* log)
 {
-	mpACD3D10 = pACD3D10;
+	mpACD3D = pACD3D;
 	mpLOG = log;
 	mpCurrentVertexBuffer = nullptr;
 	mpGDevice = gDevice;
+	mpGDevice->GetImmediateContext(&mpContext);
 	mIsWire = false;
 	mChangeAnyCache = false;
 
@@ -20,33 +21,33 @@ ACD3D10VertexManager::ACD3D10VertexManager(ACD3D10* pACD3D10,
 	for (int i = 0; i < NUM_CACHES; i++)
 	{
 		//position 
-		mpCacheP[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPosition ), VertexFormat::VF_VertexPosition, log);
+		mpCacheP[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPosition ), VertexFormat::VF_VertexPosition, log);
 		//position colored
-		mpCachePC[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
+		mpCachePC[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
 		//position textured	
-		mpCachePT[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionTextured ), VertexFormat::VF_VertexPositionTextured, log);
+		mpCachePT[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionTextured ), VertexFormat::VF_VertexPositionTextured, log);
 		//position normal textured
-		mpCachePNT[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionNormalTextured ), VertexFormat::VF_VertexPositionNormalTextured, log);
+		mpCachePNT[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionNormalTextured ), VertexFormat::VF_VertexPositionNormalTextured, log);
 		//position textured extra info
-		mpCachePTE[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionTexturedExtraInfo ), VertexFormat::VF_VertexPositionTexturedExtraInfo, log);
+		mpCachePTE[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionTexturedExtraInfo ), VertexFormat::VF_VertexPositionTexturedExtraInfo, log);
 		//skinedmesh
-		mpCacheSM[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexSkinnedMesh ), VertexFormat::VF_VertexSkinnedMesh, log);
+		mpCacheSM[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexSkinnedMesh ), VertexFormat::VF_VertexSkinnedMesh, log);
 		//sprite
-		mpCacheSP[i] = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexSprite ), VertexFormat::VF_VertexSprite, log);
+		mpCacheSP[i] = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexSprite ), VertexFormat::VF_VertexSprite, log);
 	}
 
 	//dynamicbuffer para as linhas
-	mpCacheLines = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
+	mpCacheLines = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
 	//dynamicbuffer para os pontos
-	mpCachePoints = new ACD3D10VertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
+	mpCachePoints = new ACD3DVertexCache(this, gDevice, mMaxVertices, mMaxIndices, sizeof ( ACVertexPositionColored ), VertexFormat::VF_VertexPositionColored, log);
 };
 
-ACD3D10VertexManager::~ACD3D10VertexManager()
+ACD3DVertexManager::~ACD3DVertexManager()
 {
 	Release();
 };
 
-HRESULT ACD3D10VertexManager::CreateStaticBuffer(VertexFormat vertexFormat, 
+HRESULT ACD3DVertexManager::CreateStaticBuffer(VertexFormat vertexFormat, 
 												 UINT numVertices, 
 												 UINT numIndices, 
 												 const void* pVertices, 
@@ -68,7 +69,7 @@ HRESULT ACD3D10VertexManager::CreateStaticBuffer(VertexFormat vertexFormat,
 		(*ppOutVertexBufferPtr)->NumPrimitives = INT(numVertices / 3);
 
 	//***** CRIA VB *********
-	ID3D10Buffer* pVB = nullptr;
+	ID3D11Buffer* pVB = nullptr;
 
 	//seleciona a estrutura correta de vertice
 	UINT byteWidth = 0;
@@ -89,16 +90,16 @@ HRESULT ACD3D10VertexManager::CreateStaticBuffer(VertexFormat vertexFormat,
 	byteWidth *= numVertices;
 
 	//cria a descricao do vertexbuffer
-	D3D10_BUFFER_DESC vbd;
-	vbd.Usage = D3D10_USAGE_DEFAULT;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_DEFAULT;
 	vbd.ByteWidth = byteWidth; 
-	vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
-	D3D10_SUBRESOURCE_DATA vbInitData;
+	D3D11_SUBRESOURCE_DATA vbInitData;
 	vbInitData.pSysMem = pVertices;
 
-	hr = ACD3D10Globals::G_pD3dDevice->CreateBuffer( &vbd, &vbInitData, &pVB );
+	hr = mpGDevice->CreateBuffer( &vbd, &vbInitData, &pVB );
 	if (FAILED(hr))
 	{
 		MessageBoxA(nullptr, "[ERROR] Create vb error. CreateStaticBuffer()","Error", MB_OK | MB_ICONERROR);
@@ -114,19 +115,19 @@ HRESULT ACD3D10VertexManager::CreateStaticBuffer(VertexFormat vertexFormat,
 	// se passar a lista de indices entao ele cria senao nao
 	if (pIndices!=nullptr)
 	{
-		ID3D10Buffer* pIB = nullptr;
+		ID3D11Buffer* pIB = nullptr;
 		byteWidth = sizeof( UINT ) * numIndices;
 
-		D3D10_BUFFER_DESC ibd;
-		ibd.Usage = D3D10_USAGE_DEFAULT;
+		D3D11_BUFFER_DESC ibd;
+		ibd.Usage = D3D11_USAGE_DEFAULT;
 		ibd.ByteWidth = byteWidth; 
-		ibd.BindFlags = D3D10_BIND_INDEX_BUFFER;
+		ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		ibd.CPUAccessFlags = 0;
 		ibd.MiscFlags = 0;
-		D3D10_SUBRESOURCE_DATA ibInitData;
+		D3D11_SUBRESOURCE_DATA ibInitData;
 		ibInitData.pSysMem = pIndices;
 
-		hr = ACD3D10Globals::G_pD3dDevice->CreateBuffer(&ibd, &ibInitData, &pIB);
+		hr = mpGDevice->CreateBuffer(&ibd, &ibInitData, &pIB);
 		if (FAILED(hr))
 		{
 			MessageBoxA(nullptr, "[ERROR] Create ib error. CreateStaticBuffer()","Error", MB_OK | MB_ICONERROR);
@@ -140,48 +141,48 @@ HRESULT ACD3D10VertexManager::CreateStaticBuffer(VertexFormat vertexFormat,
 
 };
 
-void ACD3D10VertexManager::InvalidateStaticBuffer()
+void ACD3DVertexManager::InvalidateStaticBuffer()
 {
 	mpCurrentVertexBuffer = nullptr;
 	mpCurrentSkin = nullptr;
 };
 
-void ACD3D10VertexManager::ReleaseBuffer(ACVertexBuffer* vertexBuffer)
+void ACD3DVertexManager::ReleaseBuffer(ACVertexBuffer* vertexBuffer)
 {
-	ID3D10Buffer* v = static_cast<ID3D10Buffer*>(vertexBuffer->pVB);
+	ID3D11Buffer* v = static_cast<ID3D11Buffer*>(vertexBuffer->pVB);
 
 	if (vertexBuffer->pIB != nullptr)
 	{
-		ID3D10Buffer* i = static_cast<ID3D10Buffer*>(vertexBuffer->pIB);
+		ID3D11Buffer* i = static_cast<ID3D11Buffer*>(vertexBuffer->pIB);
 		SAFE_RELEASE(i);
 	}
 
 	SAFE_RELEASE(v);
 };
 
-HRESULT ACD3D10VertexManager::Render(ACVertexBuffer* vertexBuffer)
+HRESULT ACD3DVertexManager::Render(ACVertexBuffer* vertexBuffer)
 {
 	//se nao for o skin corrente entao ele tem q setar os dados
 	if (vertexBuffer->Skin!=mpCurrentSkin)
 	{
 		mpCurrentSkin = vertexBuffer->Skin;
 
-		ACSHADEMODE shadeMode = mpACD3D10->GetShadeMode();
+		ACSHADEMODE shadeMode = mpACD3D->GetShadeMode();
 
 		//se for modo wireframe entao ele usa a cor pra setar o material e ja tira todas as texturas pra nao dar zebra
 		if (mIsWire)
 		{
 			////manda todo o skin para a gpu para renderizar
 			Vector4 wc(&mWireColor, 1);
-			mpACD3D10->SetMaterialAmbient(mWireColor);
-			mpACD3D10->SetMaterialDiffuse(wc);
-			mpACD3D10->SetMaterialSpecular(mWireColor);
-			mpACD3D10->SetMaterialSpecularPower(1);
-			mpACD3D10->SetMaterialEmissive(mWireColor);
+			mpACD3D->SetMaterialAmbient(mWireColor);
+			mpACD3D->SetMaterialDiffuse(wc);
+			mpACD3D->SetMaterialSpecular(mWireColor);
+			mpACD3D->SetMaterialSpecularPower(1);
+			mpACD3D->SetMaterialEmissive(mWireColor);
 			for (int i = 0; i < NUM_TEXTURES; i++)
-				mpACD3D10->SetTexture(nullptr, i);
+				mpACD3D->SetTexture(nullptr, i);
 
-			mpACD3D10->ApplyConstants();
+			mpACD3D->ApplyConstants();
 		}
 		else
 		{
@@ -190,11 +191,11 @@ HRESULT ACD3D10VertexManager::Render(ACVertexBuffer* vertexBuffer)
 				////manda todo o skin para a gpu para renderizar
 				if (mpCurrentSkin->UseMaterial)
 				{
-					mpACD3D10->SetMaterialAmbient(mpCurrentSkin->Material.AmbientColor);
-					mpACD3D10->SetMaterialDiffuse(mpCurrentSkin->Material.DiffuseColor);
-					mpACD3D10->SetMaterialSpecular(mpCurrentSkin->Material.SpecularColor);
-					mpACD3D10->SetMaterialSpecularPower(mpCurrentSkin->Material.SpecularPower);
-					mpACD3D10->SetMaterialEmissive(mpCurrentSkin->Material.EmissiveColor);
+					mpACD3D->SetMaterialAmbient(mpCurrentSkin->Material.AmbientColor);
+					mpACD3D->SetMaterialDiffuse(mpCurrentSkin->Material.DiffuseColor);
+					mpACD3D->SetMaterialSpecular(mpCurrentSkin->Material.SpecularColor);
+					mpACD3D->SetMaterialSpecularPower(mpCurrentSkin->Material.SpecularPower);
+					mpACD3D->SetMaterialEmissive(mpCurrentSkin->Material.EmissiveColor);
 				}
 
 				//se for triangulo entao ele adiciona as texturas senao ele tira todas
@@ -204,20 +205,20 @@ HRESULT ACD3D10VertexManager::Render(ACVertexBuffer* vertexBuffer)
 				{
 					//se for pointsprite ele usa so a primeira textura
 					if (shadeMode == ACSHADEMODE::ACSM_PointSprite)
-						mpACD3D10->SetTexture(mpCurrentSkin->Textures[0], 0);
+						mpACD3D->SetTexture(mpCurrentSkin->Textures[0], 0);
 					else
 					{
 						for (int i = 0; i < NUM_TEXTURES; i++)
-							mpACD3D10->SetTexture(mpCurrentSkin->Textures[i], i);
+							mpACD3D->SetTexture(mpCurrentSkin->Textures[i], i);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < NUM_TEXTURES; i++)
-						mpACD3D10->SetTexture(nullptr, i);
+						mpACD3D->SetTexture(nullptr, i);
 				}
 
-				mpACD3D10->ApplyConstants();
+				mpACD3D->ApplyConstants();
 			}
 		}
 	}
@@ -229,104 +230,104 @@ HRESULT ACD3D10VertexManager::Render(ACVertexBuffer* vertexBuffer)
 
 		UINT offset = 0;
 	
-		ID3D10Buffer* v = static_cast<ID3D10Buffer*>(mpCurrentVertexBuffer->pVB);
-		ACD3D10Globals::G_pD3dDevice->IASetVertexBuffers( 0, 1, &v, &mpCurrentVertexBuffer->Stride, &offset );
+		ID3D11Buffer* v = static_cast<ID3D11Buffer*>(mpCurrentVertexBuffer->pVB);
+		mpContext->IASetVertexBuffers( 0, 1, &v, &mpCurrentVertexBuffer->Stride, &offset );
 
-		switch (mpACD3D10->GetShadeMode())
+		switch (mpACD3D->GetShadeMode())
 		{
-			case ACSHADEMODE::ACSM_TriangleList: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); break;
-			case ACSHADEMODE::ACSM_TriangleStrip: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP ); break;
-			case ACSHADEMODE::ACSM_LineList: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_LINELIST ); break;
-			case ACSHADEMODE::ACSM_LineStrip: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP ); break;
+			case ACSHADEMODE::ACSM_TriangleList:	mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );		break;
+			case ACSHADEMODE::ACSM_TriangleStrip:	mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );	break;
+			case ACSHADEMODE::ACSM_LineList:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );			break;
+			case ACSHADEMODE::ACSM_LineStrip:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP );		break;
 			case ACSHADEMODE::ACSM_Point: 
-			case ACSHADEMODE::ACSM_PointSprite:	mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_POINTLIST ); break;
+			case ACSHADEMODE::ACSM_PointSprite:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );		break;
 		};
 
 		//se existe IB entao ele seta
 		if (mpCurrentVertexBuffer->pIB != nullptr)
 		{
-			ID3D10Buffer* i = static_cast<ID3D10Buffer*>(mpCurrentVertexBuffer->pIB);
-			ACD3D10Globals::G_pD3dDevice->IASetIndexBuffer(i, DXGI_FORMAT_R32_UINT, 0);
+			ID3D11Buffer* i = static_cast<ID3D11Buffer*>(mpCurrentVertexBuffer->pIB);
+			mpContext->IASetIndexBuffer(i, DXGI_FORMAT_R32_UINT, 0);
 
-			ACD3D10Globals::G_pD3dDevice->DrawIndexed( mpCurrentVertexBuffer->NumIndices, 0, 0);
+			mpContext->DrawIndexed( mpCurrentVertexBuffer->NumIndices, 0, 0);
 		}
 		else
-			ACD3D10Globals::G_pD3dDevice->Draw( mpCurrentVertexBuffer->NumVertices, 0);
+			mpContext->Draw( mpCurrentVertexBuffer->NumVertices, 0);
 	}
 	else
 	{
 		//se existe IB entao ele seta
 		if (mpCurrentVertexBuffer->pIB != nullptr)
 		{
-			ACD3D10Globals::G_pD3dDevice->DrawIndexed( mpCurrentVertexBuffer->NumIndices, 0, 0);
+			mpContext->DrawIndexed( mpCurrentVertexBuffer->NumIndices, 0, 0);
 		}
 		else
-			ACD3D10Globals::G_pD3dDevice->Draw( mpCurrentVertexBuffer->NumVertices, 0);
+			mpContext->Draw( mpCurrentVertexBuffer->NumVertices, 0);
 	}
 
 	return AC_OK;
 };
 
 
-HRESULT ACD3D10VertexManager::RenderLines(UINT numVertices, 
-										  UINT numIndices, 
-										  ACVertexPositionColored* vertices, 
-										  UINT* indices,
-										  BOOL strip)
+HRESULT ACD3DVertexManager::RenderLines(UINT numVertices, 
+										UINT numIndices, 
+										ACVertexPositionColored* vertices, 
+										UINT* indices,
+										BOOL strip)
 {
 	//invalida o staticbuffer e tb o skin corrente
 	InvalidateStaticBuffer();
 
 	// se precisar ele ja executa o flush antes de trocar o estado
-	mpACD3D10->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
+	mpACD3D->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
 
 	//pega o atual para setar no final
-	ACSHADEMODE currentSM = mpACD3D10->GetShadeMode();
+	ACSHADEMODE currentSM = mpACD3D->GetShadeMode();
 	
 	if (strip)
-		mpACD3D10->SetShadeMode(ACSHADEMODE::ACSM_LineStrip);
+		mpACD3D->SetShadeMode(ACSHADEMODE::ACSM_LineStrip);
 	else
-		mpACD3D10->SetShadeMode(ACSHADEMODE::ACSM_LineList);
+		mpACD3D->SetShadeMode(ACSHADEMODE::ACSM_LineList);
 
 	mpCacheLines->Add(numVertices, numIndices, vertices, indices, nullptr);
 	mpCacheLines->Flush();
 
-	mpACD3D10->SetShadeMode(currentSM);
+	mpACD3D->SetShadeMode(currentSM);
 
 	return AC_OK;
 };
 
 
-HRESULT ACD3D10VertexManager::RenderPoints(UINT numVertices, 
-										   ACVertexPositionColored* vertices)
+HRESULT ACD3DVertexManager::RenderPoints(UINT numVertices, 
+										 ACVertexPositionColored* vertices)
 {
 	//invalida o staticbuffer e tb o skin corrente
 	InvalidateStaticBuffer();
 
 	// se precisar ele ja executa o flush antes de trocar o estado
-	mpACD3D10->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
+	mpACD3D->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
 
 	//pega o atual para setar no final
-	ACSHADEMODE currentSM = mpACD3D10->GetShadeMode();
+	ACSHADEMODE currentSM = mpACD3D->GetShadeMode();
 	
-	mpACD3D10->SetShadeMode(ACSHADEMODE::ACSM_Point);
+	mpACD3D->SetShadeMode(ACSHADEMODE::ACSM_Point);
 
 	mpCachePoints->Add(numVertices, 0, vertices, nullptr, nullptr);
 	mpCachePoints->Flush();
 
-	mpACD3D10->SetShadeMode(currentSM);
+	mpACD3D->SetShadeMode(currentSM);
 
 	return AC_OK;
 };
 
-HRESULT ACD3D10VertexManager::Render(VertexFormat vertexFormat, 
+HRESULT ACD3DVertexManager::Render(VertexFormat vertexFormat, 
 									 UINT numVertices, 
 									 UINT numIndices, 
 									 void* vertices, 
 									 UINT* indices, 
 									 ACSkin* skin)
 {
-	ACD3D10VertexCache **pCache=nullptr,
+	ACD3DVertexCache **pCache=nullptr,
 						*pCacheEmpty=nullptr,
 						*pCacheFullest=nullptr;
 	int emptyVC   = -1;
@@ -376,7 +377,7 @@ HRESULT ACD3D10VertexManager::Render(VertexFormat vertexFormat,
 	return pCacheFullest->Add(numVertices, numIndices, vertices, indices, skin);
 };
 
-HRESULT ACD3D10VertexManager::ForcedFlushAll()
+HRESULT ACD3DVertexManager::ForcedFlushAll()
 {
 	//se entrou aqui e nao tiver nenhum cache modificado entao ele sai fora logo nao fica passando por todos
 	//pra ver se estao limpos
@@ -442,9 +443,9 @@ HRESULT ACD3D10VertexManager::ForcedFlushAll()
 	return AC_OK;
 };
 
-HRESULT ACD3D10VertexManager::ForcedFlush(VertexFormat vertexFormat)
+HRESULT ACD3DVertexManager::ForcedFlush(VertexFormat vertexFormat)
 {
-	ACD3D10VertexCache **pCache = nullptr;
+	ACD3DVertexCache **pCache = nullptr;
 	HRESULT hr = AC_OK;
 	int i=0;
 
@@ -467,27 +468,27 @@ HRESULT ACD3D10VertexManager::ForcedFlush(VertexFormat vertexFormat)
    return hr;
 };
 
-BOOL ACD3D10VertexManager::IsWire()
+BOOL ACD3DVertexManager::IsWire()
 {
 	return mIsWire;
 };
 
-void ACD3D10VertexManager::SetIsWire(BOOL value)
+void ACD3DVertexManager::SetIsWire(BOOL value)
 {
 	mIsWire = value;
 };
 
-Vector3 ACD3D10VertexManager::GetWireColor()
+Vector3 ACD3DVertexManager::GetWireColor()
 {
 	return mWireColor;
 };
 
-void ACD3D10VertexManager::SetWireColor(const Vector3& color)
+void ACD3DVertexManager::SetWireColor(const Vector3& color)
 {
 	mWireColor = color;
 };
 
-void ACD3D10VertexManager::Release()
+void ACD3DVertexManager::Release()
 {
 	SAFE_DELETE(mpCacheLines);
 	SAFE_DELETE(mpCachePoints);
@@ -504,7 +505,7 @@ void ACD3D10VertexManager::Release()
 	}
 };
 
-void ACD3D10VertexManager::Log(char* message, ...)
+void ACD3DVertexManager::Log(char* message, ...)
 {
 	if (mpLOG!=nullptr)
 	{

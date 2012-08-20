@@ -111,8 +111,8 @@ void Game::Draw()
 
 		//Mandar renderizar daqui 
 		//ativa o rendertarget pra textura
-		mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
-		mpGDevice->RenderTargetActivate(mRenderTargetID);
+		/*mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
+		mpGDevice->RenderTargetActivate(mRenderTargetID);*/
 
 		//mpDynamicTest->Render(mpCamera);
 		mpSpriteTest->Draw();
@@ -121,12 +121,12 @@ void Game::Draw()
 		//ate aqui
 
 		//seta o render target para screen
-		mpGDevice->RenderTargetActivate(0);
+	/*	mpGDevice->RenderTargetActivate(0);
 		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
 
 		mpSpriteBatch->BeginRender();
 		mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
-		mpSpriteBatch->EndRender();
+		mpSpriteBatch->EndRender();*/
 
 		DrawTexts();
 		mpGDevice->EndRendering();

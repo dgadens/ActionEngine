@@ -1,14 +1,14 @@
-#include "ACD3D10VertexCache.h"
-#include "ACD3D10VertexManager.h"
-#include "ACD3D10.h"
+#include "ACD3DVertexCache.h"
+#include "ACD3DVertexManager.h"
+#include "ACD3D.h"
 
-ACD3D10VertexCache::ACD3D10VertexCache(ACD3D10VertexManager* vManager,
-									   ID3D10Device* gDevice,
-									   UINT vertexMax, 
-									   UINT indicesMax, 
-									   UINT nStride,  
-									   VertexFormat vFormat, 
-									   FILE* log)
+ACD3DVertexCache::ACD3DVertexCache(ACD3DVertexManager* vManager,
+								   ID3D11Device* gDevice,
+								   UINT vertexMax, 
+								   UINT indicesMax, 
+								   UINT nStride,  
+								   VertexFormat vFormat, 
+								   FILE* log)
 {
 	HRESULT hr;
 
@@ -19,6 +19,7 @@ ACD3D10VertexCache::ACD3D10VertexCache(ACD3D10VertexManager* vManager,
 
 	mpVManager			= vManager;
 	mpGDevice			= gDevice;
+	mpGDevice->GetImmediateContext(&mpContext);
 	mpLOG				= log;
 
 	mNumVerticesMax		= vertexMax;
@@ -26,44 +27,40 @@ ACD3D10VertexCache::ACD3D10VertexCache(ACD3D10VertexManager* vManager,
 	mStride				= nStride;
 
 	//cria o vb
-	D3D10_BUFFER_DESC vbd;
-	vbd.Usage = D3D10_USAGE_DYNAMIC;
+	D3D11_BUFFER_DESC vbd;
+	vbd.Usage = D3D11_USAGE_DYNAMIC;
 	vbd.ByteWidth =  mStride * vertexMax; 
-	vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-	vbd.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vbd.MiscFlags = 0;
-	D3D10_SUBRESOURCE_DATA vbInitData;
-	vbInitData.pSysMem = nullptr;
-	
+	vbd.StructureByteStride = 0;
 	hr = gDevice->CreateBuffer( &vbd, nullptr, &mpVB );
 	if (FAILED(hr)) mpVB = nullptr;
 
 	//cria o indexbuffer
-	D3D10_BUFFER_DESC ibd;
-	ibd.Usage = D3D10_USAGE_DYNAMIC;
+	D3D11_BUFFER_DESC ibd;
+	ibd.Usage = D3D11_USAGE_DYNAMIC;
 	ibd.ByteWidth = sizeof ( UINT) * indicesMax; 
-	ibd.BindFlags = D3D10_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	ibd.MiscFlags = 0;
-	D3D10_SUBRESOURCE_DATA ibInitData;
-	ibInitData.pSysMem = nullptr;
-
+	ibd.StructureByteStride = 0;
 	hr = gDevice->CreateBuffer(&ibd, nullptr, &mpIB);
 	if (FAILED(hr)) mpIB = nullptr;
 };
 
-ACD3D10VertexCache::~ACD3D10VertexCache()
+ACD3DVertexCache::~ACD3DVertexCache()
 {
 	SAFE_RELEASE(mpVB);
 	SAFE_RELEASE(mpIB);
 };
 
-BOOL ACD3D10VertexCache::UseSkin(ACSkin* skin)
+BOOL ACD3DVertexCache::UseSkin(ACSkin* skin)
 {
 	return mpSkin == skin;
 };
 
-HRESULT ACD3D10VertexCache::Add(UINT numVertices, UINT numIndices, void* vertices, UINT* indices, ACSkin* skin)
+HRESULT ACD3DVertexCache::Add(UINT numVertices, UINT numIndices, void* vertices, UINT* indices, ACSkin* skin)
 {
 	HRESULT hr;
 
@@ -75,7 +72,7 @@ HRESULT ACD3D10VertexCache::Add(UINT numVertices, UINT numIndices, void* vertice
 
 	INT   posV;
 	INT   posI;
-	D3D10_MAP flag;
+	D3D11_MAP flag;
 
 	//se passar mais vertices doq o buffer suporta fudeu
 	if (numVertices > mNumVerticesMax || numIndices > mNumIndicesMax)
@@ -112,26 +109,35 @@ HRESULT ACD3D10VertexCache::Add(UINT numVertices, UINT numIndices, void* vertice
 	if (NumVertices == 0) 
 	{
 		posV = posI = 0;
-		flag = D3D10_MAP_WRITE_DISCARD;
+		flag = D3D11_MAP_WRITE_DISCARD;
 	}
 	else  //senao ele apenas concatena sem sobrepor oq ja tem
 	{
 		posV = mStride * NumVertices;
 		posI = sizeof( UINT ) * NumIndices;
-		flag = D3D10_MAP_WRITE_NO_OVERWRITE;
+		flag = D3D11_MAP_WRITE_NO_OVERWRITE;
 	}
 
-	//da um lock no vb e ib, se der erro no lock do IB entao ele ja fecha o VB tb
-	if (FAILED(mpVB->Map(flag, 0, (void**)&tmpVertices)))
-		return AC_BUFFERLOCK;
-	if (FAILED(mpIB->Map(flag, 0, (void**)&tmpIndices))) 
+	//lock no VB
+	D3D11_MAPPED_SUBRESOURCE vbMappedResource;
+	hr = mpContext->Map(mpVB, 0, flag, 0, &vbMappedResource);
+	if(FAILED(hr))
 	{
-		mpVB->Unmap();
 		return AC_BUFFERLOCK;
 	}
-
+	tmpVertices = (BYTE*)vbMappedResource.pData;
 	// copias os vertices para dentro do buffer partindo da posicao atual
 	memcpy(tmpVertices + posV, vertices, sizeV);
+
+	//lock no IB
+	D3D11_MAPPED_SUBRESOURCE ibMappedResource;
+	hr = mpContext->Map(mpIB, 0, flag, 0, &ibMappedResource);
+	if(FAILED(hr))
+	{
+		mpContext->Unmap(mpVB, 0);
+		return AC_BUFFERLOCK;
+	}
+	tmpIndices = (UINT*)ibMappedResource.pData;
 
 	// copia os indices para o buffer, ele copia para as posicoes certas, pq pode ter partes sem indices e com saca
 	UINT base = NumVertices;
@@ -150,15 +156,15 @@ HRESULT ACD3D10VertexCache::Add(UINT numVertices, UINT numIndices, void* vertice
 	NumVertices += numVertices;
 
 	// unlock buffers
-	mpVB->Unmap();
-	mpIB->Unmap();
+	mpContext->Unmap(mpVB, 0);
+	mpContext->Unmap(mpIB, 0);
 
 	IsEmpty = false;
 
 	return AC_OK;
 };
 
-HRESULT ACD3D10VertexCache::Flush()
+HRESULT ACD3DVertexCache::Flush()
 {
 	//se nao tem vertices no cache entao nao renderiza nada
 	if  (NumVertices <= 0) 
@@ -166,24 +172,24 @@ HRESULT ACD3D10VertexCache::Flush()
 
 	//pega a implementacao da interface do render para comecar a setar os valores
 	//se existir um skin entao ele aplica, pode nao haver no caso de renderizar pontos ou linhas
-	ACD3D10* acd3d10 = mpVManager->GetACD3D10();
+	ACD3D* acd3d = mpVManager->GetACD3D();
 
-	ACSHADEMODE shadeMode = acd3d10->GetShadeMode();
+	ACSHADEMODE shadeMode = acd3d->GetShadeMode();
 
 	//se for wireframe entao ele passa a cor do wire para o shader
 	if (mpVManager->IsWire())
 	{
 		//manda todo o skin para a gpu para renderizar
 		Vector4 wc(&mpVManager->GetWireColor(), 1);
-		acd3d10->SetMaterialAmbient(mpVManager->GetWireColor());
-		acd3d10->SetMaterialDiffuse(wc);
-		acd3d10->SetMaterialSpecular(mpVManager->GetWireColor());
-		acd3d10->SetMaterialSpecularPower(1);
-		acd3d10->SetMaterialEmissive(mpVManager->GetWireColor());
+		acd3d->SetMaterialAmbient(mpVManager->GetWireColor());
+		acd3d->SetMaterialDiffuse(wc);
+		acd3d->SetMaterialSpecular(mpVManager->GetWireColor());
+		acd3d->SetMaterialSpecularPower(1);
+		acd3d->SetMaterialEmissive(mpVManager->GetWireColor());
 		for (int i = 0; i < NUM_TEXTURES; i++)
-			acd3d10->SetTexture(nullptr, i);
+			acd3d->SetTexture(nullptr, i);
 
-		acd3d10->ApplyConstants();
+		acd3d->ApplyConstants();
 	}
 	else
 	{
@@ -192,11 +198,11 @@ HRESULT ACD3D10VertexCache::Flush()
 			////manda todo o skin para a gpu para renderizar
 			if (mpSkin->UseMaterial)
 			{
-				acd3d10->SetMaterialAmbient(mpSkin->Material.AmbientColor);
-				acd3d10->SetMaterialDiffuse(mpSkin->Material.DiffuseColor);
-				acd3d10->SetMaterialSpecular(mpSkin->Material.SpecularColor);
-				acd3d10->SetMaterialSpecularPower(mpSkin->Material.SpecularPower);
-				acd3d10->SetMaterialEmissive(mpSkin->Material.EmissiveColor);
+				acd3d->SetMaterialAmbient(mpSkin->Material.AmbientColor);
+				acd3d->SetMaterialDiffuse(mpSkin->Material.DiffuseColor);
+				acd3d->SetMaterialSpecular(mpSkin->Material.SpecularColor);
+				acd3d->SetMaterialSpecularPower(mpSkin->Material.SpecularPower);
+				acd3d->SetMaterialEmissive(mpSkin->Material.EmissiveColor);
 			}
 
 			if (shadeMode == ACSHADEMODE::ACSM_TriangleList ||
@@ -204,17 +210,17 @@ HRESULT ACD3D10VertexCache::Flush()
 				shadeMode == ACSHADEMODE::ACSM_PointSprite) //sprites usam points no directx 10+
 			{
 				//se for pointsprite ele usa apenas a primeira textura
-				if (acd3d10->GetShadeMode() == ACSHADEMODE::ACSM_PointSprite)
+				if (acd3d->GetShadeMode() == ACSHADEMODE::ACSM_PointSprite)
 				{
 					if (mpSkin->Textures[0] != nullptr)
-						acd3d10->SetTexture(mpSkin->Textures[0], 0);
+						acd3d->SetTexture(mpSkin->Textures[0], 0);
 				}
 				else
 				{
 					for (int i = 0; i < NUM_TEXTURES; i++)
 					{
 						if (mpSkin->Textures[i] != nullptr)
-							acd3d10->SetTexture(mpSkin->Textures[i], i);
+							acd3d->SetTexture(mpSkin->Textures[i], i);
 					}
 				}
 			}
@@ -223,37 +229,35 @@ HRESULT ACD3D10VertexCache::Flush()
 				for (int i = 0; i < NUM_TEXTURES; i++)
 				{
 					if (mpSkin->Textures[i] != nullptr)
-						acd3d10->SetTexture(nullptr, i);
+						acd3d->SetTexture(nullptr, i);
 				}
 			}
 
-			acd3d10->ApplyConstants();
+			acd3d->ApplyConstants();
 		}
 		else
 		{
 			//quando nao tem skin entao ele passa a cor do material diffuso 1
-			acd3d10->SetMaterialDiffuse(Vector4(1));
+			acd3d->SetMaterialDiffuse(Vector4(1));
 			//zera as texturas
 			for (int i = 0; i < NUM_TEXTURES; i++)
-				acd3d10->SetTexture(nullptr, i);
-			acd3d10->ApplyConstants();
+				acd3d->SetTexture(nullptr, i);
+			acd3d->ApplyConstants();
 		}
 	}
 
 	//renderiza
 	UINT offset = 0;
-	mpGDevice->IASetVertexBuffers(0, 1, &mpVB, &mStride, &offset);
+	mpContext->IASetVertexBuffers(0, 1, &mpVB, &mStride, &offset);
 
-	switch (acd3d10->GetShadeMode())
+	switch (acd3d->GetShadeMode())
 	{
-		case ACSHADEMODE::ACSM_TriangleList: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); break;
-		case ACSHADEMODE::ACSM_TriangleStrip: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP ); break;
-		case ACSHADEMODE::ACSM_LineList: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_LINELIST ); break;
-		case ACSHADEMODE::ACSM_LineStrip: mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP ); break;
+		case ACSHADEMODE::ACSM_TriangleList:	mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );		break;
+		case ACSHADEMODE::ACSM_TriangleStrip:	mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );	break;
+		case ACSHADEMODE::ACSM_LineList:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );			break;
+		case ACSHADEMODE::ACSM_LineStrip:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP );		break;
 		case ACSHADEMODE::ACSM_Point:
-		case ACSHADEMODE::ACSM_PointSprite: 
-						  mpGDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_POINTLIST ); 
-						  break;
+		case ACSHADEMODE::ACSM_PointSprite:		mpContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_POINTLIST );		break;
 	};
 
 	//se existir indices e nao for pontos entao usa os indices
@@ -261,11 +265,11 @@ HRESULT ACD3D10VertexCache::Flush()
 		shadeMode != ACSHADEMODE::ACSM_Point &&
 		shadeMode != ACSHADEMODE::ACSM_PointSprite)
 	{
-		mpGDevice->IASetIndexBuffer(mpIB, DXGI_FORMAT_R32_UINT, 0);
-		mpGDevice->DrawIndexed(NumIndices, 0, 0);
+		mpContext->IASetIndexBuffer(mpIB, DXGI_FORMAT_R32_UINT, 0);
+		mpContext->DrawIndexed(NumIndices, 0, 0);
 	}
 	else
-		mpGDevice->Draw(NumVertices, 0);
+		mpContext->Draw(NumVertices, 0);
 
 	//seta os indices pra 0 pq quando ele der um add ele vai dar um discard nos vertices e indices
 	NumIndices = 0;
@@ -278,7 +282,7 @@ HRESULT ACD3D10VertexCache::Flush()
 	return AC_OK;
 };
 
-void ACD3D10VertexCache::Log(char* message, ...)
+void ACD3DVertexCache::Log(char* message, ...)
 {
 	if (mpLOG!=nullptr)
 	{

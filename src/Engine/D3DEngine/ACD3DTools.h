@@ -1,12 +1,12 @@
 
-#ifndef __ACD3D10TOOLS_H
-#define __ACD3D10TOOLS_H
+#ifndef __ACD3DTOOLS_H
+#define __ACD3DTOOLS_H
 
-#include <D3D10.h>  
+#include <D3D11.h>  
 
-#include "ACD3D10Globals.h"
+#include "ACD3DGlobals.h"
 
-class ACD3D10Tools
+class ACD3DTools
 {
 public:
 	static IDXGIFactory* GetDXGIFactory();
@@ -14,7 +14,7 @@ public:
 	static IDXGIDevice* GetDXGIDevice();
 };
 
-inline IDXGIFactory* ACD3D10Tools::GetDXGIFactory()
+inline IDXGIFactory* ACD3DTools::GetDXGIFactory()
 {
 	//pega o factory
 	IDXGIAdapter* pDXGIAdapter = GetDXGIAdapter();
@@ -38,7 +38,7 @@ inline IDXGIFactory* ACD3D10Tools::GetDXGIFactory()
 	return nullptr;
 };
 
-inline IDXGIAdapter* ACD3D10Tools::GetDXGIAdapter()
+inline IDXGIAdapter* ACD3DTools::GetDXGIAdapter()
 {
 	//pega o adaptador
 	IDXGIDevice* pDXGIDevice = GetDXGIDevice();
@@ -62,13 +62,13 @@ inline IDXGIAdapter* ACD3D10Tools::GetDXGIAdapter()
 	return nullptr;
 };
 
-inline IDXGIDevice* ACD3D10Tools::GetDXGIDevice()
+inline IDXGIDevice* ACD3DTools::GetDXGIDevice()
 {
 	//pega o dispositivo dxgi 
-	if (ACD3D10Globals::G_pD3dDevice != nullptr)
+	if (ACD3DGlobals::G_pD3dDevice != nullptr)
 	{
 		IDXGIDevice* pDXGIDevice;
-		HRESULT hr = ACD3D10Globals::G_pD3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
+		HRESULT hr = ACD3DGlobals::G_pD3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
 		if ( FAILED(hr) )
 		{
 			MessageBoxA(nullptr, "Erro ao resgatar dispositivo GXDI", "Erro", MB_OK);

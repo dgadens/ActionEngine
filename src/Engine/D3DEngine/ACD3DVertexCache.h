@@ -4,26 +4,27 @@
 // Date: 01/06/2012
 //*****************************
 
-#ifndef __ACD3D10VERTEXCACHE_H
-#define __ACD3D10VERTEXCACHE_H
+#ifndef __ACD3DVERTEXCACHE_H
+#define __ACD3DVERTEXCACHE_H
 
-#include <d3d10.h>
+#include <d3d11.h>
 
 #include "EngineMath.h"
 #include "ACSkin.h"
 #include "ACVertexFormat.h"
 
-class ACD3D10VertexManager;
+class ACD3DVertexManager;
 
 //classe q representa o vb dinamico
-class ACD3D10VertexCache
+class ACD3DVertexCache
 {
-	ID3D10Device*			mpGDevice;
-	ACD3D10VertexManager*	mpVManager;
+	ID3D11Device*			mpGDevice;
+	ID3D11DeviceContext*	mpContext;
+	ACD3DVertexManager*		mpVManager;
 	FILE*					mpLOG;
 	ACSkin*					mpSkin;         //skin atual quando troca ele faz o flush
-	ID3D10Buffer*			mpVB;
-	ID3D10Buffer*			mpIB;
+	ID3D11Buffer*			mpVB;
+	ID3D11Buffer*			mpIB;
 
 	UINT  mNumVerticesMax;  // numero maximo de vertices no buffer
 	UINT  mNumIndicesMax;   // numero maximo de indices no buffer
@@ -34,15 +35,15 @@ public:
 	UINT  NumVertices;		// numero atual de vertices no buffer
 	UINT  NumIndices;		// numero atual de indices no buffer
 
-	ACD3D10VertexCache(ACD3D10VertexManager* vManager,
-					   ID3D10Device* gDevice,
-					   UINT verticesMax, 
-					   UINT indicesMax, 
-                       UINT nStride,  
-                       VertexFormat vFormat, 
-					   FILE* log);
+	ACD3DVertexCache(ACD3DVertexManager* vManager,
+					 ID3D11Device* gDevice,
+					 UINT verticesMax, 
+					 UINT indicesMax, 
+                     UINT nStride,  
+                     VertexFormat vFormat, 
+					 FILE* log);
 
-	~ACD3D10VertexCache();
+	~ACD3DVertexCache();
 
 	//retorna se usa o skin passado como parametro
 	BOOL UseSkin(ACSkin* skin);

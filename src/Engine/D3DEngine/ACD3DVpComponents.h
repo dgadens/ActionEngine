@@ -4,32 +4,31 @@
 // date: 24/06/2011
 //**************************
 
-#ifndef __ACD3D10VPCOMPONENTS_H
-#define __ACD3D10VPCOMPONENTS_H
+#ifndef __ACD3DVPCOMPONENTS_H
+#define __ACD3DVPCOMPONENTS_H
 
-#include <d3d10.h>
-#include <d3dx10.h>
+#include <d3d11.h>
 #include <DXGI.h>
 
 #include "GenericTools.h"
 
-struct ACD3D10VpComponents
+struct ACD3DVpComponents
 {
 	IDXGISwapChain*				pSwapChain; 
-	ID3D10RenderTargetView*		pRenderTargetView; 
-	ID3D10DepthStencilView*		pDepthStencilView; 
-	D3D10_VIEWPORT 				Viewport;
+	ID3D11RenderTargetView*		pRenderTargetView; 
+	ID3D11DepthStencilView*		pDepthStencilView; 
+	D3D11_VIEWPORT 				Viewport;
 
-	ACD3D10VpComponents() 
+	ACD3DVpComponents() 
 	{
 		pSwapChain = nullptr; 
 		pRenderTargetView = nullptr; 
 		pDepthStencilView = nullptr; 
 
-		ZeroMemory(&Viewport, sizeof ( D3D10_VIEWPORT ));
+		ZeroMemory(&Viewport, sizeof ( D3D11_VIEWPORT ));
 	};
 
-	~ACD3D10VpComponents()
+	~ACD3DVpComponents()
 	{
 		Release();
 	};

@@ -4,8 +4,8 @@
 // Date: 29/05/2012
 //*********************************
 
-#ifndef __ACD3D10CONSTANTBUFFERSTRUCT_H
-#define __ACD3D10CONSTANTBUFFERSTRUCT_H
+#ifndef __ACD3DCONSTANTBUFFERSTRUCT_H
+#define __ACD3DCONSTANTBUFFERSTRUCT_H
 
 #include "EngineMath.h"
 

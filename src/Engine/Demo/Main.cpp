@@ -321,7 +321,7 @@ HRESULT EngineStartup()
 	//*** CRIA O PONTEIRO PARA O GRAPHICSDEVICE ***
 	//cria o objeto renderizador
 	pRenderer = new ACRenderer(HInst);
-	if (FAILED(pRenderer->CreateDevice("ACD3D10Engine.dll")))
+	if (FAILED(pRenderer->CreateDevice("ACD3DEngine.dll")))
 		return E_FAIL;
 	Globals::pRenderDevice = pRenderer->GetDevice();
 	if (Globals::pRenderDevice == nullptr) 

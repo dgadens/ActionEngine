@@ -4,11 +4,12 @@
 // date: 20/04/2011
 //***********************************
 
-#ifndef __ACD3D10_H
-#define __ACD3D10_H
+#ifndef __ACD3D_H
+#define __ACD3D_H
 
-#include <d3d10.h>
-#include <d3dx10.h>
+#include <d3d11.h>
+#include <d3dx11.h>
+#include <d3dcompiler.h>
 #include <DXGI.h>
 #include <WTypes.h>
 #include <map>
@@ -19,34 +20,35 @@
 #include "ACRenderDevice.h"
 
 #include "ACCamera.h"
-#include "ACD3D10Globals.h"
-#include "ACD3D10Tools.h"
-#include "ACD3D10Configurations.h"
-#include "ACD3D10VpComponents.h"
-#include "ACD3D10VertexLayoutProvider.h"
-#include "ACD3D10ConstantBuffersStructs.h"
-#include "ACD3D10VertexManager.h"
-#include "ACD3D10RenderToTexture.h"
+#include "ACD3DGlobals.h"
+#include "ACD3DTools.h"
+#include "ACD3DConfigurations.h"
+#include "ACD3DVpComponents.h"
+#include "ACD3DVertexLayoutProvider.h"
+#include "ACD3DConstantBuffersStructs.h"
+#include "ACD3DVertexManager.h"
+#include "ACD3DRenderToTexture.h"
 
 //herda da interface padrao
-class ACD3D10 : public ACRenderDevice
+class ACD3D : public ACRenderDevice
 {
 private:
 
-	D3D10_DRIVER_TYPE							mDriverType;
+	D3D_DRIVER_TYPE								mDriverType;
+	D3D_FEATURE_LEVEL							mFeatureLevel;
 	
-	std::map<HWND, ACD3D10VpComponents*>        mpVpComponents; //mantem os buffers
-	ACD3D10VpComponents*					    mpCurrentVpComponents;
-	std::vector<ACD3D10RenderToTexture*>        mpRenderTargets; //lista de rendertargets criados pelo cliente, retorna o id
+	std::map<HWND, ACD3DVpComponents*>			mpVpComponents; //mantem os buffers
+	ACD3DVpComponents*							mpCurrentVpComponents;
+	std::vector<ACD3DRenderToTexture*>			mpRenderTargets; //lista de rendertargets criados pelo cliente, retorna o id
 	BOOL										mStencil;
 	BOOL										mIsSceneRunning;
 	FLOAT										mClearColor[4];
 
 	//constant buffer usando para todos os shaders
-	ID3D10Buffer*								mpVSCBPerFrame;
-	ID3D10Buffer*								mpVSCBPerModel;
-	ID3D10Buffer*								mpVSCBPerPass;
-	ID3D10Buffer*								mpPSCBMaterial;
+	ID3D11Buffer*								mpVSCBPerFrame;
+	ID3D11Buffer*								mpVSCBPerModel;
+	ID3D11Buffer*								mpVSCBPerPass;
+	ID3D11Buffer*								mpPSCBMaterial;
 
 	VS_CB_PERFRAME                              mVSCBPerFrameData;
 	VS_CB_PERMODEL                              mVSCBPerModelData;
@@ -74,8 +76,8 @@ private:
 
 public:
 
-	ACD3D10(HINSTANCE hDLL);
-	~ACD3D10();
+	ACD3D(HINSTANCE hDLL);
+	~ACD3D();
 
 	//inicializacao
 	HRESULT Init(HWND, BOOL enableVSync, BOOL log);
@@ -146,12 +148,12 @@ public:
 
 	//Vertex buffer
 	HRESULT CreateStaticBuffer(VertexFormat vertexFormat, 
-									   UINT numVertices, 
-									   UINT numIndices, 
-									   const void* pVertices, 
-									   const UINT* pIndices, 
-									   ACSkin* pSkin,
-									   ACVertexBuffer** ppOutVertexBufferPtr);
+							   UINT numVertices, 
+							   UINT numIndices, 
+							   const void* pVertices, 
+							   const UINT* pIndices, 
+							   ACSkin* pSkin,
+							   ACVertexBuffer** ppOutVertexBufferPtr);
 
 	void ReleaseBuffer(ACVertexBuffer* vertexBuffer);
 	
@@ -198,7 +200,7 @@ public:
 };
 
 //declaracao das funcoes que vao ser externadas pela dll. 
-//Na real é um delegate e a assinatura esta dentro do ACD3D10.h dentro da dll
+//Na real é um delegate e a assinatura esta dentro do ACD3D.h dentro da dll
 DLLEXPORT HRESULT CreateRenderDevice(HINSTANCE hDLL, ACRenderDevice **pInterface);
 DLLEXPORT HRESULT ReleaseRenderDevice(ACRenderDevice **pInterface);
 

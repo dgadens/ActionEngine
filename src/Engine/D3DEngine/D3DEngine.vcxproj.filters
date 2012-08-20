@@ -30,58 +30,58 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ACD3D10Globals.h">
+    <ClInclude Include="ACD3DConfigurations.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10Configurations.h">
+    <ClInclude Include="ACD3DGlobals.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="ACD3D10Tools.h">
+    <ClInclude Include="ACD3DTools.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10VertexLayoutProvider.h">
+    <ClInclude Include="ACD3DVpComponents.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ACD3DVertexCache.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10ConstantBuffersStructs.h">
+    <ClInclude Include="ACD3DVertexLayoutProvider.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10VertexManager.h">
+    <ClInclude Include="ACD3DRenderToTexture.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10VertexCache.h">
+    <ClInclude Include="ACD3DConstantBuffersStructs.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ACD3D10RenderToTexture.h">
+    <ClInclude Include="ACD3DVertexManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ACD3D.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ACD3D10Configurations.cpp">
+    <ClCompile Include="ACD3DConfigurations.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10Globals.cpp">
+    <ClCompile Include="ACD3DGlobals.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10.cpp">
+    <ClCompile Include="ACD3DVertexCache.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10VertexLayoutProvider.cpp">
+    <ClCompile Include="ACD3DVertexLayoutProvider.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10VertexCache.cpp">
+    <ClCompile Include="ACD3DRenderToTexture.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10VertexManager.cpp">
+    <ClCompile Include="ACD3DVertexManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="ACD3D10RenderToTexture.cpp">
+    <ClCompile Include="ACD3D.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ACD3D10VpComponents.h">
-      <Filter>Header Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

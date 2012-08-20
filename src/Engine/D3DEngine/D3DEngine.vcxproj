@@ -14,7 +14,7 @@
     <ProjectGuid>{1157A469-5191-4ADA-A129-D3CA1667F952}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>D3DEngine</RootNamespace>
-    <ProjectName>ACD3D10Engine</ProjectName>
+    <ProjectName>ACD3DEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -63,7 +63,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <AdditionalDependencies>d3d10.lib;d3dx10.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMTD</IgnoreSpecificDefaultLibraries>
     </Link>
     <Manifest>
@@ -92,31 +92,31 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
-      <AdditionalDependencies>d3d10.lib;d3dx10d.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;DXGI.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ACD3D10.h" />
-    <ClInclude Include="ACD3D10ConstantBuffersStructs.h" />
-    <ClInclude Include="ACD3D10Globals.h" />
-    <ClInclude Include="ACD3D10Configurations.h" />
-    <ClInclude Include="ACD3D10RenderToTexture.h" />
-    <ClInclude Include="ACD3D10Tools.h" />
-    <ClInclude Include="ACD3D10VertexCache.h" />
-    <ClInclude Include="ACD3D10VertexLayoutProvider.h" />
-    <ClInclude Include="ACD3D10VertexManager.h" />
+    <ClInclude Include="ACD3DConfigurations.h" />
+    <ClInclude Include="ACD3D.h" />
+    <ClInclude Include="ACD3DConstantBuffersStructs.h" />
+    <ClInclude Include="ACD3DRenderToTexture.h" />
+    <ClInclude Include="ACD3DVertexCache.h" />
+    <ClInclude Include="ACD3DVertexLayoutProvider.h" />
+    <ClInclude Include="ACD3DVertexManager.h" />
+    <ClInclude Include="ACD3DGlobals.h" />
+    <ClInclude Include="ACD3DTools.h" />
+    <ClInclude Include="ACD3DVpComponents.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ACD3D10.cpp" />
-    <ClCompile Include="ACD3D10Globals.cpp" />
-    <ClCompile Include="ACD3D10Configurations.cpp" />
-    <ClCompile Include="ACD3D10RenderToTexture.cpp" />
-    <ClCompile Include="ACD3D10VertexCache.cpp" />
-    <ClCompile Include="ACD3D10VertexLayoutProvider.cpp" />
-    <ClCompile Include="ACD3D10VertexManager.cpp" />
-    <ClCompile Include="ACD3D10VpComponents.h" />
+    <ClCompile Include="ACD3D.cpp" />
+    <ClCompile Include="ACD3DGlobals.cpp" />
+    <ClCompile Include="ACD3DConfigurations.cpp" />
+    <ClCompile Include="ACD3DRenderToTexture.cpp" />
+    <ClCompile Include="ACD3DVertexCache.cpp" />
+    <ClCompile Include="ACD3DVertexLayoutProvider.cpp" />
+    <ClCompile Include="ACD3DVertexManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EngineCommon\EngineCommon.vcxproj">

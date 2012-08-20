@@ -4,47 +4,48 @@
 // Date: 01/06/2012
 //*****************************
 
-#ifndef __ACD3D10VERTEXMANAGER_H
-#define __ACD3D10VERTEXMANAGER_H
+#ifndef __ACD3DVertexManager_H
+#define __ACD3DVertexManager_H
 
-#include <d3d10.h>
+#include <d3d11.h>
 
 #include "EngineMath.h"
 #include "ACVertexFormat.h"
 #include "ACRenderDevice.h"
-#include "ACD3D10VertexCache.h"
+#include "ACD3DVertexCache.h"
 
 class ACSkin;
-class ACD3D10;
+class ACD3D;
 
-class ACD3D10VertexManager : public ACVertexManager
+class ACD3DVertexManager : public ACVertexManager
 {
-	ID3D10Device*           mpGDevice;
+	ID3D11Device*           mpGDevice;
+	ID3D11DeviceContext*    mpContext;
 	
-	ACD3D10VertexCache*		mpCacheLines;             //criei um vb dinamico exclusivo para armazenar so linhas
-	ACD3D10VertexCache*		mpCachePoints;            //criei um vb dinamico exclusivo para armazenar so pontos
+	ACD3DVertexCache*		mpCacheLines;             //criei um vb dinamico exclusivo para armazenar so linhas
+	ACD3DVertexCache*		mpCachePoints;            //criei um vb dinamico exclusivo para armazenar so pontos
 
-	ACD3D10VertexCache*		mpCacheP[NUM_CACHES];     // position
-	ACD3D10VertexCache*		mpCachePC[NUM_CACHES];    // position colored
-	ACD3D10VertexCache*		mpCachePT[NUM_CACHES];    // position textured
-	ACD3D10VertexCache*		mpCachePNT[NUM_CACHES];   // position normal textured
-	ACD3D10VertexCache*		mpCachePTE[NUM_CACHES];   // position textured extra info
-	ACD3D10VertexCache*		mpCacheSM[NUM_CACHES];    // skinnedmesh
-	ACD3D10VertexCache*		mpCacheSP[NUM_CACHES];    // sprite
+	ACD3DVertexCache*		mpCacheP[NUM_CACHES];     // position
+	ACD3DVertexCache*		mpCachePC[NUM_CACHES];    // position colored
+	ACD3DVertexCache*		mpCachePT[NUM_CACHES];    // position textured
+	ACD3DVertexCache*		mpCachePNT[NUM_CACHES];   // position normal textured
+	ACD3DVertexCache*		mpCachePTE[NUM_CACHES];   // position textured extra info
+	ACD3DVertexCache*		mpCacheSM[NUM_CACHES];    // skinnedmesh
+	ACD3DVertexCache*		mpCacheSP[NUM_CACHES];    // sprite
 
 	UINT					mMaxVertices; //numero maximo de vertices dentro do buffer
 	UINT					mMaxIndices;  //numero maximo de indices no buffer
 
-	ACD3D10*				mpACD3D10;   //referencia local para a classe principal, usando para poder setar os materiais
+	ACD3D*					mpACD3D;   //referencia local para a classe principal, usando para poder setar os materiais
 
 public:
-	ACD3D10VertexManager(ACD3D10* pACD3D10, 
-					     ID3D10Device* gDevice, 
-						 UINT maxVertices, 
-						 UINT maxIndices, 
-						 FILE* pLog);
+	ACD3DVertexManager(ACD3D* pACD3D, 
+  				       ID3D11Device* gDevice, 
+					   UINT maxVertices, 
+					   UINT maxIndices, 
+					   FILE* pLog);
 
-	~ACD3D10VertexManager();
+	~ACD3DVertexManager();
 
 	HRESULT CreateStaticBuffer(VertexFormat vertexFormat, 
 							   UINT numVertices, 
@@ -95,7 +96,7 @@ public:
 
 	void Log(char* message, ...);
 
-	ACD3D10* GetACD3D10(void) { return mpACD3D10; };
+	ACD3D* GetACD3D(void) { return mpACD3D; };
 };
 
 #endif
