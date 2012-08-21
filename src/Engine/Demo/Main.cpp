@@ -323,7 +323,7 @@ HRESULT EngineStartup()
 	pRenderer = new ACRenderer(HInst);
 	if (FAILED(pRenderer->CreateDevice("ACD3DEngine.dll")))
 	{
-		MessageBoxA(nullptr, "Loading ACD3DEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
+		MessageBoxA(nullptr, "Loading ACDIEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
 	}
 	Globals::pRenderDevice = pRenderer->GetDevice();

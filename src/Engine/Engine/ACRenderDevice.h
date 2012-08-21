@@ -99,7 +99,6 @@ class ACRenderDevice
 protected:
 	HWND mActiveWnd;		   //janela ativa para manipulacao
 	HWND mActiveWndRendering;  //janela ativa para renderizacao
-	HINSTANCE mhDLL;           //modulo dll
 	BOOL mWindowed;			   //modo janela?
 	CHAR mAdapterName[256];    //nome do adaptador
 	FILE* mpLOG;			   //arquivo de log

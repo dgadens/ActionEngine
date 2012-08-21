@@ -27,7 +27,8 @@ HRESULT ReleaseInputDevice(ACInputDevice **pDevice)
 	return AC_OK;
 };
 
-ACDI::ACDI(HINSTANCE hDLL) {
+ACDI::ACDI(HINSTANCE hDLL) 
+{
    mhDLL        = hDLL;
    mpDI         = nullptr;
    mpJoy        = nullptr;

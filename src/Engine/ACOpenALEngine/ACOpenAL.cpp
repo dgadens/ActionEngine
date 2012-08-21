@@ -30,6 +30,7 @@ HRESULT ReleaseAudioDevice(ACAudioDevice **pDevice)
 #pragma region Contructor and Destructor
 ACOpenAL::ACOpenAL(HINSTANCE hDLL)
 {
+	mhDLL = hDLL;
 	mpLOG = nullptr;
 };
 

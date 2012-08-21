@@ -61,8 +61,6 @@ public:
 
 	static void ClearCharArray(char* value, int size);
 
-	static LPWSTR StringToLPWSTR(std::string value);
-
 	static int StringToInt(std::string &value);
 	static unsigned int StringToUInt(std::string value);
 	static long StringToLong(std::string value);
@@ -76,6 +74,9 @@ public:
 	static std::string ULongToString(unsigned long value);
 	static std::string FloatToString(float value);
     static std::string DoubleToString(double value);
+
+
+	//static LPWSTR StringToLPWSTR(std::string value);
 };
 
 inline FLOAT GenericTools::ConvertPixelsToClipSpace( const UINT pixelDimension, const UINT pixels )
@@ -239,13 +240,13 @@ inline std::string GenericTools::DoubleToString(double value)
 	return ret;
 };
 
-inline LPWSTR GenericTools::StringToLPWSTR(std::string value)
-{
-	int buffSize = value.size() + 1;
-	LPWSTR str = new WCHAR[buffSize];
-	MultiByteToWideChar(CP_ACP, 0, value.c_str(), buffSize, str, buffSize);
-
-	return str;
-};
+//inline LPWSTR GenericTools::StringToLPWSTR(std::string value)
+//{
+//	int buffSize = value.size() + 1;
+//	LPWSTR str = new WCHAR[buffSize];
+//	MultiByteToWideChar(CP_ACP, 0, value.c_str(), buffSize, str, buffSize);
+//
+//	return str;
+//};
 
 #endif
