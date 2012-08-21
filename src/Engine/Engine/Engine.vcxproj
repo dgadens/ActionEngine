@@ -127,10 +127,8 @@
     <ClInclude Include="ACSound.h" />
     <ClInclude Include="ACSoundSource.h" />
     <ClInclude Include="ACFont.h" />
-    <ClInclude Include="ACLine.h" />
     <ClInclude Include="ACLineList.h" />
     <ClInclude Include="ACLineStruct.h" />
-    <ClInclude Include="ACLineManager.h" />
     <ClInclude Include="ACModelDefinition.h" />
     <ClInclude Include="ACQuadStruct.h" />
     <ClInclude Include="ACRenderDevice.h" />
@@ -164,10 +162,8 @@
     <ClCompile Include="ACParticles.cpp" />
     <ClCompile Include="ACSkin.cpp" />
     <ClCompile Include="ACSoundSource.cpp" />
-    <ClCompile Include="ACLine.cpp" />
     <ClCompile Include="ACLineList.cpp" />
     <ClCompile Include="ACLineStruct.cpp" />
-    <ClCompile Include="ACLineManager.cpp" />
     <ClCompile Include="ACModelDefinition.cpp" />
     <ClCompile Include="ACRenderer.cpp" />
     <ClCompile Include="ACCamera.cpp" />

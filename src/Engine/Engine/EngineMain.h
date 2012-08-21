@@ -9,7 +9,6 @@
 
 #include "ACModel.h"
 #include "ACAMTStructs.h"
-#include "ACLine.h"
 #include "ACContentManager.h"
 
 //skin

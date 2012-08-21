@@ -141,17 +141,11 @@
     <ClInclude Include="ACModelDefinition.h">
       <Filter>Header Files\ContentManager\ACModel</Filter>
     </ClInclude>
-    <ClInclude Include="ACLineManager.h">
-      <Filter>Header Files\ContentManager</Filter>
-    </ClInclude>
     <ClInclude Include="ACLineStruct.h">
       <Filter>Header Files\ContentManager\ACLine</Filter>
     </ClInclude>
     <ClInclude Include="ACAMTStructs.h">
       <Filter>Header Files\ContentManager\ACModel</Filter>
-    </ClInclude>
-    <ClInclude Include="ACLine.h">
-      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="ACLineList.h">
       <Filter>Header Files\ContentManager\ACLine</Filter>
@@ -272,14 +266,8 @@
     <ClCompile Include="ACModelDefinition.cpp">
       <Filter>Source Files\ContentManager\ACModel</Filter>
     </ClCompile>
-    <ClCompile Include="ACLineManager.cpp">
-      <Filter>Source Files\ContentManager</Filter>
-    </ClCompile>
     <ClCompile Include="ACLineStruct.cpp">
       <Filter>Source Files\ContentManager\ACLine</Filter>
-    </ClCompile>
-    <ClCompile Include="ACLine.cpp">
-      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="ACLineList.cpp">
       <Filter>Source Files\ContentManager\ACLine</Filter>
