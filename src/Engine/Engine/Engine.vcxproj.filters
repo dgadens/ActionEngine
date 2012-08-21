@@ -249,6 +249,9 @@
     <ClInclude Include="ACUtils.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="ACParticlesEmitter.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACRenderer.cpp">

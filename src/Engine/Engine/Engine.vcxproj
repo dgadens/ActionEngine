@@ -147,6 +147,7 @@
     <ClInclude Include="ACTimeAccum.h" />
     <ClInclude Include="ACTimeControl.h" />
     <ClInclude Include="ACParticleTypes.h" />
+    <ClInclude Include="ACParticlesEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACAFTLoader.cpp" />
