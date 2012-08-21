@@ -17,10 +17,6 @@ HRESULT ACAudio::CreateDevice(const std::string &audioLibraryName)
 	mhDLL = LoadLibraryA(audioLibraryName.c_str());
 	if(!mhDLL) 
 	{
-		std::string message = "Loading ";
-		message.append(audioLibraryName);
-		message.append(" from lib failed.");
-		MessageBoxA(nullptr,message.c_str(), "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
     }
    
@@ -34,7 +30,6 @@ HRESULT ACAudio::CreateDevice(const std::string &audioLibraryName)
 
 	if(FAILED(hr))
 	{
-		MessageBox(nullptr,L"CreateAudioDevice() from lib failed.", L"ACEngine - error", MB_OK | MB_ICONERROR);
 		mpDevice = nullptr;
 		return E_FAIL;
 	}

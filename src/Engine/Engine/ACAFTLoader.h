@@ -8,7 +8,6 @@
 #ifndef __ACAFTLOADER_H 
 #define __ACAFTLOADER_H 
 
-#include <windows.h>                                 
 #include <stdio.h>
 #include <string>
 #include "EngineMath.h"

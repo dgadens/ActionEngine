@@ -322,7 +322,10 @@ HRESULT EngineStartup()
 	//cria o objeto renderizador
 	pRenderer = new ACRenderer(HInst);
 	if (FAILED(pRenderer->CreateDevice("ACD3DEngine.dll")))
+	{
+		MessageBoxA(nullptr, "Loading ACD3DEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
+	}
 	Globals::pRenderDevice = pRenderer->GetDevice();
 	if (Globals::pRenderDevice == nullptr) 
 		return E_FAIL;
@@ -335,7 +338,10 @@ HRESULT EngineStartup()
 	#pragma region CRIA INPUTDEVICE
 	pInput = new ACInput(HInst);
 	if (FAILED(pInput->CreateDevice("ACDIEngine.dll")))
+	{
+		MessageBoxA(nullptr, "Loading ACDIEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
+	}
 	Globals::pInputDevice = pInput->GetDevice();
 	if (Globals::pInputDevice == nullptr) 
 		return E_FAIL;
@@ -349,7 +355,10 @@ HRESULT EngineStartup()
 	#pragma region CRIA NETWORKDEVICE
 	//pNetwork = new ACNetwork(HInst);
 	//if (FAILED(pNetwork->CreateDevice("ACWSEngine.dll")))
+	//{
+	// 	MessageBoxA(nullptr, "Loading ACWSEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 	//	return E_FAIL;
+	//}
 	//Globals::pNetworkDevice = pNetwork->GetDevice();
 	//if (Globals::pNetworkDevice == nullptr) 
 	//	return E_FAIL;
@@ -358,7 +367,10 @@ HRESULT EngineStartup()
 	#pragma region CRIA AUDIO DEVICE
 	pAudio = new ACAudio(HInst);
 	if (FAILED(pAudio->CreateDevice("ACOpenALEngine.dll")))
+	{
+		MessageBoxA(nullptr, "Loading ACOpenALEngine.dll from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
+	}
 	Globals::pAudioDevice = pAudio->GetDevice();
 	if (Globals::pAudioDevice == nullptr) 
 		return E_FAIL;

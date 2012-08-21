@@ -21,13 +21,7 @@ HRESULT ACInput::CreateDevice(const std::string& inputLibraryName)
 	// carrega a dll com a implementacao da interface
 	mhDLL = LoadLibraryExA(inputLibraryName.c_str(),nullptr,0);
 	if(!mhDLL) 
-	{
-		std::string message = "Loading ";
-		message.append(inputLibraryName);
-		message.append(" from lib failed.");
-		MessageBoxA(nullptr, message.c_str(), "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
-    }
    
 	CREATEINPUTDEVICE _CreateInputDevice = 0;
 	HRESULT hr;
@@ -39,7 +33,6 @@ HRESULT ACInput::CreateDevice(const std::string& inputLibraryName)
 	hr = _CreateInputDevice(mhDLL, &mpDevice);
 	if(FAILED(hr))
 	{
-		MessageBoxA(nullptr, "CreateInputDevice() from lib failed.", "ACEngine - error", MB_OK | MB_ICONERROR);
 		mpDevice = nullptr;
 		return E_FAIL;
 	}

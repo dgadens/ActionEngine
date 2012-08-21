@@ -7,7 +7,6 @@
 #ifndef __ACNETWORKDEVICE_H
 #define __ACNETWORKDEVICE_H
 
-#include <windows.h>
 #include <stdio.h>
 #include "ACPackage.h"
 #include "EngineCommon.h"

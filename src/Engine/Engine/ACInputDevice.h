@@ -7,7 +7,6 @@
 #ifndef __ACINPUTDEVICE_H
 #define __ACINPUTDEVICE_H
 
-#include <Windows.h>
 #include <string>
 #include <stdio.h>
 #include "EngineCommon.h"

@@ -21,13 +21,7 @@ HRESULT ACRenderer::CreateDevice(const std::string &graphicsLibraryName)
 	//mas eu acho palha usar esse metodo com A
 	mhDLL = LoadLibraryA(graphicsLibraryName.c_str());
 	if (!mhDLL)
-	{
-		std::string message = "Loading ";
-		message.append(graphicsLibraryName);
-		message.append(" from lib failed.");
-		MessageBoxA(nullptr, message.c_str(), "ACEngine Error.", MB_OK | MB_ICONERROR);
 		return E_FAIL;
-	}
 
 	CREATERENDERDEVICE _createRenderDevice = 0;
 	HRESULT hr;
@@ -42,7 +36,6 @@ HRESULT ACRenderer::CreateDevice(const std::string &graphicsLibraryName)
 
 	if (FAILED(hr))
 	{
-		MessageBoxA(nullptr, "CreateRenderDevice() from lib failed.", "ACEngine Error.", MB_OK | MB_ICONERROR);
 		mpDevice = nullptr;
 		return E_FAIL;
 	}

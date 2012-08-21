@@ -7,7 +7,6 @@
 #ifndef __ACAUDIODEVICE_H
 #define __ACAUDIODEVICE_H
 
-#include <windows.h>
 #include <stdio.h>
 #include <map>
 #include <string>

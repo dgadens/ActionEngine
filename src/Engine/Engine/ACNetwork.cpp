@@ -16,13 +16,7 @@ HRESULT ACNetwork::CreateDevice(const std::string &mplayerLibraryName)
 {
 	mhDLL = LoadLibraryA(mplayerLibraryName.c_str());
 	if(!mhDLL) 
-	{
-		std::string message = "Loading ";
-		message.append(mplayerLibraryName);
-		message.append(" from lib failed.");
-		MessageBoxA(nullptr,message.c_str(), "ACEngine - error", MB_OK | MB_ICONERROR);
 		return E_FAIL;
-    }
    
 	CREATENETWORKDEVICE _CreateNetworkDevice = 0;
 	HRESULT hr;
@@ -34,7 +28,6 @@ HRESULT ACNetwork::CreateDevice(const std::string &mplayerLibraryName)
 
 	if(FAILED(hr))
 	{
-		MessageBox(nullptr,L"CreateNetworkDevice() from lib failed.", L"ACEngine - error", MB_OK | MB_ICONERROR);
 		mpDevice = nullptr;
 		return E_FAIL;
 	}
