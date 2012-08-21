@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineMath", "EngineMath\En
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineCommon", "EngineCommon\EngineCommon.vcxproj", "{44C56719-8796-4C81-A41E-22E0F317AF30}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACD3D10Engine", "D3DEngine\D3DEngine.vcxproj", "{1157A469-5191-4ADA-A129-D3CA1667F952}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACD3DEngine", "D3DEngine\D3DEngine.vcxproj", "{1157A469-5191-4ADA-A129-D3CA1667F952}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineWrapper", "EngineWrapper\EngineWrapper.vcxproj", "{D6E9C7F9-7537-4C37-8C22-572520F5C4F1}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACWSEngine", "ACWSEngine\ACWSEngine.vcxproj", "{ECE141B5-58A2-46F3-AC59-659C6403E4E6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ACOpenALEngine", "ACOpenALEngine\ACOpenALEngine.vcxproj", "{67A9AF38-3BA6-44A4-8C0E-FB3AB60B7FE3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineWrapperCLI", "EngineWrapperCLI\EngineWrapperCLI.vcxproj", "{DB381140-FBA6-49EA-887A-6D5C9FB57E28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +111,15 @@ Global
 		{67A9AF38-3BA6-44A4-8C0E-FB3AB60B7FE3}.Release|Win32.ActiveCfg = Release|Win32
 		{67A9AF38-3BA6-44A4-8C0E-FB3AB60B7FE3}.Release|Win32.Build.0 = Release|Win32
 		{67A9AF38-3BA6-44A4-8C0E-FB3AB60B7FE3}.Release|x64.ActiveCfg = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Debug|Win32.Build.0 = Debug|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Debug|x64.ActiveCfg = Debug|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Profile|Win32.ActiveCfg = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Profile|Win32.Build.0 = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Profile|x64.ActiveCfg = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Release|Win32.ActiveCfg = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Release|Win32.Build.0 = Release|Win32
+		{DB381140-FBA6-49EA-887A-6D5C9FB57E28}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
