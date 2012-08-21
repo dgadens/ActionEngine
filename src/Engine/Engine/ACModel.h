@@ -8,8 +8,6 @@
 #define __ACMODEL_H
 
 #include <string.h>
-#include <WTypes.h>
-
 #include "ActionTypeDef.h"
 #include "EngineMath.h"
 #include "ACCamera.h"
