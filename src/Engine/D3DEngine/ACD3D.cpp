@@ -161,7 +161,6 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create device error. D3DCreateDevice()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create device error. D3DCreateDevice()");
 		return hr;
 	}
 	//*********************************
@@ -271,7 +270,6 @@ HRESULT ACD3D::CreateConstantBuffers()
 	if(FAILED(hr))
 	{
 		MessageBoxA(nullptr, "[ERROR] Create VS_CB_PERFRAME. CreateConstantBuffers()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create VS_CB_PERFRAME");
 		return hr;
 	}
 
@@ -286,7 +284,6 @@ HRESULT ACD3D::CreateConstantBuffers()
 	if(FAILED(hr))
 	{
 		MessageBoxA(nullptr, "[ERROR] Create VS_CB_PERMODEL. CreateConstantBuffers()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create VS_CB_PERMODEL");
 		return hr;
 	}
 
@@ -301,7 +298,6 @@ HRESULT ACD3D::CreateConstantBuffers()
 	if(FAILED(hr))
 	{
 		MessageBoxA(nullptr, "[ERROR] Create VS_CB_PERPASS. CreateConstantBuffers()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create VS_CB_PERPASS");
 		return hr;
 	}
 
@@ -316,7 +312,6 @@ HRESULT ACD3D::CreateConstantBuffers()
 	if(FAILED(hr))
 	{
 		MessageBoxA(nullptr, "[ERROR] Create PS_CB_LIGHT. CreateConstantBuffers()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create PS_CB_LIGHT");
 		return hr;
 	}
 
@@ -357,7 +352,6 @@ HRESULT ACD3D::AddViewport(HWND hWnd, BOOL enableVSync)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Creating SwapChain. AddViewport()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Creating SwapChain. AddViewport()");
 		return hr;
 	}
 
@@ -377,21 +371,19 @@ HRESULT ACD3D::AddViewport(HWND hWnd, BOOL enableVSync)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create buffer. AddViewport()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create buffer. AddViewport()");
 		return hr;
 	}
-			
+
 	hr = ACD3DGlobals::G_pD3dDevice->CreateRenderTargetView( pBackBuffer, nullptr, &pRenderTargetView );
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create render target. AddViewport()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create render target. AddViewport()");
 		return hr;
 	}
 
 	vpComponent->pRenderTargetView = pRenderTargetView;
 
-	pBackBuffer->Release(); //release na textura usando como backbuffer
+	pBackBuffer->Release();
 	#pragma endregion
 
 	#pragma region CREATE DEPTHSTENCILVIEW
@@ -405,7 +397,6 @@ HRESULT ACD3D::AddViewport(HWND hWnd, BOOL enableVSync)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create depth stencil view. AddViewport()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create depth stencil view. AddViewport()");
 		return hr;
 	}
 
@@ -439,8 +430,8 @@ HRESULT ACD3D::AddViewport(HWND hWnd, BOOL enableVSync)
 
 HRESULT ACD3D::DropViewport(HWND hWnd)
 {
-	SAFE_RELEASE(mpVpComponents[hWnd]->pDepthStencilView);
 	SAFE_RELEASE(mpVpComponents[hWnd]->pRenderTargetView);
+	SAFE_RELEASE(mpVpComponents[hWnd]->pDepthStencilView);
 	SAFE_RELEASE(mpVpComponents[hWnd]->pSwapChain);
 
 	mpVpComponents.erase(hWnd);
@@ -475,7 +466,6 @@ HRESULT ACD3D::Resize(UINT width, UINT height)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] ResizeBuffer. Resize()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] ResizeBuffer. Resize()");
 		return hr;
 	}
 	#pragma endregion
@@ -488,7 +478,6 @@ HRESULT ACD3D::Resize(UINT width, UINT height)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create Buffer. Resize()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create Buffer. Resize()");
 		return hr;
 	}
 
@@ -496,13 +485,11 @@ HRESULT ACD3D::Resize(UINT width, UINT height)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create render target view. Resize()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create render target view. Resize()");
 		return hr;
 	}
 
 	mpVpComponents[mActiveWnd]->pRenderTargetView = pRenderTargetView;
-
-	pBackBuffer->Release(); //release na textura usando como backbuffer
+	pBackBuffer->Release();
 	#pragma endregion
 
 	#pragma region CREATE DEPTHSTENCILVIEW
@@ -516,7 +503,6 @@ HRESULT ACD3D::Resize(UINT width, UINT height)
 	if( FAILED( hr ) )
 	{
 		MessageBoxA(nullptr, "[ERROR] Create depth stencil view. Resize()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Create depth stencil view. Resize()");
 		return hr;
 	}
 
@@ -548,7 +534,6 @@ void ACD3D::GoFullscreen(BOOL value)
 	else
 	{
 		MessageBoxA(nullptr, "[ERROR] Goto Fullscreen. GoFullscreen()", "Error", MB_OK | MB_ICONERROR);
-		Log("[ERROR] Goto Fullscreen. GoFullscreen()");
 	}
 };
 
@@ -1475,27 +1460,10 @@ void ACD3D::SaveScreenShot(const std::string& path)
 
     ID3D11Resource* backbufferRes;
     vpComponent->pRenderTargetView->GetResource(&backbufferRes);
-    D3D11_TEXTURE2D_DESC texDesc;
-    texDesc.ArraySize = 1;
-    texDesc.BindFlags = 0;
-    texDesc.CPUAccessFlags = 0;
-    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    texDesc.Width = vpComponent->Viewport.Width;
-    texDesc.Height = vpComponent->Viewport.Height; 
-    texDesc.MipLevels = 1;
-    texDesc.MiscFlags = 0;
-    texDesc.SampleDesc.Count = 1;
-    texDesc.SampleDesc.Quality = 0;
-    texDesc.Usage = D3D11_USAGE_DEFAULT;
-    ID3D11Texture2D* texture;
-    if (FAILED(ACD3DGlobals::G_pD3dDevice->CreateTexture2D(&texDesc, 0, &texture)))
-		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
 
-	ACD3DGlobals::G_pContext->CopyResource(texture, backbufferRes);
-    if (FAILED(D3DX11SaveTextureToFileA(ACD3DGlobals::G_pContext, texture, D3DX11_IFF_BMP, path.c_str())))
-		MessageBoxA(nullptr, "Error saving image.", "Error", MB_OK);
+	if (FAILED(D3DX11SaveTextureToFileA( ACD3DGlobals::G_pContext, backbufferRes, D3DX11_IFF_JPG, path.c_str())))
+		MessageBoxA(nullptr, "Error saving image. Verify folder permission.", "Error", MB_OK);
 
-    SAFE_RELEASE( texture );
     SAFE_RELEASE( backbufferRes );
 };
 
