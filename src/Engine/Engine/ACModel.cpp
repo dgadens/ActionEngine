@@ -134,7 +134,6 @@ void ACModel::Render(ACCamera* camera)
 		mpGDevice->ActiveVS(mpVS);
 		mpGDevice->ActivePS(mpPS);
 
-		mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_TriangleList);
 		mpGDevice->SetWorldMatrix(World);
 
 		mpGDevice->ApplyConstants();

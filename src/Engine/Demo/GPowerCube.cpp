@@ -82,6 +82,7 @@ void GPowerCube::Update(float elapsedTime)
 	 
 void GPowerCube::Render(ACCamera* camera)
 {
+	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_TriangleList);
 	mpGDevice->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
 	mpGDevice->SetSamplerState(ACSAMPLERSTATE::ACSS_Bilinear_Wrap, 0);
 	//mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullCCW);

@@ -136,12 +136,12 @@ namespace ACEditor
 
         public void AddModel(string name)
         {
-            ACGraphics.Instance.AddModel(name);
+            //ACGraphics.Instance.AddModel(name);
         }
 
         public void ShowNormals(string name)
         {
-            ACGraphics.Instance.ShowNormals(name);
+            //ACGraphics.Instance.ShowNormals(name);
         }
 
         private void ucViewport_Resize(object sender, EventArgs e)

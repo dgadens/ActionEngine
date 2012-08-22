@@ -77,9 +77,9 @@ namespace ACFramework
                 string graphicsAPI = null;
                 switch (type)
                 {
-                    case APIType.DirectX9:   graphicsAPI = "ACD3D9Engine.dll";  break;
-                    case APIType.Direct3D10: graphicsAPI = "ACD3D10Engine.dll"; break;
-                    case APIType.Direct3D11: graphicsAPI = "ACD3D11Engine.dll"; break;
+                    case APIType.DirectX9:   graphicsAPI = "ACD3DEngine.dll";  break;
+                    case APIType.Direct3D10: graphicsAPI = "ACD3DEngine.dll"; break;
+                    case APIType.Direct3D11: graphicsAPI = "ACD3DEngine.dll"; break;
                     case APIType.OpenGl2:    graphicsAPI = "OpenGl2Engine.dll"; break;
                     case APIType.OpenGl3:    graphicsAPI = "OpenGl3Engine.dll"; break;
                     case APIType.OpenGl4:    graphicsAPI = "OpenGl4Engine.dll"; break;
