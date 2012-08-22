@@ -60,6 +60,7 @@
     <ClInclude Include="src\ltable.h" />
     <ClInclude Include="src\ltm.h" />
     <ClInclude Include="src\lua.h" />
+    <ClInclude Include="src\lua.hpp" />
     <ClInclude Include="src\luaconf.h" />
     <ClInclude Include="src\lualib.h" />
     <ClInclude Include="src\lundump.h" />
