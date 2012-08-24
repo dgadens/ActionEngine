@@ -6,11 +6,13 @@ std::string ACGlobals::AC_PATH_SHADERS;
 std::string ACGlobals::AC_PATH_SOUNDS;
 std::string ACGlobals::AC_PATH_TEXTURES;
 std::string ACGlobals::AC_PATH_FONTS;
+std::string ACGlobals::AC_PATH_SCRIPTS;
+
 UINT ACGlobals::GlobalID = 0;
 bool ACGlobals::ENABLE_LOG = false;
 bool ACGlobals::EDITOR_MODE = false;
 
-std::string ACGlobals::ACGetCurrentDirectory()
+const std::string ACGlobals::ACGetCurrentDirectory()
 {
 	char currentdirectory[FILENAME_MAX];
 	if (!GetCurrentDir(currentdirectory, sizeof(currentdirectory)))  
@@ -27,7 +29,7 @@ std::string ACGlobals::ACGetCurrentDirectory()
 	return ret;
 };
 
-std::string ACGlobals::GetCurrentDirectory()
+const std::string& ACGlobals::GetCurrentDirectory()
 {
 	if (AC_CURRENT_DIRECTORY == "")
 		AC_CURRENT_DIRECTORY = ACGetCurrentDirectory();
@@ -35,7 +37,7 @@ std::string ACGlobals::GetCurrentDirectory()
 	return AC_CURRENT_DIRECTORY;
 };
 
-std::string ACGlobals::GetPathModels()
+const std::string& ACGlobals::GetPathModels()
 {
 	if (AC_PATH_MODELS=="")
 	{
@@ -46,7 +48,7 @@ std::string ACGlobals::GetPathModels()
 	return AC_PATH_MODELS;
 };
 
-std::string ACGlobals::GetPathTextures()
+const std::string& ACGlobals::GetPathTextures()
 {
 	if (AC_PATH_TEXTURES=="")
 	{
@@ -57,7 +59,7 @@ std::string ACGlobals::GetPathTextures()
 	return AC_PATH_TEXTURES;
 };
 
-std::string ACGlobals::GetPathFonts()
+const std::string& ACGlobals::GetPathFonts()
 {
 	if (AC_PATH_FONTS=="")
 	{
@@ -68,7 +70,7 @@ std::string ACGlobals::GetPathFonts()
 	return AC_PATH_FONTS;
 };
 
-std::string ACGlobals::GetPathShaders()
+const std::string& ACGlobals::GetPathShaders()
 {
 	if (AC_PATH_SHADERS=="")
 	{
@@ -79,7 +81,7 @@ std::string ACGlobals::GetPathShaders()
 	return AC_PATH_SHADERS;
 };
 
-std::string ACGlobals::GetPathSounds()
+const std::string& ACGlobals::GetPathSounds()
 {
 	if (AC_PATH_SOUNDS=="")
 	{
@@ -88,4 +90,15 @@ std::string ACGlobals::GetPathSounds()
 	}
 
 	return AC_PATH_SOUNDS;
+};
+
+const std::string& ACGlobals::GetPathScripts()
+{
+	if (AC_PATH_SCRIPTS=="")
+	{
+		AC_PATH_SCRIPTS = ACGetCurrentDirectory();
+		AC_PATH_SCRIPTS.append("\\Contents\\Scripts\\");
+	}
+
+	return AC_PATH_SCRIPTS;
 };

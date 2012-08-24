@@ -22,13 +22,14 @@ class ACGlobals
 {
 private:
 
-	static std::string ACGetCurrentDirectory();
+	static const std::string ACGetCurrentDirectory();
 	static std::string AC_CURRENT_DIRECTORY;
 	static std::string AC_PATH_MODELS;
 	static std::string AC_PATH_TEXTURES;
 	static std::string AC_PATH_SHADERS;
 	static std::string AC_PATH_SOUNDS;
 	static std::string AC_PATH_FONTS;
+	static std::string AC_PATH_SCRIPTS;
 
 public:
 
@@ -36,12 +37,13 @@ public:
 	static bool ENABLE_LOG;
 	static UINT GlobalID;
 	static bool EDITOR_MODE;
-	static std::string GetCurrentDirectory();
-	static std::string GetPathModels();
-	static std::string GetPathTextures();
-	static std::string GetPathShaders();
-	static std::string GetPathSounds();
-	static std::string GetPathFonts();
+	static const std::string& GetCurrentDirectory();
+	static const std::string& GetPathModels();
+	static const std::string& GetPathTextures();
+	static const std::string& GetPathShaders();
+	static const std::string& GetPathSounds();
+	static const std::string& GetPathFonts();
+	static const std::string& GetPathScripts();
 };
 
 #endif
