@@ -4,12 +4,15 @@ Game::Game(ACRenderDevice* gDevice, ACContentManager* cManager)
 {
 	mpGDevice = gDevice;
 	mpCManager = cManager;
+
+	mpScriptMachine = nullptr;
 };
 
 Game::~Game()
 {
 	mpCManager->RemoveFont(mpFont);
 
+	SAFE_DELETE(mpScriptMachine);
 	SAFE_DELETE(mpPowerCube);
 	SAFE_DELETE(mpDynamicTest);
 	SAFE_DELETE(mpSpriteTest);
@@ -32,6 +35,11 @@ void Game::Initialize()
 {
 	//timecontrol
 	ACTimeControl::FixedFPS = false;
+
+	//ScriptMachine
+	mpScriptMachine = new ScriptMachine();
+	mpScriptMachine->Initialize();
+	mpScriptMachine->ExecuteScript("");
 
 	//font
 	mpFont = mpCManager->LoadFont("CourierNew20Bold.aft");

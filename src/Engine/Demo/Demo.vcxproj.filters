@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Testes">
       <UniqueIdentifier>{e167700f-12f5-483b-b09b-8ea76c4211f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripts">
+      <UniqueIdentifier>{fcd4cdc8-ef33-40e5-9c4c-8b344ee8a8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{de6877c2-4122-49e2-8668-316b6054cd06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -78,6 +84,9 @@
     <ClCompile Include="SpriteTest.cpp">
       <Filter>Source Files\Testes</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptMachine.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInput.h">
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="SpriteTest.h">
       <Filter>Header Files\Testes</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptMachine.h">
+      <Filter>Header Files\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@
 #include "DynamicTest.h"
 #include "SpriteTest.h"
 #include "LinePointTest.h"
+#include "ScriptMachine.h"
 
 class Game
 {
@@ -25,6 +26,7 @@ class Game
 	ACCamera*			mpCamera;
 	ACFont*				mpFont;
 	ACSpriteBatch*		mpSpriteBatch;
+	ScriptMachine*		mpScriptMachine;
 
 	//cubo
 	GPowerCube*			mpPowerCube;

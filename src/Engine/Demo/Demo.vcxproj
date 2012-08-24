@@ -122,6 +122,7 @@
     <ClCompile Include="LinePointTest.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GPowerCube.cpp" />
+    <ClCompile Include="ScriptMachine.cpp" />
     <ClCompile Include="SpriteTest.cpp" />
     <ClCompile Include="VerifySelection.cpp" />
   </ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="LinePointTest.h" />
     <ClInclude Include="GPowerCube.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScriptMachine.h" />
     <ClInclude Include="SpriteTest.h" />
     <ClInclude Include="VerifySelection.h" />
   </ItemGroup>
