@@ -9,9 +9,8 @@
 
 #include <lua.hpp>
 #include <string>
-#include <iostream>
-#include <conio.h>
-#include <windows.h>
+
+#include "GUtils.h"
 
 class ScriptMachine
 {

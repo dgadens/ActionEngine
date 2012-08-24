@@ -128,5 +128,8 @@
     <ClInclude Include="ScriptMachine.h">
       <Filter>Header Files\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="GUtils.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

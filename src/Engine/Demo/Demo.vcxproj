@@ -134,6 +134,7 @@
     <ClInclude Include="GameInput.h" />
     <ClInclude Include="GEnums.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="GUtils.h" />
     <ClInclude Include="LinePointTest.h" />
     <ClInclude Include="GPowerCube.h" />
     <ClInclude Include="Resource.h" />

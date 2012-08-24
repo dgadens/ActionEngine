@@ -24,14 +24,7 @@ void ScriptMachine::Release()
 
 void ScriptMachine::ExecuteScript(const std::string& name)
 {
-	AllocConsole();
-	freopen("conin$","r",stdin);
-	freopen("conout$","w",stdout);
-	freopen("conout$","w",stderr);
-	printf("Debugging Window:\n");
-
-	std::cout << "teste" << std::endl;
+	GUtils::ShowConsole();
 	luaL_dostring(lua, "print(\"Teste lua\")");
-
-	FreeConsole();
+	GUtils::HideConsole();
 };
