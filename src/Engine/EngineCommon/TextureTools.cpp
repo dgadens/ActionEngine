@@ -3,7 +3,7 @@
 EndianType TextureTools::GetEndian()
 {
 	DWORD data = 0x12345678;
-	PUCHAR ptr = (PUCHAR)&data;
+	UCHAR* ptr = (UCHAR*)&data;
 
 	if(*ptr == 0x12 && *(ptr+1) == 0x34 &&
 	   *(ptr+2) == 0x56 && *(ptr+3) == 0x78)
@@ -18,10 +18,10 @@ EndianType TextureTools::GetEndian()
 		return ENDIAN_Unknown;
 };
 
-void TextureTools::SwapBytes(PCHAR data, INT size)
+void TextureTools::SwapBytes(CHAR* data, INT size)
 {
 	assert((size & 1) == 0);
-	PCHAR ptr = data;
+	CHAR* ptr = data;
 	CHAR temp = 0;
 	for(INT i = 0, j = size - 1; i < size / 2; i++, j--)
 	{
@@ -31,7 +31,7 @@ void TextureTools::SwapBytes(PCHAR data, INT size)
 	}
 };
 
-PUCHAR TextureTools::LoadDDS(PCHAR file, ImageInfoDDS &info)
+UCHAR* TextureTools::LoadDDS(CHAR* file, ImageInfoDDS &info)
 {
 	const INT ddsHeightOffset = 12;
 	const INT ddsWidthOffset = 16;
@@ -66,27 +66,27 @@ PUCHAR TextureTools::LoadDDS(PCHAR file, ImageInfoDDS &info)
 	fread(&dwHeight, sizeof(UINT), 1, fp);
 
 	if(byteSwap == TRUE)
-		SwapBytes((PCHAR)&dwHeight, sizeof(UINT));
+		SwapBytes((CHAR*)&dwHeight, sizeof(UINT));
 	fseek(fp, ddsWidthOffset, SEEK_SET);
 	fread(&dwWidth, sizeof(UINT), 1, fp);
 
 	if(byteSwap == TRUE)
-		SwapBytes((PCHAR)&dwWidth, sizeof(UINT));
+		SwapBytes((CHAR*)&dwWidth, sizeof(UINT));
 	fseek(fp, ddsLinearSizeOffset, SEEK_SET);
 	fread(&dwLinearSize, sizeof(UINT), 1, fp);
 
 	if(byteSwap == TRUE)
-		SwapBytes((PCHAR)&dwLinearSize, sizeof(UINT));
+		SwapBytes((CHAR*)&dwLinearSize, sizeof(UINT));
 	fseek(fp, ddsMipMapNumOffset, SEEK_SET);
 	fread(&dwMipMaps, sizeof(UINT), 1, fp);
 
 	if(byteSwap == TRUE)
-		SwapBytes((PCHAR)&dwMipMaps, sizeof(UINT));
+		SwapBytes((CHAR*)&dwMipMaps, sizeof(UINT));
 	fseek(fp, ddsFourCCOffset, SEEK_SET);
 	fread(&dwFourCC, sizeof(UINT), 1, fp);
 
 	if(byteSwap == TRUE)
-		SwapBytes((PCHAR)&dwFourCC, sizeof(UINT));
+		SwapBytes((CHAR*)&dwFourCC, sizeof(UINT));
 	if(dwLinearSize == 0)
 		dwLinearSize = dwHeight * dwWidth;
 
@@ -132,7 +132,7 @@ PUCHAR TextureTools::LoadDDS(PCHAR file, ImageInfoDDS &info)
 	else
 		totalSize = dwLinearSize;
 
-	PUCHAR image = nullptr;
+	UCHAR* image = nullptr;
 	image = new UCHAR[totalSize * sizeof(UCHAR)];
 	if(image != nullptr)
 	{

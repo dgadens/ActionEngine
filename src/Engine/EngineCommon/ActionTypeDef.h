@@ -6,31 +6,14 @@
 #define __ACTIONDEF_H
 
 typedef unsigned long       DWORD;
-typedef DWORD				*PDWORD;
-
 typedef int                 BOOL;
-typedef BOOL	            *PBOOL;
-
 typedef char				CHAR;
-typedef CHAR                *PCHAR;
-
 typedef unsigned char       UCHAR;
-typedef UCHAR                *PUCHAR;
-
 typedef unsigned char       BYTE;
-typedef BYTE                *PBYTE;
-
 typedef unsigned short      WORD;
-typedef WORD                *PWORD;
-
 typedef float               FLOAT;
-typedef FLOAT               *PFLOAT;
-
 typedef int                 INT;
-typedef INT		            *PINT;
-
 typedef unsigned int        UINT;
-typedef UINT				*PUINT;
 
 
 // everything went smooth

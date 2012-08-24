@@ -34,5 +34,5 @@ private:
 	static void SwapBytes(char *data, int size); //se for endian_big entao ele inverte a ordem dos bytes
 
 public:
-	PUCHAR LoadDDS(char *file, ImageInfoDDS &info); //carrega a textura DDS, so funciona com as compressoes dxt1, 3 e 5 se passar outro tipo ele retorna null
+	UCHAR* LoadDDS(char *file, ImageInfoDDS &info); //carrega a textura DDS, so funciona com as compressoes dxt1, 3 e 5 se passar outro tipo ele retorna null
 };
