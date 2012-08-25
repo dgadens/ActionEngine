@@ -21,7 +21,6 @@ class ScriptMachine
 	void FirstExample();
 	//exemplo q mostra como executar um metodo c++ no lua
 	void SecondExample();
-
 	//exemplo de como chamar uma funcao lua
 	void ThirdExample();
 
