@@ -1,15 +1,20 @@
 #pragma once
 
+#include <msclr\marshal_cppstd.h>
 #include "EngineMain.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
+using namespace msclr::interop;
 
-ref class ACRendererW
+namespace EngineWrapper
 {
-public:
-	ACRendererW(IntPtr hInst);
-private:
-	ACRenderer* pRenderer;
-};
-
+	public ref class ACRendererW
+	{
+	public:
+		ACRendererW(IntPtr hInst);
+		HRESULT CreateDevice(String^ graphicsLibraryName);
+	private:
+		ACRenderer* pRenderer;
+	};
+}
