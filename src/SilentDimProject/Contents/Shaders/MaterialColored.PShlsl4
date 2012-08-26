@@ -1,0 +1,25 @@
+//******************************
+// PS colored, apenas exibe a cor do vertice
+// Creator: Daniel Gadens
+// Date: 05/05/2012
+//******************************
+
+cbuffer cbMaterial : register(b1) 
+{
+    float3 xMaterialAmbient		: packoffset(c0);
+    float3 xMaterialEmissive		: packoffset(c1);
+    float4 xMaterialDiffuse		: packoffset(c2);	
+    float3 xMaterialSpecular		: packoffset(c3);
+    float  xMaterialSpecularPower 	: packoffset(c3.w);
+};
+
+struct PS_INPUT
+{
+    float4 Position  : SV_POSITION;
+};
+
+
+float4 main( PS_INPUT input ) : SV_Target
+{
+    return xMaterialDiffuse;
+}

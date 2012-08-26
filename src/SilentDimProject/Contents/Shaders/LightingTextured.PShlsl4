@@ -1,0 +1,81 @@
+//******************************
+// PS lighting, com specular e o escambal
+// Creator: Daniel Gadens
+// Date: 05/05/2012
+//******************************
+
+cbuffer cbPerFrame : register(b0) 
+{
+    float3 xCameraPosition             	: packoffset(c0);
+    float3 xLightPosition                 : packoffset(c1);
+    float3 xLightDirection                : packoffset(c2);
+    float3 xLightColor		        : packoffset(c3);
+    float  xLightRange		        : packoffset(c3.w);
+    float  xLightFalloff		        : packoffset(c4.x);	    
+    float  xTime                             : packoffset(c4.y);
+};
+
+cbuffer cbMaterial : register(b1) 
+{
+    float3 xMaterialAmbient		: packoffset(c0);
+    float3 xMaterialEmissive		: packoffset(c1);
+    float4 xMaterialDiffuse		: packoffset(c2);	
+    float3 xMaterialSpecular		: packoffset(c3);
+    float  xMaterialSpecularPower 	: packoffset(c3.w);
+};
+
+Texture2D xDiffuseTexture : register(t0);
+SamplerState samplerStateDiffuse : register(s0);
+
+Texture2D xSpecularTexture : register(t1);
+SamplerState samplerStateSpecular : register(s1);
+
+Texture2D xNormalTexture : register(t2);
+SamplerState samplerStateNormal : register(s2);
+
+Texture2D xAnimatedTexture : register(t3);
+SamplerState samplerStateAnimated : register(s3);
+
+struct PS_INPUT
+{
+    float4 Position   : SV_POSITION;
+    float3 Normal     : TEXCOORD0;
+    float2 TexCoord   : TEXCOORD1;
+    float3 PosWorld   : TEXCOORD2;
+};
+
+
+float4 main( PS_INPUT input ) : SV_Target
+{
+    float3 lightDir = xLightPosition - input.PosWorld;
+    float lightDistance = length(lightDir);
+    lightDir /= lightDistance; 
+    float lightFactor = dot(lightDir, input.Normal);
+
+    //carrega as texturas
+    float4 texDiffuse = xDiffuseTexture.Sample( samplerStateDiffuse, input.TexCoord );
+    float4 texSpecular = xSpecularTexture.Sample( samplerStateSpecular, input.TexCoord );
+    float4 texNormal = xNormalTexture.Sample( samplerStateNormal, input.TexCoord );
+    float4 texAnimated = xAnimatedTexture.Sample( samplerStateAnimated, input.TexCoord + float2(0,xTime / 2));
+    
+    //calcula a intensidade da luz conforme o falloff exponencial
+    float baseIntensity = pow(saturate((xLightRange - lightDistance) / xLightRange), xLightFalloff);
+    
+    //intensidade da cor diffusa
+    float3 diffuse = lightFactor * xLightColor * texDiffuse.xyz;
+
+    //calculo da specular
+    float3 reflectionVector = normalize(reflect(-lightDir, input.Normal));
+    float3 directionToCamera = normalize(xCameraPosition - input.PosWorld);
+    float3 specular = saturate(xLightColor * (xMaterialSpecular + texSpecular.xyz) * pow(saturate(dot(reflectionVector, directionToCamera)), xMaterialSpecularPower));
+
+    //calcula a cor diffusa sem iluminacao
+    float3 finalColor = xMaterialAmbient.xyz * texDiffuse.xyz;
+    //adiciona a iluminacao
+    finalColor += (baseIntensity * (diffuse + specular)) + xMaterialEmissive.xyz;
+
+    //coloca a textura animada aparecendo so onde tem o diffuse transparent
+    finalColor += texAnimated.xyz * (1 - texDiffuse.a); 	     
+
+    return float4(finalColor.xyz, xMaterialDiffuse.w); 
+}

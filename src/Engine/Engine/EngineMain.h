@@ -10,6 +10,7 @@
 #include "ACModel.h"
 #include "ACAMTStructs.h"
 #include "ACContentManager.h"
+#include "ACSpriteBatch.h"
 
 //skin
 #include "ACTexture.h"

@@ -4,21 +4,13 @@ Game::Game(ACRenderDevice* gDevice, ACContentManager* cManager)
 {
 	mpGDevice = gDevice;
 	mpCManager = cManager;
-
-	mpScriptMachine = nullptr;
 };
 
 Game::~Game()
 {
 	mpCManager->RemoveFont(mpFont);
 
-	SAFE_DELETE(mpScriptMachine);
-	SAFE_DELETE(mpPowerCube);
-	SAFE_DELETE(mpDynamicTest);
-	SAFE_DELETE(mpSpriteTest);
-	SAFE_DELETE(mpLinePointTest);
 	SAFE_DELETE(mpCamera);
-	SAFE_DELETE(mpSpriteBatch);
 };
 
 //Ativa o game ou desativa, quando a janela perde o foco ele desativa quando ganyha ativa
@@ -35,11 +27,6 @@ void Game::Initialize()
 {
 	//timecontrol
 	ACTimeControl::FixedFPS = false;
-
-	//ScriptMachine
-	mpScriptMachine = new ScriptMachine();
-	mpScriptMachine->Initialize();
-	mpScriptMachine->ExecuteScript("");
 
 	//font
 	mpFont = mpCManager->LoadFont("CourierNew20Bold.aft");
@@ -79,55 +66,35 @@ void Game::ReziseWindow(INT width, INT height)
 //carrega os conteudos necessarios
 void Game::LoadContents()
 {
-	mpPowerCube = new GPowerCube(mpGDevice, mpCManager);
-	mpDynamicTest = new DynamicTest(mpGDevice, mpCManager);
-	mpSpriteTest = new SpriteTest(mpGDevice, mpCManager);
-	mpLinePointTest = new LinePointTest(mpGDevice, mpCManager);
 };
 
 //upate macro dos objetos
 void Game::Update()
 {
-	if (Globals::IsRunning)
+	if (SD_Globals::IsRunning)
 	{
 		ACTimeControl::Update();
 		mpCamera->Update();
 
 		//TODO: só programar :)
-		mpPowerCube->Update(ACTimeControl::GetFElapsedTime());
-		mpDynamicTest->Update(ACTimeControl::GetFElapsedTime());
-		mpSpriteTest->Update(ACTimeControl::GetFElapsedTime());
-		mpLinePointTest->Update(ACTimeControl::GetFElapsedTime());
 	}
 };
 
 //renderiza oq tem pra renderizar
 void Game::Draw()
 {
-	if (Globals::IsRunning)
+	if (SD_Globals::IsRunning)
 	{
 		mpGDevice->Clear(TRUE, TRUE, TRUE);
 		mpGDevice->BeginRendering();
 		SetPerframeData();
 
-		//Mandar renderizar daqui 
 		//ativa o rendertarget pra textura
 		//mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
 		//mpGDevice->RenderTargetActivate(mRenderTargetID);
 
-		//mpDynamicTest->Render(mpCamera);
-		mpSpriteTest->Draw();
-		mpPowerCube->Render(mpCamera);
-		mpLinePointTest->Render(mpCamera);
-		//ate aqui
-
 		//seta o render target para screen
 		//mpGDevice->RenderTargetActivate(0);
-		//ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
-
-		//mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_Opaque);
-		//mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
-		//mpSpriteBatch->EndRender();
 
 		DrawTexts();
 		mpGDevice->EndRendering();

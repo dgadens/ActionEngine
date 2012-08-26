@@ -20,6 +20,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineWrapper", "EngineWrap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCLI", "DemoCLI\DemoCLI.csproj", "{89AD2D08-2761-436D-9FCD-1A58C69C4267}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SilentDimProject", "..\SilentDimProject\SilentDimProject.vcxproj", "{9F89C01E-B5E3-4940-BE54-6155555C038A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -216,6 +218,15 @@ Global
 		{89AD2D08-2761-436D-9FCD-1A58C69C4267}.Release|x64.ActiveCfg = Release|x86
 		{89AD2D08-2761-436D-9FCD-1A58C69C4267}.Release|x86.ActiveCfg = Release|x86
 		{89AD2D08-2761-436D-9FCD-1A58C69C4267}.Release|x86.Build.0 = Release|x86
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Debug|Win32.Build.0 = Debug|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Debug|x64.ActiveCfg = Debug|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Profile|Win32.ActiveCfg = Release|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Profile|Win32.Build.0 = Release|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Profile|x64.ActiveCfg = Release|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Release|Win32.ActiveCfg = Release|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Release|Win32.Build.0 = Release|Win32
+		{9F89C01E-B5E3-4940-BE54-6155555C038A}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
