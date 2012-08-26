@@ -5,10 +5,10 @@
 using namespace System;
 using namespace System::Runtime::InteropServices;
 
-ref class WACRenderer
+ref class ACRendererW
 {
 public:
-	WACRenderer(IntPtr hInst);
+	ACRendererW(IntPtr hInst);
 private:
 	ACRenderer* pRenderer;
 };

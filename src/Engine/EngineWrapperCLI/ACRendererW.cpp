@@ -1,8 +1,8 @@
 #include "StdAfx.h"
-#include "WACRenderer.h"
+#include "ACRendererW.h"
 
 
-WACRenderer::WACRenderer(IntPtr hInst)
+ACRendererW::ACRendererW(IntPtr hInst)
 {
 	pRenderer = new ACRenderer((HINSTANCE)hInst.ToPointer());
 };
