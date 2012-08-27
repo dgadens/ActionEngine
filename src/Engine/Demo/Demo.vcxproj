@@ -45,6 +45,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)\Build\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,6 +94,15 @@
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
       <LargeAddressAware>false</LargeAddressAware>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)$(Configuration)\ACD3DEngine.dll $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\ACDIEngine.dll $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\ACOpenALEngine.dll $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\ACWSEngine.dll $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\Engine.lib $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\EngineCommon.lib $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)\Build\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Demo.ico" />
