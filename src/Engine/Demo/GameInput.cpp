@@ -45,7 +45,7 @@ void GameInput::Process(GPowerCube* cube)
 #pragma region Piking
 	//verifica selecao
 	Ray ray;
-	Ray::GetPickRay(&Vector2(mCurrentMouseState.PosX, mCurrentMouseState.PosY), &Globals::pCamera->Projection, &Globals::pCamera->View, Globals::MainWndWidth, Globals::MainWndHeight,  Globals::pCamera->GetNear(), Globals::pCamera->GetFar(), &ray);
+	Ray::GetPickRay(&Vector2(mCurrentMouseState.PosX, mCurrentMouseState.PosY), &Globals::pCamera->GetProjection(), &Globals::pCamera->GetView(), Globals::MainWndWidth, Globals::MainWndHeight,  Globals::pCamera->GetNear(), Globals::pCamera->GetFar(), &ray);
 	VerifySelection::Process(cube->GetModel(), &ray); 
 #pragma endregion
 

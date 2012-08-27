@@ -39,7 +39,6 @@ void Game::Initialize()
 
 	//cria a camera padrao
 	mpCamera = new ACCamera();
-	mpCamera->ResetCamera();
 	mpCamera->SetWidth(mpGDevice->GetVPWidth());
 	mpCamera->SetHeight(mpGDevice->GetVPHeight());
 
@@ -104,7 +103,7 @@ void Game::Draw()
 void Game::SetPerframeData()
 {
 	//light and camera
-	mpGDevice->SetViewProjectionMatrix(mpCamera->ViewProjection);
+	mpGDevice->SetViewProjectionMatrix(mpCamera->GetViewProjection());
 	mpGDevice->SetCameraPosition(mpCamera->GetPosition());
 	mpGDevice->SetLightPosition(Vector3(0, 0, 100));
 	mpGDevice->SetLightDirection(Vector3(0, 0, -0.5f));

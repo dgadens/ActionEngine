@@ -2,45 +2,56 @@
 
 ACCamera::ACCamera()
 {
-	ResetCamera();
-};
+	mCameraProjection = ACCameraProjection::ACCP_Perspective;
 
-ACCamera::~ACCamera()
-{
-	Release();
-};
-
-void ACCamera::Release()
-{
-};
-
-void ACCamera::ResetCamera()
-{
     mNearPlane = 1.0f;
     mFarPlane = 1000.0f;
     mPosition.X  = 0.0f;
 	mPosition.Y  = 0.0f;
 	mPosition.Z  = 500.0f;
-
-    PreviousPosition = mPosition;
-
+	
     mTarget = Vector3(0, 0, -1);
     mUp = Vector3(0, 1, 0);
 
-	Zoom = 800;
+	mChangedView = TRUE;
+    mChangedProjection = TRUE;
+};
 
-    mChangedPosition = FALSE;
+ACCamera::~ACCamera()
+{
+
 };
 
 void ACCamera::Update()
 {
-    mChangedZoom = FALSE;
-    mChangedPosition = TRUE;
+	//se altera a matrix de visualizacao entao ele recalcula
+	if (mChangedView)
+		Matrix::CreateLookAt(&mPosition, &mTarget, &mUp, &mView);
 
-	Matrix::CreateLookAt(&mPosition, &mTarget, &mUp, &View);
-	Matrix::CreatePerspectiveFieldOfView(PIOVER4, mWidth / mHeight, mNearPlane, mFarPlane, &Projection);
+	//se mudou a matrix de projecao entao recalcula
+	if (mChangedProjection)
+	{
+		if (mCameraProjection == ACCameraProjection::ACCP_Perspective)
+			Matrix::CreatePerspectiveFieldOfView(PIOVER4, mWidth / mHeight, mNearPlane, mFarPlane, &mProjection);
+		else
+			Matrix::CreateOrthographic(mWidth, mHeight, mNearPlane, mFarPlane, &mProjection);
+	}
 
-	Matrix::Multiply(&View, &Projection, &ViewProjection);
+	//se alterou qq uma entao ele recalcula a viewprojection
+	if (mChangedView || mChangedProjection)
+		Matrix::Multiply(&mView, &mProjection, &mViewProjection);
+
+	mChangedProjection = FALSE;
+	mChangedView = FALSE;	
+};
+
+void ACCamera::SetCameraProjection(ACCameraProjection value)
+{
+	if (mCameraProjection!=value)
+	{
+		mCameraProjection = value;
+		mChangedProjection = TRUE;
+	}
 };
 
 void ACCamera::SetWidth(FLOAT value)
@@ -48,7 +59,7 @@ void ACCamera::SetWidth(FLOAT value)
 	if (mWidth!=value)
 	{
 		mWidth = value;
-		mChangedVPDimension = TRUE;
+		mChangedProjection = TRUE;
 	}
 };
 		
@@ -57,7 +68,7 @@ void ACCamera::SetHeight(FLOAT value)
 	if (mHeight!=value)
 	{
 		mHeight = value;
-		mChangedVPDimension = TRUE;
+		mChangedProjection = TRUE;
 	}
 };
 
@@ -66,7 +77,7 @@ void ACCamera::SetNear(FLOAT value)
 	if (mNearPlane != value)
 	{
 		mNearPlane = value;
-		mChangedVPDimension = TRUE;
+		mChangedProjection = TRUE;
 	}
 };
 
@@ -75,7 +86,7 @@ void ACCamera::SetFar(FLOAT value)
 	if (mFarPlane != value)
 	{
 		mFarPlane = value;
-		mChangedVPDimension = TRUE;
+		mChangedProjection = TRUE;
 	}
 };
 
@@ -84,7 +95,7 @@ void ACCamera::SetPosition(const Vector3& value)
 	if (mPosition != value)
 	{
 		mPosition = value;
-		mChangedVPDimension = TRUE;
+		mChangedView = TRUE;
 	}
 };
 
@@ -93,7 +104,7 @@ void ACCamera::SetTarget(const Vector3& value)
 	if (mTarget != value)
 	{
 		mTarget = value;
-		mChangedVPDimension = TRUE;
+		mChangedView = TRUE;
 	}
 };
 
@@ -102,8 +113,13 @@ void ACCamera::SetUp(const Vector3& value)
 	if (mUp != value)
 	{
 		mUp = value;
-		mChangedVPDimension = TRUE;
+		mChangedView = TRUE;
 	}
+};
+
+ACCameraProjection ACCamera::GetCameraProjection()
+{
+	return mCameraProjection;
 };
 
 FLOAT ACCamera::GetWidth()
@@ -140,4 +156,20 @@ const Vector3& ACCamera::GetUp()
 {
 	return mUp;
 };
+
+const Matrix& ACCamera::GetView()
+{
+	return mView;
+};
+
+const Matrix& ACCamera::GetProjection()
+{
+	return mProjection;
+};
+
+const Matrix& ACCamera::GetViewProjection()
+{
+	return mViewProjection;
+};
+
 

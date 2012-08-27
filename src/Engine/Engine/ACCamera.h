@@ -10,12 +10,19 @@
 #include "ActionTypeDef.h"
 #include "EngineMath.h"
 
+enum ACCameraProjection
+{
+	ACCP_Perspective,
+	ACCP_Orthographic
+};
+
 class ACCamera
 {
 private:
-	BOOL mChangedVPDimension;
-	BOOL mChangedZoom;
-	BOOL mChangedPosition;
+	ACCameraProjection mCameraProjection;
+
+	BOOL mChangedProjection;
+	BOOL mChangedView;
 
     FLOAT mHalfWidth;
     FLOAT mHalfHeight;
@@ -31,27 +38,16 @@ private:
 	FLOAT mNearPlane;
     FLOAT mFarPlane;
 
+	Matrix mView;
+    Matrix mProjection;
+	Matrix mViewProjection;
+
 public:
 	ACCamera();
 	~ACCamera();
 
-    Matrix View;
-    Matrix Projection;
-	Matrix ViewProjection;
-
-    Vector3 PreviousPosition;
-    FLOAT Zoom;
-
-    //boundingbox da camera
-	//BOUNDINGBOX BB;
-	//boundingbox dos limites do mapa
-	//BOUNDINGBOX BBLimits;
-	//frustum da camera
-	//BOUNDINGFRUSTUM Frustum;
-
-	//movimento suave da camera
-    BOOL SmoothMoviment;
-
+	//sets
+	void SetCameraProjection(ACCameraProjection value);
 	void SetWidth(FLOAT value);
 	void SetHeight(FLOAT value);
 	void SetNear(FLOAT value);
@@ -60,6 +56,8 @@ public:
 	void SetTarget(const Vector3& value);
 	void SetUp(const Vector3& value);
 
+	//gets
+	ACCameraProjection GetCameraProjection();
 	FLOAT GetWidth();
 	FLOAT GetHeight();
 	FLOAT GetNear();
@@ -68,11 +66,11 @@ public:
 	const Vector3& GetTarget();
 	const Vector3& GetUp();
 
-	void Update();
-	void ResetCamera();
-	
-	void Release();
+	const Matrix& GetView();
+	const Matrix& GetProjection();
+	const Matrix& GetViewProjection();
 
+	void Update();
 };
 
 #endif
