@@ -4,11 +4,7 @@
 
 ACSkin::ACSkin(ACRenderDevice* pGDevice, ACContentManager* pCManager, BOOL useMaterial)
 {
-	Material.AmbientColor = Vector3(0);
-	Material.DiffuseColor = Vector4(0);
-	Material.SpecularColor = Vector3(0);
-	Material.EmissiveColor = Vector3(0);
-	Material.SpecularPower = 0;
+	memset(&Material,0, sizeof (ACMaterial));
 
 	for(int i = 0; i < NUM_TEXTURES; i++)
 		Textures[i] = nullptr;

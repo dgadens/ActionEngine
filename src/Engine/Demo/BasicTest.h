@@ -30,7 +30,7 @@ public:
 	~BasicTest();
 
 	void Update(FLOAT elapsedTime);
-	void Render(ACCamera* camera);
+	void Draw(ACCamera* camera);
 
 	void Release();
 };

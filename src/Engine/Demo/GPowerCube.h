@@ -44,7 +44,7 @@ public:
 
 	void Update(float elapsedTime);
 
-	void Render(ACCamera* camera);
+	void Draw(ACCamera* camera);
 
 
 	//special effects

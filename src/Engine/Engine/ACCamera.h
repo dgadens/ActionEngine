@@ -17,7 +17,6 @@ private:
 	BOOL mChangedZoom;
 	BOOL mChangedPosition;
 
-	Vector3* mpDestination;
     FLOAT mHalfWidth;
     FLOAT mHalfHeight;
     FLOAT mRelativeZoomWidth;
@@ -25,16 +24,16 @@ private:
 	FLOAT mWidth;
 	FLOAT mHeight;
 
+	Vector3 mPosition;
+	Vector3 mTarget;
+    Vector3 mUp;
+
+	FLOAT mNearPlane;
+    FLOAT mFarPlane;
+
 public:
 	ACCamera();
 	~ACCamera();
-
-	Vector3 Position;
-	Vector3 Target;
-    Vector3 Up;
-
-	FLOAT NearPlane;
-    FLOAT FarPlane;
 
     Matrix View;
     Matrix Projection;
@@ -53,12 +52,22 @@ public:
 	//movimento suave da camera
     BOOL SmoothMoviment;
 
-	//pega a velocidade da camera para movimentar os objetos conforme
-    Vector3 CurrentCameraMoviment;
-
-    //usado para cameras orthograficas
 	void SetWidth(FLOAT value);
 	void SetHeight(FLOAT value);
+	void SetNear(FLOAT value);
+	void SetFar(FLOAT value);
+	void SetPosition(const Vector3& value);
+	void SetTarget(const Vector3& value);
+	void SetUp(const Vector3& value);
+
+	FLOAT GetWidth();
+	FLOAT GetHeight();
+	FLOAT GetNear();
+	FLOAT GetFar();
+	const Vector3& GetPosition();
+	const Vector3& GetTarget();
+	const Vector3& GetUp();
+
 	void Update();
 	void ResetCamera();
 	

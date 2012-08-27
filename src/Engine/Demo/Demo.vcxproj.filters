@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Scripts">
       <UniqueIdentifier>{de6877c2-4122-49e2-8668-316b6054cd06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameTest">
+      <UniqueIdentifier>{440777d4-7481-429b-b9ea-27886b00f7e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameTest">
+      <UniqueIdentifier>{63dbfdca-3ed8-45e9-8807-b6ba956cfc34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -87,6 +93,9 @@
     <ClCompile Include="ScriptMachine.cpp">
       <Filter>Source Files\Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>Source Files\GameTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInput.h">
@@ -130,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="GUtils.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Floor.h">
+      <Filter>Header Files\GameTest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

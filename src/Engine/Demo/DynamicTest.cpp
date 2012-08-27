@@ -73,7 +73,6 @@ DynamicTest::~DynamicTest()
 void DynamicTest::Update(FLOAT elapsedTime)
 {
 	mRotation.Y += elapsedTime;
-	//Matrix::CreateScale(30, &World);
 	Matrix::CreateRotationY(mRotation.Y, &World1);
 
 	Matrix::CreateRotationY(mRotation.Y, &World2);
@@ -83,7 +82,7 @@ void DynamicTest::Update(FLOAT elapsedTime)
 	World3.M41 += 100;
 };
 
-void DynamicTest::Render(ACCamera* camera)
+void DynamicTest::Draw(ACCamera* camera)
 {
 	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_LineList);
 	mpGDevice->ActiveVS(mpVS);

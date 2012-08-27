@@ -17,6 +17,7 @@
 #include "SpriteTest.h"
 #include "LinePointTest.h"
 #include "ScriptMachine.h"
+#include "Floor.h"
 
 class Game
 {
@@ -28,14 +29,14 @@ class Game
 	ACSpriteBatch*		mpSpriteBatch;
 	ScriptMachine*		mpScriptMachine;
 
+	//Floor
+	Floor*				mpFloor;
+
 	//cubo
 	GPowerCube*			mpPowerCube;
 	//teste dinamico
 	DynamicTest*        mpDynamicTest;
-	//teste dos sprites
-	SpriteTest*			mpSpriteTest;
-	//teste linhas e pontos
-	LinePointTest*		mpLinePointTest;
+
 	//RenderTarget
 	UINT				mRenderTargetID;
 

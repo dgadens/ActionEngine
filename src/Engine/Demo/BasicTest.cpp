@@ -42,7 +42,7 @@ void BasicTest::Update(FLOAT elapsedTime)
 	Matrix::CreateRotationY(mRotation.Y, &World);
 };
 
-void BasicTest::Render(ACCamera* camera)
+void BasicTest::Draw(ACCamera* camera)
 {
 	mpGDevice->ActiveVS(mpVS);
 	mpGDevice->ActivePS(mpPS);

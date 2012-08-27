@@ -73,14 +73,14 @@ void GPowerCube::Update(float elapsedTime)
 	mCurrentRotation += (elapsedTime * 2);
 
 	mpModels[0]->SetAbsolutePosition(-100, 0, 0);
-	mpModels[0]->SetAbsoluteScale(100);
+	mpModels[0]->SetAbsoluteScale(30);
 	mpModels[0]->SetAbsoluteRotation(0, mCurrentRotation, 0);
 	mpModels[0]->Update(elapsedTime);
 	/*foi = true;
 	}*/
 };
 	 
-void GPowerCube::Render(ACCamera* camera)
+void GPowerCube::Draw(ACCamera* camera)
 {
 	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_TriangleList);
 	mpGDevice->SetBlendState(ACBLENDSTATE::ACBS_Opaque);

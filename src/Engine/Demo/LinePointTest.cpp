@@ -60,7 +60,7 @@ void LinePointTest::Update(FLOAT elapsedTime)
 	}
 };
 
-void LinePointTest::Render(ACCamera* camera)
+void LinePointTest::Draw(ACCamera* camera)
 {
 	mpGDevice->ActiveVS(mpVS);
 	mpGDevice->ActivePS(mpPS);

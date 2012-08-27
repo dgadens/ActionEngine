@@ -105,7 +105,7 @@ void Game::SetPerframeData()
 {
 	//light and camera
 	mpGDevice->SetViewProjectionMatrix(mpCamera->ViewProjection);
-	mpGDevice->SetCameraPosition(mpCamera->Position);
+	mpGDevice->SetCameraPosition(mpCamera->GetPosition());
 	mpGDevice->SetLightPosition(Vector3(0, 0, 100));
 	mpGDevice->SetLightDirection(Vector3(0, 0, -0.5f));
 	mpGDevice->SetLightColor(Vector3(0.1f, 0.1f, 0.1f));
