@@ -79,7 +79,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EngineWrapperCLI\EngineWrapperCLI.vcxproj">
       <Project>{DB381140-FBA6-49EA-887A-6D5C9FB57E28}</Project>
-      <Name>EngineWrapperCLI</Name>
+      <Name>EngineWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

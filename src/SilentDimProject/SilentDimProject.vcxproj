@@ -39,9 +39,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -78,6 +80,21 @@
       <AdditionalLibraryDirectories>..\Engine\References\Lua5.1.5\libs\Win32;..\Engine\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;Lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(SolutionDir)$(Configuration)\ACD3DEngine.dll $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\ACDIEngine.dll $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\ACOpenALEngine.dll $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\ACWSEngine.dll $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\Engine.lib $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\EngineCommon.lib $(ProjectDir)$(Configuration)\
+copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)$(Configuration)\
+
+
+</Command>
+    </PostBuildEvent>
+    <BuildLog>
+      <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
