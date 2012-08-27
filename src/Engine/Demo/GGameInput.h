@@ -18,7 +18,7 @@
 #include "ACTimeControl.h"
 #include "GPowerCube.h"
 
-class GameInput
+class GGameInput
 {
 private:
 	static ACKeyboard* mpKeyboard;
@@ -32,7 +32,15 @@ private:
 
 public:
 	static void Init(ACKeyboard* keyboard, ACMouse* mouse);
-	static void Process(GPowerCube* cube);
+	static void Update();
+
+	static ACKeyboardState GetKBState();
+	static ACKeyboardState GetPreviousKBState();
+
+	static ACMouseState GetMouseState();
+	static ACMouseState GetPreviousMouseState();
+
+	static void Picking();
 };
 
 #endif

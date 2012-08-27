@@ -5,7 +5,7 @@
 #include "EngineCommon.h"
 #include "EngineMath.h"
 #include "Globals.h"
-#include "GameInput.h"
+#include "GGameInput.h"
 #include "Game.h"
 
 //declaracao dos atributos globais
@@ -349,7 +349,7 @@ HRESULT EngineStartup()
 	Globals::pMouse = pInput->GetMouse();
 	pInput->CreateKeyboard();
 	Globals::pKeyboard = pInput->GetKeyboard();
-	GameInput::Init(Globals::pKeyboard, Globals::pMouse);
+	GGameInput::Init(Globals::pKeyboard, Globals::pMouse);
 	#pragma endregion
 
 	#pragma region CRIA NETWORKDEVICE

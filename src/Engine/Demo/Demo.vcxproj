@@ -129,7 +129,8 @@ copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)\Build\</Command
     <ClCompile Include="DynamicTest.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameInput.cpp" />
+    <ClCompile Include="GGameInput.cpp" />
+    <ClCompile Include="GCamera.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="LinePointTest.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -144,7 +145,8 @@ copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)\Build\</Command
     <ClInclude Include="DynamicTest.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameInput.h" />
+    <ClInclude Include="GGameInput.h" />
+    <ClInclude Include="GCamera.h" />
     <ClInclude Include="GEnums.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GUtils.h" />

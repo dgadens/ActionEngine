@@ -13,10 +13,10 @@
 class ACKeyboardState
 {
 public:
-	bool Keys[256];
+	BOOL Keys[256];
 
-	bool IsPressed(ACKEYS key);
-	bool IsReleased(ACKEYS key);
+	BOOL IsPressed(ACKEYS key);
+	BOOL IsReleased(ACKEYS key);
 
 	void Copy(ACKeyboardState* dest);
 

@@ -13,12 +13,12 @@
 class ACMouseState
 {
 public:
-	bool Buttons[3];
+	BOOL Buttons[3];
 	int  PosX;
 	int  PosY;
 
-	bool IsPressed(ACMOUSEBUTTON key);
-	bool IsReleased(ACMOUSEBUTTON key);
+	BOOL IsPressed(ACMOUSEBUTTON key);
+	BOOL IsReleased(ACMOUSEBUTTON key);
 
 	void Copy(ACMouseState* dest);
 

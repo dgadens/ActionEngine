@@ -4,6 +4,7 @@ ACCamera::ACCamera()
 {
 	mCameraProjection = ACCameraProjection::ACCP_Perspective;
 
+	mFOV = PIOVER4;
     mNearPlane = 1.0f;
     mFarPlane = 1000.0f;
     mPosition.X  = 0.0f;
@@ -32,7 +33,7 @@ void ACCamera::Update()
 	if (mChangedProjection)
 	{
 		if (mCameraProjection == ACCameraProjection::ACCP_Perspective)
-			Matrix::CreatePerspectiveFieldOfView(PIOVER4, mWidth / mHeight, mNearPlane, mFarPlane, &mProjection);
+			Matrix::CreatePerspectiveFieldOfView(mFOV, mWidth / mHeight, mNearPlane, mFarPlane, &mProjection);
 		else
 			Matrix::CreateOrthographic(mWidth, mHeight, mNearPlane, mFarPlane, &mProjection);
 	}
@@ -50,6 +51,15 @@ void ACCamera::SetCameraProjection(ACCameraProjection value)
 	if (mCameraProjection!=value)
 	{
 		mCameraProjection = value;
+		mChangedProjection = TRUE;
+	}
+};
+
+void ACCamera::SetFOV(FLOAT value)
+{
+	if (mFOV != value)
+	{
+		mFOV = value;
 		mChangedProjection = TRUE;
 	}
 };
@@ -120,6 +130,11 @@ void ACCamera::SetUp(const Vector3& value)
 ACCameraProjection ACCamera::GetCameraProjection()
 {
 	return mCameraProjection;
+};
+
+FLOAT ACCamera::GetFOV()
+{
+	return mFOV;
 };
 
 FLOAT ACCamera::GetWidth()

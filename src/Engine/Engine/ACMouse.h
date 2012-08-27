@@ -14,12 +14,16 @@
 class ACMouse
 {
 private:
-	bool mButtons[3];
+	BOOL mButtons[3];
 	int  mPosX;
 	int  mPosY;
 
 public:
-	ACMouse() {};
+	ACMouse() 
+	{
+		memset(mButtons, 0, sizeof ( BOOL ) * 3);
+	};
+
 	~ACMouse() {};
 
 	void SetButtonDown(ACMOUSEBUTTON button);

@@ -50,10 +50,10 @@ void Game::Initialize()
 	ACRandom::Randomize(ACTimeControl::GetMilliseconds());
 
 	//cria a camera padrao
-	mpCamera = new ACCamera();
+	mpCamera = new GCamera(GCameraType::Free);
 	mpCamera->SetWidth(mpGDevice->GetVPWidth());
 	mpCamera->SetHeight(mpGDevice->GetVPHeight());
-	mpCamera->SetPosition(Vector3(0,200.0f,-200));
+	mpCamera->SetPosition(Vector3(0,0,500));
 	mpCamera->SetTarget(Vector3(0,0,0));
 	mpCamera->SetUp(Vector3(0,1,0));
 
@@ -90,8 +90,10 @@ void Game::Update()
 {
 	if (Globals::IsRunning)
 	{
+		//fixo na ordem
 		ACTimeControl::Update();
-		mpCamera->Update();
+		GGameInput::Update();
+		mpCamera->Update(ACTimeControl::GetFElapsedTime());
 
 		//TODO: só programar :)
 		mpFloor->Update(ACTimeControl::GetFElapsedTime());

@@ -60,9 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="GameInput.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -96,11 +93,14 @@
     <ClCompile Include="Floor.cpp">
       <Filter>Source Files\GameTest</Filter>
     </ClCompile>
+    <ClCompile Include="GCamera.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GGameInput.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameInput.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
@@ -142,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="Floor.h">
       <Filter>Header Files\GameTest</Filter>
+    </ClInclude>
+    <ClInclude Include="GCamera.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GGameInput.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

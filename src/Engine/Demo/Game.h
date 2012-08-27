@@ -18,13 +18,15 @@
 #include "LinePointTest.h"
 #include "ScriptMachine.h"
 #include "Floor.h"
+#include "GCamera.h"
+#include "GGameInput.h"
 
 class Game
 {
 	//atributos obrigatorios
 	ACRenderDevice*		mpGDevice;
 	ACContentManager*	mpCManager;
-	ACCamera*			mpCamera;
+	GCamera*			mpCamera;
 	ACFont*				mpFont;
 	ACSpriteBatch*		mpSpriteBatch;
 	ScriptMachine*		mpScriptMachine;

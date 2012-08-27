@@ -12,5 +12,5 @@ void ACKeyboard::SetKeyUp(ACKEYS key)
 
 void ACKeyboard::GetState(ACKeyboardState* keysState)
 {
-	memcpy(keysState->Keys, mKeys, sizeof (bool) * 256);
+	memcpy(keysState->Keys, mKeys, sizeof (BOOL) * 256);
 };

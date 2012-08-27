@@ -14,13 +14,13 @@
 class ACKeyboard
 {
 private:
-	bool mKeys[256];
+	BOOL mKeys[256];
 
 public:
 	ACKeyboard() 
 	{
 		//seta tudo pra falser
-		memset(mKeys, 0, sizeof(bool) * 256);
+		memset(mKeys, 0, sizeof( BOOL ) * 256);
 	};
 	~ACKeyboard() {};
 

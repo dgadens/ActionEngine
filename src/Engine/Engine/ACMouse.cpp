@@ -12,7 +12,7 @@ void ACMouse::SetButtonUp(ACMOUSEBUTTON button)
 
 void ACMouse::GetState(ACMouseState* mouseState)
 {
-	memcpy(mouseState->Buttons, mButtons, sizeof (bool) * 3);
+	memcpy(mouseState->Buttons, mButtons, sizeof (BOOL) * 3);
 	mouseState->PosX = mPosX;
 	mouseState->PosY = mPosY;
 };

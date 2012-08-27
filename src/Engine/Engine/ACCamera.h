@@ -21,13 +21,17 @@ class ACCamera
 private:
 	ACCameraProjection mCameraProjection;
 
+	Matrix mView;
+    Matrix mProjection;
+	Matrix mViewProjection;
+
+	FLOAT mFOV;
+
+protected:
+
 	BOOL mChangedProjection;
 	BOOL mChangedView;
 
-    FLOAT mHalfWidth;
-    FLOAT mHalfHeight;
-    FLOAT mRelativeZoomWidth;
-    FLOAT mRelativeZoomHeight;
 	FLOAT mWidth;
 	FLOAT mHeight;
 
@@ -38,16 +42,13 @@ private:
 	FLOAT mNearPlane;
     FLOAT mFarPlane;
 
-	Matrix mView;
-    Matrix mProjection;
-	Matrix mViewProjection;
-
 public:
 	ACCamera();
-	~ACCamera();
+	virtual ~ACCamera();
 
 	//sets
 	void SetCameraProjection(ACCameraProjection value);
+	void SetFOV(FLOAT value);
 	void SetWidth(FLOAT value);
 	void SetHeight(FLOAT value);
 	void SetNear(FLOAT value);
@@ -58,10 +59,12 @@ public:
 
 	//gets
 	ACCameraProjection GetCameraProjection();
+	FLOAT GetFOV();
 	FLOAT GetWidth();
 	FLOAT GetHeight();
 	FLOAT GetNear();
 	FLOAT GetFar();
+
 	const Vector3& GetPosition();
 	const Vector3& GetTarget();
 	const Vector3& GetUp();
