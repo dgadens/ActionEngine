@@ -98,7 +98,6 @@ void Game::Update()
 		//TODO: só programar :)
 		mpFloor->Update(ACTimeControl::GetFElapsedTime());
 		mpPowerCube->Update(ACTimeControl::GetFElapsedTime());
-		mpDynamicTest->Update(ACTimeControl::GetFElapsedTime());
 	}
 };
 
@@ -112,20 +111,19 @@ void Game::Draw()
 		SetPerframeData();
 
 		//ativa o rendertarget pra textura
-		mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
-		mpGDevice->RenderTargetActivate(mRenderTargetID);
+		//mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
+		//mpGDevice->RenderTargetActivate(mRenderTargetID);
 
 		mpFloor->Draw(mpCamera);
 		mpPowerCube->Draw(mpCamera);
-		mpDynamicTest->Draw(mpCamera);
 
 		//seta o render target para screen
-		mpGDevice->RenderTargetActivate(0);
-		ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
+		//mpGDevice->RenderTargetActivate(0);
+		//ACTexture* rtTexture = mpGDevice->RenderTargetGetTexture(mRenderTargetID);
 
-		mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_Opaque);
-		mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
-		mpSpriteBatch->EndRender();
+		//mpSpriteBatch->BeginRender(ACBLENDSTATE::ACBS_Opaque);
+		//mpSpriteBatch->Render(rtTexture, Vector2(0,0), Vector4(1,1,1,1));
+		//mpSpriteBatch->EndRender();
 
 		DrawTexts();
 		mpGDevice->EndRendering();
@@ -137,11 +135,11 @@ void Game::SetPerframeData()
 	//light and camera
 	mpGDevice->SetViewProjectionMatrix(mpCamera->GetViewProjection());
 	mpGDevice->SetCameraPosition(mpCamera->GetPosition());
-	mpGDevice->SetLightPosition(Vector3(0, 200, 0));
+	mpGDevice->SetLightPosition(Vector3(0, 100, 0));
 	mpGDevice->SetLightDirection(Vector3(0, -1, 0));
-	mpGDevice->SetLightColor(Vector3(1.0f, 0.0f, 0.0f));
-	mpGDevice->SetLightRange(600);
-	mpGDevice->SetLightFalloff(10);
+	mpGDevice->SetLightColor(Vector3(1.0f, 1.0f, 1.0f));
+	mpGDevice->SetLightRange(1000);
+	mpGDevice->SetLightFalloff(3);
 	mpGDevice->SetTime(ACTimeControl::GetTotalSeconds());
 	
 	mpGDevice->ApplyConstants();

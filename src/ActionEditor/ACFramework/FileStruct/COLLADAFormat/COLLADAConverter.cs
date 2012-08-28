@@ -226,6 +226,7 @@ namespace ACFramework.FileStruct
                 v.Position = positions[positionIndices[i]];
                 v.Normal = normals[normalIndices[i]];
                 v.TexCoord1 = texcoords[texcoordIndices[i]];
+                //v.TexCoord1.Y = -v.TexCoord1.Y; //Inverto o Y pq o exportador do max usa as coordenadas do opengl
 
                 amtModel.Vertices.Add(v);
             }

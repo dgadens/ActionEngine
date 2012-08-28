@@ -45,9 +45,9 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	}
 
 #if DEBUG
-	ACGlobals::ENABLE_LOG = true;
+	ACConfigurations::ENABLE_LOG = true;
 #else
-	ACGlobals::ENABLE_LOG = false;
+	ACConfigurations::ENABLE_LOG = false;
 #endif
                                 
     // Main message loop
@@ -316,6 +316,10 @@ HRESULT EngineStartup()
 	RECT rcWnd;
 
 	int x = 0, y = 0;
+
+	#pragma region INICIALIZA A ENGINE
+	ACConfigurations::Initialize();
+	#pragma endregion
 
 	#pragma region CRIA GRAPHICSDEVICE
 	//*** CRIA O PONTEIRO PARA O GRAPHICSDEVICE ***

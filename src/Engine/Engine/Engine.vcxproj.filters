@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="ConfigurationFile.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACRenderDevice.h">
@@ -246,6 +247,9 @@
     <ClInclude Include="ACParticlesEmitter.h">
       <Filter>Header Files\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="..\EngineCommon\ACConfigurations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACRenderer.cpp">
@@ -316,6 +320,9 @@
     </ClCompile>
     <ClCompile Include="ACAFTLoader.cpp">
       <Filter>Source Files\ContentManager\ACFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EngineCommon\ACConfigurations.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

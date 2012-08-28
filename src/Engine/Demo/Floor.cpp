@@ -29,8 +29,11 @@ Floor::Floor(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 	//cria um skin
 	mpSkin = mpCManager->CreateSkin();
-	mpSkin->Material.AmbientColor = Vector3(1,1,1);
+	mpSkin->Material.AmbientColor = Vector3(0.2f,0.2f,0.2f);
 	mpSkin->Material.DiffuseColor = Vector4(1,1,1,1);
+	mpSkin->Material.EmissiveColor = Vector3(0,0,0);
+	mpSkin->Material.SpecularColor = Vector3(1,1,1);
+	mpSkin->Material.SpecularPower = 100;
 	mpSkin->Textures[0] = mpCManager->LoadTexture("Floor.dds");
 
 

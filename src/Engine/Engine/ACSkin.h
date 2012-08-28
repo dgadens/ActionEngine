@@ -11,6 +11,9 @@
 #include "EngineCommon.h"
 #include "ACMaterial.h"
 #include "ACTexture.h"
+#include "ACConfigurations.h"
+
+const UINT NUM_TEXTURES = 8;
 
 class ACContentManager;
 class ACRenderDevice;

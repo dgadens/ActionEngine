@@ -41,7 +41,7 @@ ACModelDefinition* ACContentManager::LoadModel(const std::string& name)
 	}
 
 	//pega o endereco completo do arquivo
-	std::string currentPath = ACGlobals::GetPathModels();
+	std::string currentPath = ACConfigurations::GetPathModels();
 	currentPath.append(name);
 
 	//cria o model def
@@ -53,7 +53,7 @@ ACModelDefinition* ACContentManager::LoadModel(const std::string& name)
 	pModelDef = new ACModelDefinition(mpGDevice, this);
 	pModelDef->Name = name;
 	pModelDef->Instance = 1;
-	pModelDef->ID = ACGlobals::GlobalID++;
+	pModelDef->ID = ACConfigurations::GlobalID++;
 	pModelDef->Prepare(model);
 
 	//adiciona a textura
@@ -111,11 +111,14 @@ ACTexture* ACContentManager::LoadTexture(std::string name)
 		}
 	}
 
+	std::string currentPath = ACConfigurations::GetPathTextures();
+	currentPath.append(name);
+
 	ACTexture* pTexture = nullptr;
-	mpGDevice->LoadTexture(name, &pTexture);
+	mpGDevice->LoadTexture(currentPath, &pTexture);
 	pTexture->Name = name;
 	pTexture->Instance = 1;
-	pTexture->ID = ACGlobals::GlobalID++;
+	pTexture->ID = ACConfigurations::GlobalID++;
 	pTexture->IsRenderTarget = false;
 
 	//adiciona a textura
@@ -177,11 +180,14 @@ ACVertexShader* ACContentManager::LoadVertexShader(std::string name, VertexForma
 		}
 	}
 
+	std::string currentPath = ACConfigurations::GetPathShaders();
+	currentPath.append(name);
+
 	ACVertexShader* pVS = nullptr;
-	mpGDevice->CompileVS(name, vertexFormat, &pVS);
+	mpGDevice->CompileVS(currentPath, vertexFormat, &pVS);
 	pVS->Name = name;
 	pVS->Instance = 1;
-	pVS->ID = ACGlobals::GlobalID++;
+	pVS->ID = ACConfigurations::GlobalID++;
 
 	//adiciona o shader
 	vertexShaders.insert(std::pair<UINT, ACVertexShader*>(pVS->ID, pVS));
@@ -238,11 +244,14 @@ ACPixelShader* ACContentManager::LoadPixelShader(std::string name)
 		}
 	}
 
+	std::string currentPath = ACConfigurations::GetPathShaders();
+	currentPath.append(name);
+
 	ACPixelShader* pPS = nullptr;
-	mpGDevice->CompilePS(name, &pPS);
+	mpGDevice->CompilePS(currentPath, &pPS);
 	pPS->Name = name;
 	pPS->Instance = 1;
-	pPS->ID = ACGlobals::GlobalID++;
+	pPS->ID = ACConfigurations::GlobalID++;
 
 	//adiciona o shader
 	pixelShaders.insert(std::pair<UINT, ACPixelShader*>(pPS->ID, pPS));
@@ -299,11 +308,14 @@ ACGeometryShader* ACContentManager::LoadGeometryShader(std::string name)
 		}
 	}
 
+	std::string currentPath = ACConfigurations::GetPathShaders();
+	currentPath.append(name);
+
 	ACGeometryShader* pGS = nullptr;
-	mpGDevice->CompileGS(name, &pGS);
+	mpGDevice->CompileGS(currentPath, &pGS);
 	pGS->Name = name;
 	pGS->Instance = 1;
-	pGS->ID = ACGlobals::GlobalID++;
+	pGS->ID = ACConfigurations::GlobalID++;
 
 	//adiciona o shader
 	geometryShaders.insert(std::pair<UINT, ACGeometryShader*>(pGS->ID, pGS));
@@ -362,8 +374,11 @@ ACSound* ACContentManager::LoadSound(std::string name)
 		}
 	}
 
+	std::string currentPath = ACConfigurations::GetPathSounds();
+	currentPath.append(name);
+
 	ACSound* pSound = nullptr;
-	mpADevice->LoadSound(name, &pSound);
+	mpADevice->LoadSound(currentPath, &pSound);
 	pSound->Name = name;
 	pSound->Instance = 1;
 
@@ -424,13 +439,13 @@ ACFont* ACContentManager::LoadFont(std::string name)
 	}
 
 	//pega o endereco completo do arquivo
-	std::string currentPath = ACGlobals::GetPathFonts();
+	std::string currentPath = ACConfigurations::GetPathFonts();
 	currentPath.append(name);
 
 	ACFont* pFont = new ACFont();
 	ACAFTLoader::LoadFromFile(currentPath.c_str(), pFont);
 	pFont->Instance = 1;
-	pFont->ID = ACGlobals::GlobalID++;
+	pFont->ID = ACConfigurations::GlobalID++;
 	//substitui as extensao por png
 	pFont->Texture = LoadTexture(name.replace(name.end() - 3, name.end(), + "png"));
 

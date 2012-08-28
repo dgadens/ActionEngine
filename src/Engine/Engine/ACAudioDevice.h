@@ -49,7 +49,7 @@ public:
 
 	// Load OGG from file
 	// Return sound (buffer) pointer
-	virtual HRESULT LoadSound(const std::string &name, ACSound** ppOutSoundPtr)=0;
+	virtual HRESULT LoadSound(const std::string& path, ACSound** ppOutSoundPtr)=0;
 	// Remove sound (buffer) of memory 
 	virtual void ReleaseSound(const ACSound* pSound)=0;
 

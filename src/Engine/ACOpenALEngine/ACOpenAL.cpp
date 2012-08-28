@@ -105,12 +105,9 @@ void ACOpenAL::Log(char* message, ...)
 #pragma endregion
 
 #pragma region LoadSound
-HRESULT ACOpenAL::LoadSound(const std::string &name, ACSound** ppOutSoundPtr)
+HRESULT ACOpenAL::LoadSound(const std::string &path, ACSound** ppOutSoundPtr)
 {
 	HRESULT hr;
-
-	std::string currentPath = ACGlobals::GetPathSounds();
-	currentPath.append(name);
 
 	*ppOutSoundPtr = new ACSound();
 
@@ -122,7 +119,7 @@ HRESULT ACOpenAL::LoadSound(const std::string &name, ACSound** ppOutSoundPtr)
 	alGenBuffers(NUM_BUFFERS, &(*ppOutSoundPtr)->SoundID);
 
 	//carrega o ogg do arquivo e armazena no buffer
-	OGGLoader::DecodeOGG(currentPath.c_str(), buffer, format, freq);
+	OGGLoader::DecodeOGG(path.c_str(), buffer, format, freq);
 
 	//armazena no buffer do OpenAL
 	alBufferData((*ppOutSoundPtr)->SoundID, format, &buffer[0], static_cast<ALsizei>(buffer.size()), freq);

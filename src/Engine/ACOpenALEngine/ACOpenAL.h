@@ -36,7 +36,7 @@ public:
 
 	void Log(char* message, ...);
   
-	HRESULT LoadSound(const std::string &name, ACSound** ppOutSoundPtr);
+	HRESULT LoadSound(const std::string &path, ACSound** ppOutSoundPtr);
 	void ReleaseSound(const ACSound* pSound);
 
 	void PlaySound(UINT);

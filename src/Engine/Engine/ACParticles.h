@@ -14,6 +14,7 @@
 #include "ACParticleTypes.h"
 #include "ACRenderDeviceEnums.h"
 #include "ACContentManager.h"
+#include "ACConfigurations.h"
 
 class ACRenderDevice;
 

@@ -14,6 +14,8 @@
 #include "ACRenderDevice.h"
 #include "ACD3DVertexCache.h"
 
+const UINT NUM_CACHES = 10;
+
 class ACSkin;
 class ACD3D;
 

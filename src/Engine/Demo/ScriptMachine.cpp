@@ -38,7 +38,7 @@ void ScriptMachine::ExecuteScript(const std::string& name)
 //exemplo q mostra como carregar o arquivo e as variaveis globais
 void ScriptMachine::FirstExample()
 {
-	std::string path = ACGlobals::GetPathScripts();
+	std::string path = ACConfigurations::GetPathScripts();
 	path.append("FirstExample.lua");
 
 	//executo o arquivo
@@ -83,7 +83,7 @@ void ScriptMachine::FirstExample()
 //exemplo q mostra como executar um metodo c++ no lua e vice-versa
 void ScriptMachine::SecondExample()
 {
-	std::string path = ACGlobals::GetPathScripts();
+	std::string path = ACConfigurations::GetPathScripts();
 	path.append("SecondExample.lua");
 
 	//registro o metodo no lua e no c++, tem q ser feito antes do dofile pq o dofile executa tudo q tem no arquivo
@@ -96,7 +96,7 @@ void ScriptMachine::SecondExample()
 
 void ScriptMachine::ThirdExample()
 {
-	std::string path = ACGlobals::GetPathScripts();
+	std::string path = ACConfigurations::GetPathScripts();
 	path.append("ThirdExample.lua");
 
 	//executo o arquivo

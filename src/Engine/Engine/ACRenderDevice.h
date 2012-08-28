@@ -213,20 +213,20 @@ public:
 	virtual void ReleaseBuffer(ACVertexBuffer* vertexBuffer) = 0;
 
 	//textures
-	virtual HRESULT LoadTexture(std::string fileName, ACTexture** ppOutTexturePtr) = 0;
+	virtual HRESULT LoadTexture(std::string path, ACTexture** ppOutTexturePtr) = 0;
 	virtual HRESULT ReleaseTexture(ACTexture* pTexture) = 0;
 	virtual void SetTexture(ACTexture* pTexture, UINT slot) = 0;
 
 	//shaders
-	virtual HRESULT CompileVS(std::string fileName, VertexFormat vertexFormat, ACVertexShader** ppOutVertexShaderPtr) = 0;
+	virtual HRESULT CompileVS(std::string path, VertexFormat vertexFormat, ACVertexShader** ppOutVertexShaderPtr) = 0;
 	virtual HRESULT ReleaseVS(ACVertexShader* pVertexShader) = 0;
 	virtual void ActiveVS(ACVertexShader* vertexShader) = 0;
 
-	virtual HRESULT CompilePS(std::string fileName, ACPixelShader** ppOutPixelShaderPtr) = 0;
+	virtual HRESULT CompilePS(std::string path, ACPixelShader** ppOutPixelShaderPtr) = 0;
 	virtual HRESULT ReleasePS(ACPixelShader* pPixelShader) = 0;
 	virtual void ActivePS(ACPixelShader* pixelShader) = 0;
 
-	virtual HRESULT CompileGS(std::string fileName, ACGeometryShader** ppOutGeometryShaderPtr) = 0;
+	virtual HRESULT CompileGS(std::string path, ACGeometryShader** ppOutGeometryShaderPtr) = 0;
 	virtual HRESULT ReleaseGS(ACGeometryShader* pGeometryShader) = 0;
 	virtual void ActiveGS(ACGeometryShader* geometryShader) = 0;
 

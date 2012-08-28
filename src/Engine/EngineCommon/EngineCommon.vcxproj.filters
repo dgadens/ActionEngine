@@ -33,9 +33,6 @@
     <ClInclude Include="TextureTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ACGlobals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,9 +45,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureTools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ACGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

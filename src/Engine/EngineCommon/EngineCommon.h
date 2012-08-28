@@ -3,7 +3,6 @@
 
 #include "ActionTypeDef.h"
 #include "GenericTools.h"
-#include "ACGlobals.h"
 #include "Enums.h"
 #include "Structs.h"
 #include "Event.h"

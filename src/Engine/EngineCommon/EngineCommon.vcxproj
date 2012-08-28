@@ -80,7 +80,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ACGlobals.h" />
     <ClInclude Include="ActionTypeDef.h" />
     <ClInclude Include="EngineCommon.h" />
     <ClInclude Include="Enums.h" />
@@ -90,7 +89,6 @@
     <ClInclude Include="TextureTools.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ACGlobals.cpp" />
     <ClCompile Include="GenericTools.cpp" />
     <ClCompile Include="TextureTools.cpp" />
   </ItemGroup>

@@ -100,7 +100,7 @@ HRESULT ACD3D::Init(HWND hWnd, BOOL enableVSync, BOOL log)
 	}
 
 	//cria o vertexmanager
-	mpVManager = new ACD3DVertexManager(this, ACD3DGlobals::G_pD3dDevice, MAX_VERTICES_IN_BUFFER, MAX_INDICES_IN_BUFFER, mpLOG);
+	mpVManager = new ACD3DVertexManager(this, ACD3DGlobals::G_pD3dDevice, ACConfigurations::GetMaxVerticesInBuffer(), ACConfigurations::GetMaxIndicesInBuffer(), mpLOG);
 	ACD3DGlobals::G_pVertexManager = static_cast<ACD3DVertexManager*>(mpVManager);
 	
 	Log("Init Success");
@@ -114,7 +114,7 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 
 	//inicializa membros
 	mDriverType = D3D_DRIVER_TYPE_HARDWARE;
-	mFeatureLevel = D3D_FEATURE_LEVEL_10_0;
+	mFeatureLevel = D3D_FEATURE_LEVEL_11_0;
 
 	ACD3DGlobals::G_pD3dDevice = nullptr;
 	ACD3DGlobals::G_pContext = nullptr;
@@ -844,11 +844,8 @@ void ACD3D::ReleaseBuffer(ACVertexBuffer* vertexBuffer)
 #pragma region Textures
 
 //carrega uma textura 2d do disco
-HRESULT ACD3D::LoadTexture(std::string name, ACTexture** ppOutTexturePtr)
+HRESULT ACD3D::LoadTexture(std::string path, ACTexture** ppOutTexturePtr)
 {
-	std::string currentPath = ACGlobals::GetPathTextures();
-	currentPath.append(name);
-
 	*ppOutTexturePtr = new ACTexture();
 	ZeroMemory(*ppOutTexturePtr, sizeof ( ACTexture ));
 
@@ -856,7 +853,7 @@ HRESULT ACD3D::LoadTexture(std::string name, ACTexture** ppOutTexturePtr)
 
 	//carrega a textura do arquivo
 	HRESULT hr = D3DX11CreateTextureFromFileA(ACD3DGlobals::G_pD3dDevice,
-									currentPath.c_str(),
+									path.c_str(),
 									nullptr,
 									nullptr,
 									&pTexture,
@@ -867,11 +864,11 @@ HRESULT ACD3D::LoadTexture(std::string name, ACTexture** ppOutTexturePtr)
 		std::string message;
         switch(hr)
         {
-			case D3D11_ERROR_FILE_NOT_FOUND:  message = "[ERROR] Erro ao carregar textura. File not found: " + name;  break;
-			case D3DERR_INVALIDCALL:          message = "[ERROR] Erro ao carregar textura. Invalid call: "   + name; break;
-			case E_INVALIDARG:                message = "[ERROR] Erro ao carregar textura. Invalid argument: " + name; break;
-			case E_OUTOFMEMORY:               message = "[ERROR] Erro ao carregar textura. Out of memory: " + name; break;
-			default:                          message = "[ERROR] Erro ao carregar textura. Unknown error: " + name;
+			case D3D11_ERROR_FILE_NOT_FOUND:  message = "[ERROR] Erro ao carregar textura. File not found: " + path;  break;
+			case D3DERR_INVALIDCALL:          message = "[ERROR] Erro ao carregar textura. Invalid call: "   + path; break;
+			case E_INVALIDARG:                message = "[ERROR] Erro ao carregar textura. Invalid argument: " + path; break;
+			case E_OUTOFMEMORY:               message = "[ERROR] Erro ao carregar textura. Out of memory: " + path; break;
+			default:                          message = "[ERROR] Erro ao carregar textura. Unknown error: " + path;
 		}
 
 		MessageBoxA(nullptr, message.c_str(), "Error", MB_OK | MB_ICONERROR);
@@ -937,7 +934,6 @@ HRESULT ACD3D::LoadTexture(std::string name, ACTexture** ppOutTexturePtr)
 
 	//popula o actexture
 	(*ppOutTexturePtr)->pData = pSRV;
-	(*ppOutTexturePtr)->Name = name;
 
 	return AC_OK;
 };
@@ -969,11 +965,8 @@ void ACD3D::SetTexture(ACTexture* pTexture, UINT slot)
 #pragma region Shaders
 
 //VERTEX SHADER
-HRESULT ACD3D::CompileVS(std::string fileName, VertexFormat vertexFormat, ACVertexShader** ppOutVertexShaderPtr)
+HRESULT ACD3D::CompileVS(std::string path, VertexFormat vertexFormat, ACVertexShader** ppOutVertexShaderPtr)
 {
-	std::string currentPath = ACGlobals::GetPathShaders();
-	currentPath.append(fileName);
-
 	*ppOutVertexShaderPtr = new ACVertexShader();
 
 	//compila o VS 
@@ -987,7 +980,7 @@ HRESULT ACD3D::CompileVS(std::string fileName, VertexFormat vertexFormat, ACVert
     #endif
 
 	HRESULT hr = 0;
-	hr = D3DX11CompileFromFileA(currentPath.c_str(), 
+	hr = D3DX11CompileFromFileA(path.c_str(), 
 								nullptr, 
 								nullptr, 
 								"main", 
@@ -1016,7 +1009,6 @@ HRESULT ACD3D::CompileVS(std::string fileName, VertexFormat vertexFormat, ACVert
 														  &pVS);
 
 		(*ppOutVertexShaderPtr)->pVS = pVS;
-		(*ppOutVertexShaderPtr)->Name = fileName;
 		(*ppOutVertexShaderPtr)->Format = vertexFormat;
 
 		//cria o layout de vertice
@@ -1082,11 +1074,8 @@ void ACD3D::ActiveVS(ACVertexShader* vertexShader)
 };
 
 //PIXEL SHADER
-HRESULT ACD3D::CompilePS(std::string fileName, ACPixelShader** ppOutPixelShaderPtr)
+HRESULT ACD3D::CompilePS(std::string path, ACPixelShader** ppOutPixelShaderPtr)
 {
-	std::string currentPath = ACGlobals::GetPathShaders();
-	currentPath.append(fileName);
-
 	*ppOutPixelShaderPtr = new ACPixelShader();
 
 	//compila o PS 
@@ -1100,7 +1089,7 @@ HRESULT ACD3D::CompilePS(std::string fileName, ACPixelShader** ppOutPixelShaderP
     #endif
 
 	HRESULT hr = 0;
-	hr = D3DX11CompileFromFileA(currentPath.c_str(), 
+	hr = D3DX11CompileFromFileA(path.c_str(), 
 								nullptr, 
 								nullptr, 
 								"main", 
@@ -1129,7 +1118,6 @@ HRESULT ACD3D::CompilePS(std::string fileName, ACPixelShader** ppOutPixelShaderP
 														  &pPS);
 
 		(*ppOutPixelShaderPtr)->pPS = pPS;
-		(*ppOutPixelShaderPtr)->Name = fileName;
 
 		hr = AC_OK;
 	}
@@ -1165,11 +1153,8 @@ void ACD3D::ActivePS(ACPixelShader* pixelShader)
 };
 
 //GEOMETRY SHADER
-HRESULT ACD3D::CompileGS(std::string fileName, ACGeometryShader** ppOutGeometryShaderPtr)
+HRESULT ACD3D::CompileGS(std::string path, ACGeometryShader** ppOutGeometryShaderPtr)
 {
-	std::string currentPath = ACGlobals::GetPathShaders();
-	currentPath.append(fileName);
-
 	*ppOutGeometryShaderPtr = new ACGeometryShader();
 
 	//compila o GS 
@@ -1183,7 +1168,7 @@ HRESULT ACD3D::CompileGS(std::string fileName, ACGeometryShader** ppOutGeometryS
     #endif
 
 	HRESULT hr = 0;
-	hr = D3DX11CompileFromFileA(currentPath.c_str(), 
+	hr = D3DX11CompileFromFileA(path.c_str(), 
 								nullptr, 
 								nullptr, 
 								"main", 
@@ -1212,7 +1197,6 @@ HRESULT ACD3D::CompileGS(std::string fileName, ACGeometryShader** ppOutGeometryS
 														  &pGS);
 
 		(*ppOutGeometryShaderPtr)->pGS = pGS;
-		(*ppOutGeometryShaderPtr)->Name = fileName;
 
 		hr = AC_OK;
 	}

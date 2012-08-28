@@ -117,7 +117,7 @@ namespace ACEditor
 
         private void MDIEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ACFramework.ACGraphics.Instance.DropAll();
+            //ACFramework.ACGraphics.Instance.DropAll();
         }
 
         private void VpMain_DragDrop(object sender, DragEventArgs e)

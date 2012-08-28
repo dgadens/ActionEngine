@@ -26,6 +26,8 @@
 #include "ACFont.h"
 #include "ACAFTLoader.h"
 
+#include "ACConfigurations.h"
+
 class ACRenderDevice;
 class ACAudioDevice;
 

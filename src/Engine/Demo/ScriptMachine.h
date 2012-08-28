@@ -12,6 +12,7 @@
 
 #include "GUtils.h"
 #include "EngineCommon.h"
+#include "ACConfigurations.h"
 
 class ScriptMachine
 {

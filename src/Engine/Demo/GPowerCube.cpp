@@ -70,7 +70,7 @@ void GPowerCube::Update(float elapsedTime)
 {
 	//if (!foi)
 	//{
-	mCurrentRotation += (elapsedTime * 2);
+	mCurrentRotation += elapsedTime;
 
 	mpModels[0]->SetAbsolutePosition(-100, 0, 0);
 	mpModels[0]->SetAbsoluteScale(30);

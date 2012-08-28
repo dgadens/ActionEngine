@@ -81,6 +81,7 @@ void GCamera::ProcessInput()
 	if (kbS.IsPressed(ACKEYS::ACKEY_E))
 		mTranslation.Y += 100 * mElapsedTime;
 
+
 	if (kbS.IsPressed(ACKEYS::ACKEY_Q))
 		mTranslation.Y -= 100 * mElapsedTime;
 

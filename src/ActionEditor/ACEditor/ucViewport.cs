@@ -30,7 +30,7 @@ namespace ACEditor
                 if (_active)
                 {
                     CurrentViewport = this;
-                    ACGraphics.Instance.ActiveViewport(hWnd);
+                    //ACGraphics.Instance.ActiveViewport(hWnd);
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace ACEditor
             set
             {
                 _clearColor = value;
-                ACGraphics.Instance.SetClearColor(_clearColor);
+                //ACGraphics.Instance.SetClearColor(_clearColor);
             }
 
             get
@@ -115,12 +115,12 @@ namespace ACEditor
 
         void ParentForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ACGraphics.Instance.DropViewport(hWnd);
+            //ACGraphics.Instance.DropViewport(hWnd);
         }
 
         public void InitializeVP()
         {
-            IntPtr hInst = Marshal.GetHINSTANCE(typeof(ucViewport).Module);
+           /* IntPtr hInst = Marshal.GetHINSTANCE(typeof(ucViewport).Module);
             hWnd = pnlVPContainer.Handle;
 
             if (!ACGraphics.MainInitialize)
@@ -130,7 +130,7 @@ namespace ACEditor
             }
             else
                 ACGraphics.Instance.AddViewport(hWnd);
-
+            */
             Initialized = true;
         }
 
@@ -146,13 +146,13 @@ namespace ACEditor
 
         private void ucViewport_Resize(object sender, EventArgs e)
         {
-            if (Initialized)
-                ACGraphics.Instance.SetWindowSize(hWnd, pnlVPContainer.Width, pnlVPContainer.Height);
+            //if (Initialized)
+              //  ACGraphics.Instance.SetWindowSize(hWnd, pnlVPContainer.Width, pnlVPContainer.Height);
         }
 
         private void ucViewport_Enter(object sender, EventArgs e)
         {
-            ACGraphics.Instance.ActiveViewport(hWnd);
+           // ACGraphics.Instance.ActiveViewport(hWnd);
         }
 
         private void pnlVPContainer_MouseDown(object sender, MouseEventArgs e)
@@ -169,7 +169,7 @@ namespace ACEditor
 
         public void Draw()
         {
-            ACGraphics.Instance.Render();
+            //ACGraphics.Instance.Render();
         }
     }
 }
