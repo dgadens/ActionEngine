@@ -142,8 +142,9 @@ namespace ACFramework.FileStructs
 
     public struct AMT_JOINT
     {
-        public string Name;                         // Descriptor
-        public string ParentName;                   // Parentdescriptor
+        public uint ID;                                 //Id q ta na lista principal, armazeno para ser facil de achar
+        public string Name;                         
+        public string ParentName;                  
         public uint ParentID;                           // ParentID
         public Vector4 Rotation;                           // Rotation
         public Vector4 Position;                           // Position

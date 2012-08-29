@@ -52,11 +52,71 @@ namespace ACFramework.FileStruct
 
             amtModel.Vertices = new List<AMT_VERTEX>();
 
+            ConvertBones(rootElement, ref amtModel);
+
             ConvertGeometries(rootElement, ref amtModel);
 
             Optimize(ref amtModel);
 
             return amtModel;
+        }
+
+        private void ConvertBones(XElement rootElement, ref AMT_MODEL amtModel)
+        {
+            //primeiro eu encontro o library_visual_scenes
+            XElement libraryVisualScenes = rootElement.Element(XName.Get("library_visual_scenes", Namespace));
+            XElement visualScene = libraryVisualScenes.Element(XName.Get("visual_scene", Namespace));
+
+            //Começo a percorrer os nodes procurando pela hierarquia de bones
+            FillBoneNodes(null, visualScene, ref amtModel);
+        }
+
+        private void FillBoneNodes(AMT_JOINT? parentBone, XElement boneNode, ref AMT_MODEL amtModel)
+        {
+            //pego todos os nodes
+            List<XElement> nodes = boneNode.Elements(XName.Get("node", Namespace)).ToList();
+            foreach (var node in nodes)
+            {
+                //se é um bone
+                if (node.Attribute("type") != null &&
+                    node.Attribute("type").Value.Contains("JOINT"))
+                {
+                    Matrix matrix = Matrix.Identity;
+
+                    XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
+                    matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
+
+                    // Create this node, use the current number of bones as number.
+                    AMT_JOINT newBone = new AMT_JOINT();
+                    if (parentBone == null)
+                    {
+                        newBone.ParentID = 0;
+                        newBone.ParentName = null;
+                        newBone.Name = "Root";
+
+                        newBone.MatrixAbsolute = matrix;
+                        newBone.MatrixRelative = matrix;
+                    }
+                    else
+                    {
+                        newBone.ParentID = parentBone.Value.ID;
+                        newBone.ParentName = parentBone.Value.Name;
+
+                        newBone.MatrixAbsolute = matrix * parentBone.Value.MatrixAbsolute;
+                        newBone.MatrixRelative = matrix;
+                    }
+
+                    //adiciono o bone na lista, PS: nao tenho uma lista hierarquica so a flat
+                    if (amtModel.Joints == null)
+                        amtModel.Joints = new List<AMT_JOINT>();
+
+                    amtModel.Joints.Add(newBone);
+                    newBone.ID = (uint)amtModel.Joints.Count() - 1;
+                    
+                    // vai para os filhos
+                    FillBoneNodes(newBone, node, ref amtModel);
+                }
+            }
         }
 
         private void ConvertGeometries(XElement rootElement, ref AMT_MODEL amtModel)
