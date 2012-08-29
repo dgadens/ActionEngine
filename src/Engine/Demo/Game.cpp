@@ -139,7 +139,7 @@ void Game::SetPerframeData()
 	mpGDevice->SetLightDirection(Vector3(0, -1, 0));
 	mpGDevice->SetLightColor(Vector3(1.0f, 1.0f, 1.0f));
 	mpGDevice->SetLightRange(1000);
-	mpGDevice->SetLightFalloff(3);
+	mpGDevice->SetLightFalloff(20);
 	mpGDevice->SetTime(ACTimeControl::GetTotalSeconds());
 	
 	mpGDevice->ApplyConstants();

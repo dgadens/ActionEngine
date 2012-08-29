@@ -195,6 +195,9 @@ namespace ACFramework
                 AMT_VERTEX v = model.Vertices[i];
                 Vector3.Transform(ref v.Position, ref rotation, out v.Position);
                 Vector3.TransformNormal(ref v.Normal, ref rotation, out v.Normal);
+                v.Normal.X = Math.Abs(v.Normal.X) < 0.00001f ? 0 : v.Normal.X;
+                v.Normal.Y = Math.Abs(v.Normal.Y) < 0.00001f ? 0 : v.Normal.Y;
+                v.Normal.Z = Math.Abs(v.Normal.Z) < 0.00001f ? 0 : v.Normal.Z;
                 model.Vertices[i] = v;
             }
 

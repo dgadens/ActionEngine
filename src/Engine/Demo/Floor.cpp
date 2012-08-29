@@ -53,7 +53,14 @@ Floor::~Floor()
 
 void Floor::Update(float elapsedTime)
 {
-	Matrix::CreateScale(300,1,300, &mWorld);
+	Matrix scale;
+	Matrix::CreateScale(300,1,300, &scale);
+	Matrix rotation;
+	Matrix::CreateRotationZ(0, &rotation);
+	Matrix translation;
+	Matrix::CreateTranslation(0,0,0, &translation);
+
+	mWorld = scale * rotation * translation;
 };
 
 void Floor::Draw(ACCamera* camera)

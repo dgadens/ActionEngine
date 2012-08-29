@@ -12,16 +12,17 @@ GPowerCube::GPowerCube(ACRenderDevice* gDevice, ACContentManager* cManager)
 	foi = false;
 
 #pragma region EXEMPLO DE CARGA DE MODELO
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		ACModel* model = new ACModel(mpGDevice, mpCManager);
-		model->Load("BoxTNT.amt");
+		model->Load("Goblin.amt");
+		
 		
 		//faco isso para adicionar a textura de animacao no braco
 		const ACSkin* modelDefaultSkin = model->GetSkin();
 		ACSkin* skin = mpCManager->CreateSkin();
 		skin->Material = modelDefaultSkin->Material;
-		skin->Textures[0] = mpCManager->LoadTexture(modelDefaultSkin->Textures[0]->Name);
+		skin->Textures[0] = mpCManager->LoadTexture("Floor.dds");
 		skin->Textures[1] = modelDefaultSkin->Textures[1];
 		skin->Textures[2] = modelDefaultSkin->Textures[2];
 		skin->Textures[3] = mpCManager->LoadTexture("BoxTNTAnimated.png"); //seta essa textura para o canal de animacao 
@@ -52,7 +53,7 @@ GPowerCube::~GPowerCube()
 		mpSoundBuffer = nullptr;
 	}
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 1; i++)
 		SAFE_RELEASE(mpModels[i]);
 };
 
@@ -72,8 +73,8 @@ void GPowerCube::Update(float elapsedTime)
 	//{
 	mCurrentRotation += elapsedTime;
 
-	mpModels[0]->SetAbsolutePosition(-100, 0, 0);
-	mpModels[0]->SetAbsoluteScale(30);
+	mpModels[0]->SetAbsolutePosition(-100, 20, 0);
+	mpModels[0]->SetAbsoluteScale(20);
 	mpModels[0]->SetAbsoluteRotation(0, mCurrentRotation, 0);
 	mpModels[0]->Update(elapsedTime);
 	/*foi = true;
@@ -85,7 +86,6 @@ void GPowerCube::Draw(ACCamera* camera)
 	mpGDevice->SetShadeMode(ACSHADEMODE::ACSM_TriangleList);
 	mpGDevice->SetBlendState(ACBLENDSTATE::ACBS_Opaque);
 	mpGDevice->SetSamplerState(ACSAMPLERSTATE::ACSS_Bilinear_Wrap, 0);
-	//mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullCCW);
 	mpModels[0]->Render(camera);
 };
 
