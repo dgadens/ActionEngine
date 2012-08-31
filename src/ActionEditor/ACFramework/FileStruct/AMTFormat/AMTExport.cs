@@ -22,6 +22,7 @@ namespace ACFramework.FileStructs
                 WriteFaces(bw, model);
                 WriteMeshes(bw, model);
                 WriteMaterials(bw, model);
+                WriteJoints(bw, model);
 
                 bw.Close();
             }
@@ -57,19 +58,10 @@ namespace ACFramework.FileStructs
             {
                 _import.ProgressText = "Exporting Vertices " + i.ToString() + "/" + vertices.Count.ToString();
 
-                bw.Write(vertices[i].Position.X);
-                bw.Write(vertices[i].Position.Y);
-                bw.Write(vertices[i].Position.Z);
-
-                bw.Write(vertices[i].TexCoord1.X);
-                bw.Write(vertices[i].TexCoord1.Y);
-
-                bw.Write(vertices[i].TexCoord2.X);
-                bw.Write(vertices[i].TexCoord2.Y);
-
-                bw.Write(vertices[i].Normal.X);
-                bw.Write(vertices[i].Normal.Y);
-                bw.Write(vertices[i].Normal.Z);
+                WriteVector(bw, vertices[i].Position);
+                WriteVector(bw, vertices[i].TexCoord1);
+                WriteVector(bw, vertices[i].TexCoord2);
+                WriteVector(bw, vertices[i].Normal);
 
                 bw.Write(vertices[i].BoneID_A);
                 bw.Write(vertices[i].BoneWeight_A);
@@ -98,9 +90,7 @@ namespace ACFramework.FileStructs
                 for (int j = 0; j < faces[i].Indices.Count; j++)
                     bw.Write(faces[i].Indices[j]);
 
-                bw.Write(faces[i].Normal.X);
-                bw.Write(faces[i].Normal.Y);
-                bw.Write(faces[i].Normal.Z);
+                WriteVector(bw, faces[i].Normal);
 
                 bw.Write(faces[i].MeshID);
 
@@ -140,22 +130,10 @@ namespace ACFramework.FileStructs
 
                 _import.ProgressText = "Exporting Materials " + materials[i].Name;
 
-                bw.Write(materials[i].Ambient.X);        
-                bw.Write(materials[i].Ambient.Y);
-                bw.Write(materials[i].Ambient.Z);
-
-                bw.Write(materials[i].Diffuse.X);        
-                bw.Write(materials[i].Diffuse.Y);
-                bw.Write(materials[i].Diffuse.Z);
-
-                bw.Write(materials[i].Specular.X);        
-                bw.Write(materials[i].Specular.Y);
-                bw.Write(materials[i].Specular.Z);
-
-                bw.Write(materials[i].Emissive.X);        
-                bw.Write(materials[i].Emissive.Y);
-                bw.Write(materials[i].Emissive.Z);
-
+                WriteVector(bw, materials[i].Ambient);
+                WriteVector(bw, materials[i].Diffuse);
+                WriteVector(bw, materials[i].Specular);
+                WriteVector(bw, materials[i].Emissive);
                 bw.Write(materials[i].SpecularPower);
                 bw.Write(materials[i].Transparency);
 
@@ -173,6 +151,108 @@ namespace ACFramework.FileStructs
 
                 bw.Write(materials[i].Flag);
             }
+        }
+
+        private void WriteJoints(BinaryWriter bw, AMT_MODEL model)
+        {
+            List<AMT_JOINT> joints = model.Joints;
+
+            for (int i = 0; i < joints.Count; i++)
+            {
+                char[] name = Tools.GetCharArray(joints[i].Name, 64);
+                bw.Write(name);
+
+                char[] parentName = Tools.GetCharArray(joints[i].ParentName, 64);
+                bw.Write(parentName);
+
+                _import.ProgressText = "Exporting Bones: Parent" + parentName + " name: " + name;
+
+                bw.Write(joints[i].ID);
+                bw.Write(joints[i].ParentID);
+
+                WriteVector(bw, joints[i].Rotation);
+                WriteVector(bw, joints[i].Position);
+
+                bw.Write(joints[i].NumKFRotation);
+                bw.Write(joints[i].NumKFPosition);
+
+                WriteKFRotations(bw, joints[i].KFRotation);
+                WriteKFRotations(bw, joints[i].KFPosition);               
+
+                bw.Write(joints[i].IsAnimated);
+
+                bw.Write(joints[i].Flag);
+
+                WriteMatrix(bw, joints[i].Matrix);
+                WriteMatrix(bw, joints[i].MatrixAbsolute);
+                WriteMatrix(bw, joints[i].MatrixRelative);
+            }
+        }
+
+        private void WriteKFRotations(BinaryWriter bw, List<AMT_KF_ROT> kfRots)
+        {
+            foreach (var item in kfRots)
+            {
+                bw.Write(item.Time);
+                bw.Write(item.Rotation.X);
+                bw.Write(item.Rotation.Y);
+                bw.Write(item.Rotation.Z);
+            }
+        }
+
+        private void WriteKFRotations(BinaryWriter bw, List<AMT_KF_POS> kfPos)
+        {
+            foreach (var item in kfPos)
+            {
+                bw.Write(item.Time);
+                bw.Write(item.Position.X);
+                bw.Write(item.Position.Y);
+                bw.Write(item.Position.Z);
+            }
+        }
+
+        private void WriteVector(BinaryWriter bw, Vector2 v)
+        {
+            bw.Write(v.X);
+            bw.Write(v.Y);
+        }
+
+        private void WriteVector(BinaryWriter bw, Vector3 v)
+        {
+            bw.Write(v.X);
+            bw.Write(v.Y);
+            bw.Write(v.Z);
+        }
+
+        private void WriteVector(BinaryWriter bw, Vector4 v)
+        {
+            bw.Write(v.X);
+            bw.Write(v.Y);
+            bw.Write(v.Z);
+            bw.Write(v.W);
+        }
+
+        private void WriteMatrix(BinaryWriter bw, Matrix mat)
+        {
+            bw.Write(mat.M11);
+            bw.Write(mat.M12);
+            bw.Write(mat.M13);
+            bw.Write(mat.M14);
+
+            bw.Write(mat.M21);
+            bw.Write(mat.M22);
+            bw.Write(mat.M23);
+            bw.Write(mat.M24);
+
+            bw.Write(mat.M31);
+            bw.Write(mat.M32);
+            bw.Write(mat.M33);
+            bw.Write(mat.M34);
+
+            bw.Write(mat.M41);
+            bw.Write(mat.M42);
+            bw.Write(mat.M43);
+            bw.Write(mat.M44);
         }
     }
 }

@@ -145,7 +145,7 @@ namespace ACFramework.FileStructs
         public uint ID;                                 //Id q ta na lista principal, armazeno para ser facil de achar
         public string Name;                         
         public string ParentName;                  
-        public uint ParentID;                           // ParentID
+        public int ParentID;                           // ParentID
         public Vector4 Rotation;                           // Rotation
         public Vector4 Position;                           // Position
         public uint NumKFRotation;                     // Number of KF_Rots

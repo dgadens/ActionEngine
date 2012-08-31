@@ -67,8 +67,55 @@ namespace ACFramework.FileStruct
             XElement libraryVisualScenes = rootElement.Element(XName.Get("library_visual_scenes", Namespace));
             XElement visualScene = libraryVisualScenes.Element(XName.Get("visual_scene", Namespace));
 
+            //se tem o nodo skeleton
+            XElement rootNode = FindRootSkeletonNodeId(visualScene);
+
             //Começo a percorrer os nodes procurando pela hierarquia de bones
-            FillBoneNodes(null, visualScene, ref amtModel);
+            if (rootNode != null)
+            {
+                //adiciona o bone raiz
+                amtModel.Joints = new List<AMT_JOINT>();
+                Matrix matrix = Matrix.Identity;
+                XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
+                matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
+                AMT_JOINT newBone = new AMT_JOINT();
+                newBone.ParentID = -1; //nao tem pai
+                newBone.ParentName = null;
+                newBone.Name = "Root";
+                newBone.MatrixAbsolute = matrix;
+                newBone.MatrixRelative = matrix;
+                newBone.ID = 0;
+                amtModel.Joints.Add(newBone);
+
+                FillBoneNodes(newBone, rootNode, ref amtModel);
+            }
+        }
+
+        private XElement FindRootSkeletonNodeId(XElement visualNode)
+        {
+            string rootNodeId = null;
+            List<XElement> nodes = visualNode.Elements(XName.Get("node", Namespace)).ToList();
+            //encontro algum nodo q tem o instance_controller
+            XElement controller = nodes.Find(
+                item => { return item.Element(XName.Get("instance_controller", Namespace)) != null; }
+                );
+            controller = controller.Element(XName.Get("instance_controller", Namespace));
+
+
+            //acho o skeleton pra procurar o id do nodo raiz
+            if (controller != null)
+                rootNodeId = controller.Element(XName.Get("skeleton", Namespace)).Value.Substring(1);
+            else
+                return null;
+
+            //procuro o nodo raiz
+            XElement rootNode = nodes.Find(
+                                item => { return item.Attribute("type") != null && 
+                                                 item.Attribute("type").Value.Contains("JOINT") &&
+                                                 item.Attribute("id").Value == rootNodeId; }
+                                );
+
+            return rootNode;
         }
 
         private void FillBoneNodes(AMT_JOINT? parentBone, XElement boneNode, ref AMT_MODEL amtModel)
@@ -88,30 +135,13 @@ namespace ACFramework.FileStruct
 
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
-                    if (parentBone == null)
-                    {
-                        newBone.ParentID = 0;
-                        newBone.ParentName = null;
-                        newBone.Name = "Root";
+                    newBone.ParentID = (int)parentBone.Value.ID;
+                    newBone.ParentName = parentBone.Value.Name;
+                    newBone.MatrixAbsolute = matrix * parentBone.Value.MatrixAbsolute;
+                    newBone.MatrixRelative = matrix;
 
-                        newBone.MatrixAbsolute = matrix;
-                        newBone.MatrixRelative = matrix;
-                    }
-                    else
-                    {
-                        newBone.ParentID = parentBone.Value.ID;
-                        newBone.ParentName = parentBone.Value.Name;
-
-                        newBone.MatrixAbsolute = matrix * parentBone.Value.MatrixAbsolute;
-                        newBone.MatrixRelative = matrix;
-                    }
-
-                    //adiciono o bone na lista, PS: nao tenho uma lista hierarquica so a flat
-                    if (amtModel.Joints == null)
-                        amtModel.Joints = new List<AMT_JOINT>();
-
+                    newBone.ID = (uint)amtModel.Joints.Count();
                     amtModel.Joints.Add(newBone);
-                    newBone.ID = (uint)amtModel.Joints.Count() - 1;
                     
                     // vai para os filhos
                     FillBoneNodes(newBone, node, ref amtModel);
@@ -224,6 +254,7 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumMeshes = (uint)amtModel.Meshes.Count;
             amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
             amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
+            amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
         }
 
         private void ConvertMesh(XElement meshElement, XElement triangles, ref AMT_MODEL amtModel)
