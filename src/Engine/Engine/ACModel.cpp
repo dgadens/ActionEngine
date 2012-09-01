@@ -47,6 +47,20 @@ const ACSkin const* ACModel::GetSkin()
 
 #pragma endregion
 
+#pragma region AUX DATA
+
+void ACModel::SetRenderBones(BOOL value)
+{
+	mRenderBones = value;
+};
+
+void ACModel::SetRenderNormals(BOOL value)
+{
+	mRenderNormals = value;
+};
+
+#pragma endregion
+
 #pragma region CUSTOM SHADERS
 
 void ACModel::SetVertexShader(const ACVertexShader* vs)
@@ -86,7 +100,11 @@ void ACModel::Load(const std::string& name)
 	pModelDefinition = mpCManager->LoadModel(name);
 
 	//carrega os shaders padrao para modelos carregados de arquivo
-	mpVS = mpCManager->LoadVertexShader("LightingTextured.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
+	if (pModelDefinition->HasSkeleton)
+		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexSkinnedMesh);
+	else
+		mpVS = mpCManager->LoadVertexShader("LightingTextured.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
+
 	mpPS = mpCManager->LoadPixelShader("LightingTextured.PShlsl4");
 };
 
@@ -140,6 +158,17 @@ void ACModel::Render(ACCamera* camera)
 
 		//renderiza
 		mpGDevice->Render(pModelDefinition->pVertexBuffer);	
+	}
+
+	if (mRenderBones)
+	{
+		if (pModelDefinition->HasSkeleton)
+		{
+		}
+	}
+
+	if (mRenderNormals)
+	{
 	}
 };
 

@@ -31,6 +31,9 @@ protected:
 	ACPixelShader*     mpPS;
 	ACGeometryShader*  mpGS;
 
+	BOOL mRenderBones;
+	BOOL mRenderNormals;
+
 private:
 
 	BOOL mChangeTransformation;
@@ -65,8 +68,8 @@ public:
 
 	//configurations
 	//void SetRenderBB(bool value);
-	//void SetRenderNormals(bool value);
-	//void SetRenderBones(bool value);
+	void SetRenderNormals(BOOL value);
+	void SetRenderBones(BOOL value);
 
 	//update
 	void Update(FLOAT elapsedTime);

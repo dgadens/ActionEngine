@@ -6,6 +6,7 @@ ID3D11InputLayout* ACD3DVertexLayoutProvider::pVertexPositionTexturedLayout = nu
 ID3D11InputLayout* ACD3DVertexLayoutProvider::pVertexPositionNormalTexturedLayout = nullptr;
 ID3D11InputLayout* ACD3DVertexLayoutProvider::pVertexPositionTexturedExtraInfoLayout = nullptr;
 ID3D11InputLayout* ACD3DVertexLayoutProvider::pVertexSpriteLayout = nullptr;
+ID3D11InputLayout* ACD3DVertexLayoutProvider::pVertexSkinnedMeshLayout = nullptr;
 
 HRESULT ACD3DVertexLayoutProvider::CreateInputLayout(ID3D11Device* gDevice, ID3DBlob* pVSBuf, VertexFormat vertexFormat)
 {
@@ -157,6 +158,32 @@ HRESULT ACD3DVertexLayoutProvider::CreateInputLayout(ID3D11Device* gDevice, ID3D
 			}
 		};
 		break;
+		case VF_VertexSkinnedMesh:
+		{
+			if (pVertexSkinnedMeshLayout == nullptr)
+			{
+				// Define  o layout do positionnormaltextured
+				D3D11_INPUT_ELEMENT_DESC layout[] =
+				{
+					{"POSITION",	 0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{"NORMAL"  ,	 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{"TEXCOORD",	 0, DXGI_FORMAT_R32G32_FLOAT,       0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{"BLENDWEIGHTs", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+					{"BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 48, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+				};
+				UINT numElements = sizeof( layout ) / sizeof( layout[0] );
+
+				hr= gDevice->CreateInputLayout( layout, 
+												numElements, 
+												pVSBuf->GetBufferPointer(),
+												pVSBuf->GetBufferSize(), 
+												&pVertexSkinnedMeshLayout );
+
+				if( FAILED( hr ) )
+					return hr;
+			}
+		};
+		break;
 
 	};
 
@@ -171,4 +198,5 @@ void ACD3DVertexLayoutProvider::ReleaseAll()
 	SAFE_RELEASE(pVertexPositionNormalTexturedLayout);
 	SAFE_RELEASE(pVertexPositionTexturedExtraInfoLayout);
 	SAFE_RELEASE(pVertexSpriteLayout);
+	SAFE_RELEASE(pVertexSkinnedMeshLayout);
 };

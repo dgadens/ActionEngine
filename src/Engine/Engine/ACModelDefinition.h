@@ -48,6 +48,9 @@ public:
 
 	ACVertexBuffer*    pVertexBuffer;
 
+	BOOL HasAnimation;
+	BOOL HasSkeleton;
+
 	ACModelDefinition(ACRenderDevice* mpGDevice, ACContentManager* mpCManager);
 	~ACModelDefinition();
 

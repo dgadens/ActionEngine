@@ -82,8 +82,11 @@ namespace ACFramework.FileStruct
                 newBone.ParentID = -1; //nao tem pai
                 newBone.ParentName = null;
                 newBone.Name = "Root";
+                newBone.Position = matrix.Translation;
+                newBone.Rotation = Vector3.Zero;
+                newBone.BindMatrix = matrix;
                 newBone.MatrixAbsolute = matrix;
-                newBone.MatrixRelative = matrix;
+                newBone.InverseBindMatrix = Matrix.Invert(matrix);
                 newBone.ID = 0;
                 amtModel.Joints.Add(newBone);
 
@@ -137,8 +140,12 @@ namespace ACFramework.FileStruct
                     AMT_JOINT newBone = new AMT_JOINT();
                     newBone.ParentID = (int)parentBone.Value.ID;
                     newBone.ParentName = parentBone.Value.Name;
-                    newBone.MatrixAbsolute = matrix * parentBone.Value.MatrixAbsolute;
-                    newBone.MatrixRelative = matrix;
+                    newBone.Position = matrix.Translation;
+                    newBone.Rotation = Vector3.Zero;
+                    newBone.BindMatrix = matrix;
+                    newBone.InverseBindMatrix = Matrix.Invert(matrix);
+                    //absoluta = absoluta do pai * a relativa do atual
+                    newBone.MatrixAbsolute = parentBone.Value.MatrixAbsolute * matrix;
 
                     newBone.ID = (uint)amtModel.Joints.Count();
                     amtModel.Joints.Add(newBone);

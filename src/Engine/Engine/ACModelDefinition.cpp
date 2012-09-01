@@ -36,11 +36,14 @@ void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 
 	delete[] points;
 
+	HasSkeleton = amtModel->Head.HasSkeleton;
+	HasAnimation = amtModel->Head.NumAnimations > 0;
+
 	//verifica o tipo de vertices se tiver bones entao é um skinnedmesh senao um mesh normal
 	if (amtModel->Head.HasSkeleton)
 	{
 		VFormat = VertexFormat::VF_VertexSkinnedMesh;
-		//TODO: programar o tipo skin
+		PrepareVSM(amtModel);
 	}
 	else
 	{
@@ -117,7 +120,62 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 {
+	mNumVertices = model->Head.NumVertices;
+	mpVSMCache = new ACVertexSkinnedMesh[mNumVertices];
 
+	//seta os vertices para o array
+	for (int i = 0; i < mNumVertices; i++)
+	{
+		mpVSMCache[i].position = model->pVertices[i]->Position;
+		mpVSMCache[i].normal = model->pVertices[i]->Normal;
+		mpVSMCache[i].texcoord = model->pVertices[i]->TexCoord1;
+		mpVSMCache[i].blendWeights = Vector4(model->pVertices[i]->BoneWeight_A,
+											 model->pVertices[i]->BoneWeight_B,
+											 model->pVertices[i]->BoneWeight_C,
+											 model->pVertices[i]->BoneWeight_D);
+		mpVSMCache[i].blendIndices = Vector4(model->pVertices[i]->BoneID_A,
+											 model->pVertices[i]->BoneID_B,
+											 model->pVertices[i]->BoneID_C,
+											 model->pVertices[i]->BoneID_D);
+
+	}
+
+	//atribui os indices
+	mNumIndices = model->pFaces.size() * 3;
+	mpIndices = new UINT[mNumIndices];
+	int index = 0;
+	for (int i = 0; i< model->pFaces.size(); i++)
+	{
+		mpIndices[index++] = model->pFaces[i]->Indices[0];
+		mpIndices[index++] = model->pFaces[i]->Indices[1];
+		mpIndices[index++] = model->pFaces[i]->Indices[2];
+	}
+
+	ACSkin* pSkin = mpCManager->CreateSkin();
+	pSkin->Material.AmbientColor = model->pMaterials[0]->Ambient;
+	pSkin->Material.EmissiveColor = model->pMaterials[0]->Emissive;
+	pSkin->Material.SpecularColor = model->pMaterials[0]->Specular;
+	pSkin->Material.SpecularPower = model->pMaterials[0]->SpecularPower;
+	pSkin->Material.DiffuseColor = Vector4(&model->pMaterials[0]->Diffuse, model->pMaterials[0]->Transparency);
+
+	//carrega as texturas
+	if (model->pMaterials[0]->DiffuseTexture[0] != '\0')
+		pSkin->Textures[0] = mpCManager->LoadTexture(model->pMaterials[0]->DiffuseTexture);
+	if (model->pMaterials[0]->SpecularTexture[0]  != '\0')
+		pSkin->Textures[1] = mpCManager->LoadTexture(model->pMaterials[0]->SpecularTexture);
+	if (model->pMaterials[0]->NormalTexture[0]  != '\0')
+		pSkin->Textures[2] = mpCManager->LoadTexture(model->pMaterials[0]->NormalTexture);
+	if (model->pMaterials[0]->AnimatedTexture[0]  != '\0')
+		pSkin->Textures[3] = mpCManager->LoadTexture(model->pMaterials[0]->AnimatedTexture);
+
+	//ja cria o vertexbuffer na api
+	mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexSkinnedMesh, 
+								  mNumVertices, 
+								  mNumIndices, 
+								  mpVSMCache, 
+								  mpIndices, 
+								  pSkin,
+								  &pVertexBuffer);
 };
 
 void ACModelDefinition::Release()

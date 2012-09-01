@@ -13,7 +13,8 @@
 #include <vector>
 #include <string>
 
-struct AMT_HEAD{
+struct AMT_HEAD
+{
 	UINT Version;
     UINT NumVertices;
     UINT NumIndices;
@@ -21,8 +22,8 @@ struct AMT_HEAD{
     UINT NumMeshes;
     UINT NumMaterials;
     UINT NumJoints;
-    float AnimationFPS;
-    float CurrentTime;
+    FLOAT AnimationFPS;
+    FLOAT CurrentTime;
     UINT NumFrames;
     UINT NumAnimations;
     UINT HasSkeleton;
@@ -36,20 +37,20 @@ struct AMT_VERTEX
     Vector2 TexCoord2;     
     Vector3 Normal;        
     UINT BoneID_A;               
-    float BoneWeight_A;    
+    FLOAT BoneWeight_A;    
 	UINT BoneID_B;               
-    float BoneWeight_B; 
+    FLOAT BoneWeight_B; 
 	UINT BoneID_C;              
-    float BoneWeight_C; 
+    FLOAT BoneWeight_C; 
 	UINT BoneID_D;               
-    float BoneWeight_D; 
+    FLOAT BoneWeight_D; 
     UINT Flag; 
 };
 
 //faces, usada para pegar os indices, tb todos eles vao para o indexbuffer
 struct AMT_FACE
 {
-    int Indices [ 3 ];      
+    INT Indices [ 3 ];      
     Vector3 Normal;        //normal da face
     UINT MeshID;           //id do mesh no array principal
     UINT Flag;         
@@ -57,17 +58,17 @@ struct AMT_FACE
 
 struct AMT_MATERIAL
 {
-    char Name[ 64 ];                   
+    CHAR Name[ 64 ];                   
     Vector3 Ambient;                   
     Vector3 Diffuse;                   
     Vector3 Specular;                  
     Vector3 Emissive;                  
-    float SpecularPower;               
-    float Transparency;                
-    char DiffuseTexture[64];
-    char SpecularTexture[64];
-    char NormalTexture[64];
-    char AnimatedTexture[64];
+    FLOAT SpecularPower;               
+    FLOAT Transparency;                
+    CHAR DiffuseTexture[64];
+    CHAR SpecularTexture[64];
+    CHAR NormalTexture[64];
+    CHAR AnimatedTexture[64];
     UINT Flag;    
 };
 
@@ -77,21 +78,60 @@ struct AMT_MATERIAL
 //tb tem o id do material entao é possivel
 struct AMT_MESH
 {
-    char Name [ 64 ];         
-    int NumFaces; 
+    CHAR Name [ 64 ];         
+    INT NumFaces; 
     PINT pIndices;   //indices das faces, o numero de indices é o numfaces          
     UINT MaterialID;          
     UINT Flag;
 };
 
-struct AMT_MODEL{
-	AMT_HEAD      Head;                               // Header
-	std::vector<AMT_VERTEX*>   pVertices;                           // Vertices
-	std::vector<AMT_FACE*>	   pFaces;                              // Faces
-	std::vector<AMT_MESH*>	   pMeshes;                              // Meshs
-	std::vector<AMT_MATERIAL*> pMaterials;                          // Materials
-/*   LPJOINT		pJoints;                             // Joints
-   LPANIMATION  pAnimation;                          // Animations*/
+struct AMT_KF_ROT
+{
+    FLOAT Time;                             // Time
+    Vector3 Rotation;                       // Rotation
+};
+
+struct AMT_KF_POS
+{
+    FLOAT Time;                             // Time
+    Vector3 Position;                       // Position
+};
+
+struct AMT_JOINT
+{
+    UINT ID;                                //Id q ta na lista principal, armazeno para ser facil de achar
+    CHAR Name [ 64 ];                         
+    CHAR ParentName [ 64 ];                  
+    INT ParentID;                           // ParentID
+    Vector3 Rotation;                       // Rotation
+    Vector3 Position;                       // Position
+    UINT NumKFRotation;                     // Number of KF_Rots
+    UINT NumKFPosition;                     // Number of KF_Pos
+    std::vector<AMT_KF_ROT> KFRotation;     // KF Rotations
+    std::vector<AMT_KF_POS> KFPosition;     // Position
+    UINT IsAnimated;                        // Animierd
+    UINT Flag;                              // Flags
+    Matrix BindMatrix;                      // Bind Matrix (joint)
+    Matrix MatrixAbsolute;                  // Matrix absolute
+    Matrix InverseBindMatrix;               // Inverse Bind Matrix (inverse joint)
+};
+
+struct AMT_ANIMATION
+{
+    CHAR Name [ 64 ];                         
+    FLOAT StartFrame;                    
+    FLOAT EndFrame;
+    UINT Active;                         
+};
+
+struct AMT_MODEL
+{
+	AMT_HEAD				   Head;                 // Header
+	std::vector<AMT_VERTEX*>   pVertices;            // Vertices
+	std::vector<AMT_FACE*>	   pFaces;               // Faces
+	std::vector<AMT_MESH*>	   pMeshes;              // Meshs
+	std::vector<AMT_MATERIAL*> pMaterials;           // Materials
+	std::vector<AMT_JOINT*>    pJoints;				 // Bones	
 };
 
 // -----------------------------------------------------------------

@@ -146,17 +146,17 @@ namespace ACFramework.FileStructs
         public string Name;                         
         public string ParentName;                  
         public int ParentID;                           // ParentID
-        public Vector4 Rotation;                           // Rotation
-        public Vector4 Position;                           // Position
+        public Vector3 Rotation;                           // Rotation
+        public Vector3 Position;                           // Position
         public uint NumKFRotation;                     // Number of KF_Rots
         public uint NumKFPosition;                     // Number of KF_Pos
         public List<AMT_KF_ROT> KFRotation;                        // KF Rotations
         public List<AMT_KF_POS> KFPosition;                        // Position
         public uint IsAnimated;                           // Animiert
         public uint Flag;                             // Flags
-        public Matrix Matrix;                             // Matrix
+        public Matrix BindMatrix;                             // Bind Matrix (joint)
         public Matrix MatrixAbsolute;                    // Matrix absolute
-        public Matrix MatrixRelative;                    // Matrix relativ
+        public Matrix InverseBindMatrix;                    // Inverse Bind Matrix (inverse joint)
     }
 
     public struct AMT_ANIMATION

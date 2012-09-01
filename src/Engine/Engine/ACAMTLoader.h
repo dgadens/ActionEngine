@@ -27,5 +27,6 @@ protected:
    static HRESULT   ReadFaces( AMT_MODEL* outModel );                   
    static HRESULT   ReadMesh( AMT_MODEL* outModel );                    
    static HRESULT   ReadMaterials( AMT_MODEL* outModel );               
+   static HRESULT   ReadJoints( AMT_MODEL* outModel );   
 };
 #endif

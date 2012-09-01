@@ -20,6 +20,7 @@ public:
 	static ID3D11InputLayout* pVertexPositionNormalTexturedLayout;
 	static ID3D11InputLayout* pVertexPositionTexturedExtraInfoLayout;
 	static ID3D11InputLayout* pVertexSpriteLayout;
+	static ID3D11InputLayout* pVertexSkinnedMeshLayout;
 
 	static HRESULT CreateInputLayout(ID3D11Device* gDevice, ID3DBlob* pVSBuf, VertexFormat vertexFormat);
 	static void ReleaseAll();

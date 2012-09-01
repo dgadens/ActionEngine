@@ -165,7 +165,7 @@ namespace ACFramework.FileStructs
                 char[] parentName = Tools.GetCharArray(joints[i].ParentName, 64);
                 bw.Write(parentName);
 
-                _import.ProgressText = "Exporting Bones: Parent" + parentName + " name: " + name;
+                _import.ProgressText = "Exporting Bones: Parent" + joints[i].ParentName + " name: " + joints[i].Name;
 
                 bw.Write(joints[i].ID);
                 bw.Write(joints[i].ParentID);
@@ -176,16 +176,18 @@ namespace ACFramework.FileStructs
                 bw.Write(joints[i].NumKFRotation);
                 bw.Write(joints[i].NumKFPosition);
 
-                WriteKFRotations(bw, joints[i].KFRotation);
-                WriteKFRotations(bw, joints[i].KFPosition);               
+                if (joints[i].NumKFRotation > 0)
+                    WriteKFRotations(bw, joints[i].KFRotation);
+                if (joints[i].NumKFPosition > 0)
+                    WriteKFRotations(bw, joints[i].KFPosition);               
 
                 bw.Write(joints[i].IsAnimated);
 
                 bw.Write(joints[i].Flag);
 
-                WriteMatrix(bw, joints[i].Matrix);
+                WriteMatrix(bw, joints[i].BindMatrix);
                 WriteMatrix(bw, joints[i].MatrixAbsolute);
-                WriteMatrix(bw, joints[i].MatrixRelative);
+                WriteMatrix(bw, joints[i].InverseBindMatrix);
             }
         }
 
@@ -194,9 +196,7 @@ namespace ACFramework.FileStructs
             foreach (var item in kfRots)
             {
                 bw.Write(item.Time);
-                bw.Write(item.Rotation.X);
-                bw.Write(item.Rotation.Y);
-                bw.Write(item.Rotation.Z);
+                WriteVector(bw, item.Rotation);
             }
         }
 
@@ -205,9 +205,7 @@ namespace ACFramework.FileStructs
             foreach (var item in kfPos)
             {
                 bw.Write(item.Time);
-                bw.Write(item.Position.X);
-                bw.Write(item.Position.Y);
-                bw.Write(item.Position.Z);
+                WriteVector(bw, item.Position);
             }
         }
 

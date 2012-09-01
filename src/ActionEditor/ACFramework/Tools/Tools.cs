@@ -42,6 +42,9 @@ namespace ACFramework
             {
                 ret.X = float.Parse(splitValue[0], CultureInfo.InvariantCulture);
                 ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
+
+                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
+                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
             }
 
             return ret;
@@ -57,6 +60,10 @@ namespace ACFramework
                 ret.X = float.Parse(splitValue[0], CultureInfo.InvariantCulture);
                 ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
                 ret.Z = float.Parse(splitValue[2], CultureInfo.InvariantCulture);
+
+                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
+                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
+                if (Math.Abs(ret.Z) < 0.000001f) ret.Z = 0.0f;
             }
 
             return ret;
@@ -73,6 +80,11 @@ namespace ACFramework
                 ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
                 ret.Z = float.Parse(splitValue[2], CultureInfo.InvariantCulture);
                 ret.W = float.Parse(splitValue[3], CultureInfo.InvariantCulture);
+
+                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
+                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
+                if (Math.Abs(ret.Z) < 0.000001f) ret.Z = 0.0f;
+                if (Math.Abs(ret.W) < 0.000001f) ret.W = 0.0f;
             }
 
             return ret;
@@ -88,9 +100,13 @@ namespace ACFramework
                 //crio um array de floats
                 float[] mat = new float[16];
                 for (int i = 0; i < 16; i++)
+                {
                     mat[i] = float.Parse(splitValue[i], CultureInfo.InvariantCulture);
 
-                //armazendo como column major
+                    if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
+                }
+
+                //armazendo como column major o collada armazena como rowmajor
                 ret = new Matrix(mat[offset + 0], mat[offset + 4], mat[offset + 8], mat[offset + 12],
                                  mat[offset + 1], mat[offset + 5], mat[offset + 9], mat[offset + 13],
                                  mat[offset + 2], mat[offset + 6], mat[offset + 10], mat[offset + 14],
@@ -144,7 +160,7 @@ namespace ACFramework
             }
 
             //redimensiona tb todos os bones e os keyframes
-            if (model.Joints != null)
+            /*if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
                 {
@@ -160,7 +176,7 @@ namespace ACFramework
 
                     model.Joints[i] = v;
                 }
-            }
+            }*/
         }
 
         public static void CenterPivot(ref AMT_MODEL model)
@@ -181,7 +197,7 @@ namespace ACFramework
             }
 
             //reposiciona tb todos os bones e os keyframes
-            if (model.Joints != null)
+            /*if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
                 {
@@ -197,7 +213,7 @@ namespace ACFramework
 
                     model.Joints[i] = v;
                 }
-            }
+            }*/
         }
 
         public static void SetYUp(ref AMT_MODEL model, Vector3 upVector)

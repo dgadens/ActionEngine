@@ -14,9 +14,9 @@ bool ACAMTLoader::CloseFile( bool rBool )
 
 	// bye
 	return rBool;
-}
+};
 
-bool ACAMTLoader::LoadFromFile( const char* path, AMT_MODEL* outModel)
+bool ACAMTLoader::LoadFromFile( const CHAR* path, AMT_MODEL* outModel)
 {
 	// open the file
 	mpFile = fopen( path, "rb" );
@@ -26,10 +26,11 @@ bool ACAMTLoader::LoadFromFile( const char* path, AMT_MODEL* outModel)
 	ReadVertices(outModel);  
 	ReadFaces(outModel);     
 	ReadMesh(outModel);      
-	ReadMaterials(outModel); 
+	ReadMaterials(outModel);
+	ReadJoints(outModel);
 
 	return CloseFile( true );
-}
+};
 
 HRESULT ACAMTLoader::ReadHeader( AMT_MODEL* outModel )
 {
@@ -42,7 +43,7 @@ HRESULT ACAMTLoader::ReadHeader( AMT_MODEL* outModel )
 	memcpy( &outModel->Head, &head,	sizeof( AMT_HEAD ) );
 	
 	return AC_OK;
-}
+};
 
 HRESULT ACAMTLoader::ReadVertices( AMT_MODEL* outModel )
 {
@@ -75,7 +76,7 @@ HRESULT ACAMTLoader::ReadVertices( AMT_MODEL* outModel )
 
 	// bye
 	return AC_OK;
-}
+};
 
 HRESULT ACAMTLoader::ReadFaces( AMT_MODEL* outModel )
 {
@@ -92,7 +93,7 @@ HRESULT ACAMTLoader::ReadFaces( AMT_MODEL* outModel )
 	}
 
 	return S_OK;
-}
+};
 
 HRESULT ACAMTLoader::ReadMesh( AMT_MODEL* outModel )
 {
@@ -116,7 +117,7 @@ HRESULT ACAMTLoader::ReadMesh( AMT_MODEL* outModel )
 	}
 
 	return S_OK;
-}
+};
 
 HRESULT ACAMTLoader::ReadMaterials( AMT_MODEL* outModel )
 {
@@ -129,17 +130,63 @@ HRESULT ACAMTLoader::ReadMaterials( AMT_MODEL* outModel )
 		outModel->pMaterials.push_back( new AMT_MATERIAL );
 		pMaterial = outModel->pMaterials[ i ];
 		ZeroMemory( pMaterial, sizeof( AMT_MATERIAL ) );
-		fread(pMaterial->Name, sizeof( char ), 64, mpFile);
-		fread(&pMaterial->Ambient, sizeof( float ), 14, mpFile);
-		fread(&pMaterial->DiffuseTexture, sizeof( char ), 64, mpFile);
-		fread(&pMaterial->SpecularTexture, sizeof( char ), 64, mpFile);
-		fread(&pMaterial->NormalTexture, sizeof( char ), 64, mpFile);
-		fread(&pMaterial->AnimatedTexture, sizeof( char ), 64, mpFile);
-		fread(&pMaterial->Flag, sizeof( float ), 1, mpFile);
+		fread(pMaterial->Name, sizeof( CHAR ), 64, mpFile);
+		fread(&pMaterial->Ambient, sizeof( FLOAT ), 14, mpFile);
+		fread(&pMaterial->DiffuseTexture, sizeof( CHAR ), 64, mpFile);
+		fread(&pMaterial->SpecularTexture, sizeof( CHAR ), 64, mpFile);
+		fread(&pMaterial->NormalTexture, sizeof( CHAR ), 64, mpFile);
+		fread(&pMaterial->AnimatedTexture, sizeof( CHAR ), 64, mpFile);
+		fread(&pMaterial->Flag, sizeof( FLOAT ), 1, mpFile);
 	}
 
 	return S_OK;
-}
+};
+
+HRESULT ACAMTLoader::ReadJoints( AMT_MODEL* outModel )
+{
+	UINT numJoints = outModel->Head.NumJoints; 
+	//copia do arquivo
+	AMT_JOINT* pJoint;
+	for (int i = 0; i < numJoints; i++)
+	{
+		outModel->pJoints.push_back( new AMT_JOINT );
+		pJoint = outModel->pJoints[ i ];
+		ZeroMemory( pJoint, sizeof( AMT_JOINT ) );
+		fread(&pJoint->Name, sizeof ( CHAR ), 64, mpFile); 
+		fread(&pJoint->ParentName, sizeof ( CHAR ), 64, mpFile); 
+		fread(&pJoint->ID, sizeof ( UINT ), 1, mpFile); 
+		fread(&pJoint->ParentID, sizeof ( UINT ), 1, mpFile); 
+		fread(&pJoint->Rotation, sizeof ( FLOAT ), 3, mpFile);
+		fread(&pJoint->Position, sizeof ( FLOAT ), 3, mpFile);
+		fread(&pJoint->NumKFRotation, sizeof ( UINT ), 1, mpFile);
+		fread(&pJoint->NumKFPosition, sizeof ( UINT ), 1, mpFile);
+
+		//leio os KF de animacao de rotacao e o tempo
+		for (int i = 0; i < pJoint->NumKFRotation; i++)
+		{
+			AMT_KF_ROT kfRot;;
+			fread(&kfRot.Time, sizeof ( FLOAT ), 1, mpFile);
+			fread(&kfRot.Rotation, sizeof ( FLOAT ), 3, mpFile);
+			pJoint->KFRotation.push_back(kfRot);
+		}
+
+		//leio os KF de animacao de posicao e o tempo
+		for (int i = 0; i < pJoint->NumKFPosition; i++)
+		{
+			AMT_KF_POS kfPos;;
+			fread(&kfPos.Time, sizeof ( FLOAT ), 1, mpFile);
+			fread(&kfPos.Position, sizeof ( FLOAT ), 3, mpFile);
+			pJoint->KFPosition.push_back(kfPos);
+		}
+		fread(&pJoint->IsAnimated, sizeof ( UINT ), 1, mpFile);
+		fread(&pJoint->Flag, sizeof ( UINT ), 1, mpFile);
+		fread(&pJoint->BindMatrix, sizeof ( FLOAT ), 16, mpFile);
+		fread(&pJoint->MatrixAbsolute, sizeof ( FLOAT ), 16, mpFile);
+		fread(&pJoint->InverseBindMatrix, sizeof ( FLOAT ), 16, mpFile);
+	}
+
+	return AC_OK;
+};
 
 
 /*
