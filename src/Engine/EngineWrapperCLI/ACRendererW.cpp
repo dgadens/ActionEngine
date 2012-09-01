@@ -10,5 +10,12 @@ ACRendererW::ACRendererW(IntPtr hInst)
 
 HRESULT ACRendererW::CreateDevice(String^ graphicsLibraryName)
 {
-	return pRenderer->CreateDevice(marshal_as<std::string>(graphicsLibraryName));
+	HRESULT hr = pRenderer->CreateDevice(marshal_as<std::string>(graphicsLibraryName));
+	_renderDevice = gcnew ACRenderDeviceW(pRenderer->GetDevice());
+	return hr;
+};
+
+ACRenderDeviceW^ ACRendererW::GetDevice()
+{
+	return _renderDevice;
 };
