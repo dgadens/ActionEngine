@@ -23,9 +23,11 @@ namespace DemoCLI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ACConfigurationsW.Initialize();
+
             var hInstance = Marshal.GetHINSTANCE(typeof(Form1).Module);
             _acRenderer = new ACRendererW(hInstance);
-            _acRenderer.CreateDevice("anus");
+            _acRenderer.CreateDevice("ACD3DEngine.dll");
             _acRenderDevice = _acRenderer.GetDevice();
         }
     }

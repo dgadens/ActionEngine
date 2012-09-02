@@ -18,12 +18,12 @@ private:
 	HMODULE mhDLL;
 
 public:
-	ACRenderer(HINSTANCE hInst);
+	__declspec(dllexport) ACRenderer(HINSTANCE hInst);
 	~ACRenderer();
 
-	HRESULT CreateDevice(const std::string &graphicsLibraryName);
+	__declspec(dllexport) HRESULT CreateDevice(const std::string &graphicsLibraryName);
 	void Release();
-	ACRenderDevice* GetDevice() { return mpDevice; }
+	__declspec(dllexport) ACRenderDevice* GetDevice() { return mpDevice; }
 	HINSTANCE GetModule() { return mhDLL; }
 };
 

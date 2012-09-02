@@ -36,7 +36,7 @@ private:
 public:
 
 	//mantem o id globals dos objetos
-	static void Initialize();
+	__declspec(dllexport) static void Initialize();
 	static bool ENABLE_LOG;
 	static UINT GlobalID;
 	static bool EDITOR_MODE;
