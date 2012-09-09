@@ -85,6 +85,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>copy $(SolutionDir)$(Configuration)\ACD3DEngine.dll $(ProjectDir)bin\$(Configuration)\
+copy $(SolutionDir)$(Configuration)\ACDIEngine.dll $(ProjectDir)bin\$(Configuration)\
 copy $(SolutionDir)$(Configuration)\Engine.lib $(ProjectDir)bin\$(Configuration)\
 copy $(SolutionDir)$(Configuration)\EngineCommon.lib $(ProjectDir)bin\$(Configuration)\
 copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)bin\$(Configuration)\

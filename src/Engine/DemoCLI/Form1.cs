@@ -15,6 +15,8 @@ namespace DemoCLI
     {
         ACRendererW _acRenderer;
         ACRenderDeviceW _acRenderDevice;
+        ACInputW _acInput;
+        ACInputDeviceW _acInputDevice;
 
         public Form1()
         {
@@ -26,9 +28,16 @@ namespace DemoCLI
             ACConfigurationsW.Initialize();
 
             var hInstance = Marshal.GetHINSTANCE(typeof(Form1).Module);
+
             _acRenderer = new ACRendererW(hInstance);
             _acRenderer.CreateDevice("ACD3DEngine.dll");
             _acRenderDevice = _acRenderer.GetDevice();
+            _acRenderDevice.Init(Handle, true, true);
+            _acRenderDevice.SetActiveViewport(Handle);
+
+            _acInput = new ACInputW(hInstance);
+            _acInput.CreateDevice("ACDIEngine.dll");
+            _acInputDevice = _acInput.GetDevice();
         }
     }
 }

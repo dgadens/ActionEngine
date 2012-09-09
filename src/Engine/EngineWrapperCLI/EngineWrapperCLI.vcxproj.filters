@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Engine\RenderEngine">
       <UniqueIdentifier>{83bf204b-8b7d-41a9-88e7-354815a52cee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\InputEngine">
+      <UniqueIdentifier>{43f242dc-a2d4-42e7-b113-86ec1ca518d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\InputEngine">
+      <UniqueIdentifier>{054d29db-70fe-4719-a32d-b9203cdaa9b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -42,6 +48,12 @@
     <ClInclude Include="ACConfigurationsW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ACInputW.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACInputDeviceW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -57,6 +69,12 @@
       <Filter>Source Files\Engine\RenderEngine</Filter>
     </ClCompile>
     <ClCompile Include="ACConfigurationsW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACInputW.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACInputDeviceW.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

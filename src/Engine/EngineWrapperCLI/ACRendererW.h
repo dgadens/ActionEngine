@@ -12,12 +12,12 @@ namespace EngineWrapper
 {
 	public ref class ACRendererW
 	{
+	private:
+		ACRenderer* pRenderer;
+		ACRenderDeviceW^ _renderDevice;
 	public:
 		ACRendererW(IntPtr hInst);
 		HRESULT CreateDevice(String^ graphicsLibraryName);
 		ACRenderDeviceW^ GetDevice();
-	private:
-		ACRenderer* pRenderer;
-		ACRenderDeviceW^ _renderDevice;
 	};
 }
