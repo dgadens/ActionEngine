@@ -18,6 +18,7 @@ namespace DemoCLI
         ACInputW _input;
         ACInputDeviceW _inputDevice;
         ACMouseW _mouse;
+        ACKeyboardW _keyboard;
 
         public Form1()
         {
@@ -42,6 +43,9 @@ namespace DemoCLI
 
             _input.CreateMouse();
             _mouse = _input.GetMouse();
+
+            _input.CreateKeyboard();
+            _keyboard = _input.GetKeyboard();
         }
     }
 }

@@ -30,3 +30,15 @@ ACMouseW^ ACInputW::GetMouse()
 {
 	return _mouse;
 }
+
+
+void ACInputW::CreateKeyboard()
+{
+	pInput->CreateKeyboard();
+	_keyboard = gcnew ACKeyboardW(pInput->GetKeyboard());
+}
+
+ACKeyboardW^ ACInputW::GetKeyboard()
+{
+	return _keyboard;
+}

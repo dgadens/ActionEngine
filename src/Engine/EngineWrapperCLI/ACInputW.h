@@ -4,6 +4,7 @@
 #include "EngineMain.h"
 #include "ACInputDeviceW.h"
 #include "ACMouseW.h"
+#include "ACKeyboardW.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
@@ -17,6 +18,7 @@ namespace EngineWrapper
 			ACInput* pInput;
 			ACInputDeviceW^ _inputDevice;
 			ACMouseW^ _mouse;
+			ACKeyboardW^ _keyboard;
 		public:
 			ACInputW(IntPtr hInst);
 			HRESULT CreateDevice(String^ inputLibraryName);
@@ -24,5 +26,8 @@ namespace EngineWrapper
 
 			void CreateMouse();
 			ACMouseW^ GetMouse();
+
+			void CreateKeyboard();
+			ACKeyboardW^ GetKeyboard();
 	};
 }

@@ -57,6 +57,9 @@
     <ClInclude Include="ACMouseW.h">
       <Filter>Header Files\Engine\InputEngine</Filter>
     </ClInclude>
+    <ClInclude Include="ACKeyboardW.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -81,6 +84,9 @@
       <Filter>Source Files\Engine\InputEngine</Filter>
     </ClCompile>
     <ClCompile Include="ACMouseW.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACKeyboardW.cpp">
       <Filter>Source Files\Engine\InputEngine</Filter>
     </ClCompile>
   </ItemGroup>
