@@ -19,3 +19,14 @@ ACInputDeviceW^ ACInputW::GetDevice()
 {
 	return _inputDevice;
 }
+
+void ACInputW::CreateMouse()
+{
+	pInput->CreateMouse();
+	_mouse = gcnew ACMouseW(pInput->GetMouse());
+}
+
+ACMouseW^ ACInputW::GetMouse()
+{
+	return _mouse;
+}

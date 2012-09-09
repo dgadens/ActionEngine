@@ -82,6 +82,7 @@
     <ClInclude Include="ACConfigurationsW.h" />
     <ClInclude Include="ACInputDeviceW.h" />
     <ClInclude Include="ACInputW.h" />
+    <ClInclude Include="ACMouseW.h" />
     <ClInclude Include="ACRenderDeviceW.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="ACConfigurationsW.cpp" />
     <ClCompile Include="ACInputDeviceW.cpp" />
     <ClCompile Include="ACInputW.cpp" />
+    <ClCompile Include="ACMouseW.cpp" />
     <ClCompile Include="ACRenderDeviceW.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Stdafx.cpp">

@@ -52,7 +52,10 @@
       <Filter>Header Files\Engine\InputEngine</Filter>
     </ClInclude>
     <ClInclude Include="ACInputDeviceW.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Engine\InputEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACMouseW.h">
+      <Filter>Header Files\Engine\InputEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +78,10 @@
       <Filter>Source Files\Engine\InputEngine</Filter>
     </ClCompile>
     <ClCompile Include="ACInputDeviceW.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACMouseW.cpp">
+      <Filter>Source Files\Engine\InputEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

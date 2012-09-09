@@ -13,10 +13,11 @@ namespace DemoCLI
 {
     public partial class Form1 : Form
     {
-        ACRendererW _acRenderer;
-        ACRenderDeviceW _acRenderDevice;
-        ACInputW _acInput;
-        ACInputDeviceW _acInputDevice;
+        ACRendererW _renderer;
+        ACRenderDeviceW _renderDevice;
+        ACInputW _input;
+        ACInputDeviceW _inputDevice;
+        ACMouseW _mouse;
 
         public Form1()
         {
@@ -29,15 +30,18 @@ namespace DemoCLI
 
             var hInstance = Marshal.GetHINSTANCE(typeof(Form1).Module);
 
-            _acRenderer = new ACRendererW(hInstance);
-            _acRenderer.CreateDevice("ACD3DEngine.dll");
-            _acRenderDevice = _acRenderer.GetDevice();
-            _acRenderDevice.Init(Handle, true, true);
-            _acRenderDevice.SetActiveViewport(Handle);
+            _renderer = new ACRendererW(hInstance);
+            _renderer.CreateDevice("ACD3DEngine.dll");
+            _renderDevice = _renderer.GetDevice();
+            _renderDevice.Init(Handle, true, true);
+            _renderDevice.SetActiveViewport(Handle);
 
-            _acInput = new ACInputW(hInstance);
-            _acInput.CreateDevice("ACDIEngine.dll");
-            _acInputDevice = _acInput.GetDevice();
+            _input = new ACInputW(hInstance);
+            _input.CreateDevice("ACDIEngine.dll");
+            _inputDevice = _input.GetDevice();
+
+            _input.CreateMouse();
+            _mouse = _input.GetMouse();
         }
     }
 }
