@@ -79,6 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ACAudioDeviceW.h" />
+    <ClInclude Include="ACAudioW.h" />
     <ClInclude Include="ACConfigurationsW.h" />
     <ClInclude Include="ACInputDeviceW.h" />
     <ClInclude Include="ACInputW.h" />
@@ -92,6 +94,8 @@
     <ClInclude Include="ACRendererW.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ACAudioDeviceW.cpp" />
+    <ClCompile Include="ACAudioW.cpp" />
     <ClCompile Include="ACConfigurationsW.cpp" />
     <ClCompile Include="ACInputDeviceW.cpp" />
     <ClCompile Include="ACInputW.cpp" />

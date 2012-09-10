@@ -21,6 +21,8 @@ namespace DemoCLI
         ACKeyboardW _keyboard;
         ACNetworkW _network;
         ACNetworkDeviceW _networkDevice;
+        ACAudioW _audio;
+        ACAudioDeviceW _audioDevice;
 
         public Form1()
         {
@@ -53,7 +55,9 @@ namespace DemoCLI
             _network.CreateDevice("ACWSEngine.dll");
             _networkDevice = _network.GetDevice();
 
-
+            _audio = new ACAudioW(hInstance);
+            _audio.CreateDevice("ACOpenALEngine.dll");
+            _audioDevice = _audio.GetDevice();
         }
     }
 }

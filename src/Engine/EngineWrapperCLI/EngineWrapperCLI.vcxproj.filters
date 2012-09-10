@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Engine\NetworkEngine">
       <UniqueIdentifier>{8ce866ca-7a95-45a0-839f-5263cc6185dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\AudioEngine">
+      <UniqueIdentifier>{a394a9e0-3ea0-48b4-973f-818d78851189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\AudioEngine">
+      <UniqueIdentifier>{dcb73317-8422-4071-9022-ccff75ae64b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -70,7 +76,13 @@
       <Filter>Header Files\Engine\NetworkEngine</Filter>
     </ClInclude>
     <ClInclude Include="ACNetworkDeviceW.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Engine\NetworkEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAudioW.h">
+      <Filter>Header Files\Engine\AudioEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACAudioDeviceW.h">
+      <Filter>Header Files\Engine\AudioEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +117,13 @@
       <Filter>Source Files\Engine\NetworkEngine</Filter>
     </ClCompile>
     <ClCompile Include="ACNetworkDeviceW.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine\NetworkEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAudioW.cpp">
+      <Filter>Source Files\Engine\AudioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAudioDeviceW.cpp">
+      <Filter>Source Files\Engine\AudioEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
