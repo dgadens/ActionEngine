@@ -82,6 +82,7 @@
     <ClInclude Include="ACAudioDeviceW.h" />
     <ClInclude Include="ACAudioW.h" />
     <ClInclude Include="ACConfigurationsW.h" />
+    <ClInclude Include="ACContentManagerW.h" />
     <ClInclude Include="ACInputDeviceW.h" />
     <ClInclude Include="ACInputW.h" />
     <ClInclude Include="ACKeyboardW.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="ACAudioDeviceW.cpp" />
     <ClCompile Include="ACAudioW.cpp" />
     <ClCompile Include="ACConfigurationsW.cpp" />
+    <ClCompile Include="ACContentManagerW.cpp" />
     <ClCompile Include="ACInputDeviceW.cpp" />
     <ClCompile Include="ACInputW.cpp" />
     <ClCompile Include="ACKeyboardW.cpp" />

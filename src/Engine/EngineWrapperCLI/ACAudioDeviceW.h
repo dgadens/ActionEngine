@@ -9,9 +9,9 @@ namespace EngineWrapper
 {
 	public ref class ACAudioDeviceW
 	{
-		private:
-			ACAudioDevice* pAudioDevice;
 		public:
+			ACAudioDevice* Value;
+
 			ACAudioDeviceW(ACAudioDevice* device);
 
 			void Init(IntPtr windowPtr, bool log);

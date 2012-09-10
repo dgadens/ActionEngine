@@ -23,6 +23,7 @@ namespace DemoCLI
         ACNetworkDeviceW _networkDevice;
         ACAudioW _audio;
         ACAudioDeviceW _audioDevice;
+        ACContentManagerW _contentManager;
 
         public Form1()
         {
@@ -59,6 +60,8 @@ namespace DemoCLI
             _audio.CreateDevice("ACOpenALEngine.dll");
             _audioDevice = _audio.GetDevice();
             _audioDevice.Init(Handle, true);
+
+            _contentManager = new ACContentManagerW(_renderDevice, _audioDevice);
         }
     }
 }

@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Engine\AudioEngine">
       <UniqueIdentifier>{dcb73317-8422-4071-9022-ccff75ae64b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ContentManager">
+      <UniqueIdentifier>{c2bb3f3b-8eb1-4b20-8cf7-b313dc0cabe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager">
+      <UniqueIdentifier>{e0768ba8-b336-4ce5-8f4a-90da4aa3f574}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -84,6 +90,9 @@
     <ClInclude Include="ACAudioDeviceW.h">
       <Filter>Header Files\Engine\AudioEngine</Filter>
     </ClInclude>
+    <ClInclude Include="ACContentManagerW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -124,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="ACAudioDeviceW.cpp">
       <Filter>Source Files\Engine\AudioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACContentManagerW.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

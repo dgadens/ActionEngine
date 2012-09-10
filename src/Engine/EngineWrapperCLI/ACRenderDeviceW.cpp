@@ -1,18 +1,19 @@
 #include "StdAfx.h"
 #include "ACRenderDeviceW.h"
 
+using namespace EngineWrapper;
 
 ACRenderDeviceW::ACRenderDeviceW(ACRenderDevice* device)
 {
-	pRenderDevice = device;
+	Value = device;
 }
 
 void ACRenderDeviceW::Init(IntPtr windowPtr, bool enableVSync, bool log)
 {
-	pRenderDevice->Init((HWND)windowPtr.ToPointer(), enableVSync ? 1 : 0, log ? 1 : 0);
+	Value->Init((HWND)windowPtr.ToPointer(), enableVSync ? 1 : 0, log ? 1 : 0);
 }
 
 void ACRenderDeviceW::SetActiveViewport(IntPtr windowPtr)
 {
-	pRenderDevice->SetActiveViewport((HWND)windowPtr.ToPointer());
+	Value->SetActiveViewport((HWND)windowPtr.ToPointer());
 }
