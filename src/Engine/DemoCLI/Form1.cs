@@ -58,6 +58,7 @@ namespace DemoCLI
             _audio = new ACAudioW(hInstance);
             _audio.CreateDevice("ACOpenALEngine.dll");
             _audioDevice = _audio.GetDevice();
+            _audioDevice.Init(Handle, true);
         }
     }
 }

@@ -13,5 +13,7 @@ namespace EngineWrapper
 			ACAudioDevice* pAudioDevice;
 		public:
 			ACAudioDeviceW(ACAudioDevice* device);
+
+			void Init(IntPtr windowPtr, bool log);
 	};
 }
