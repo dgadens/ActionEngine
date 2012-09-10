@@ -84,6 +84,8 @@
     <ClInclude Include="ACInputW.h" />
     <ClInclude Include="ACKeyboardW.h" />
     <ClInclude Include="ACMouseW.h" />
+    <ClInclude Include="ACNetworkDeviceW.h" />
+    <ClInclude Include="ACNetworkW.h" />
     <ClInclude Include="ACRenderDeviceW.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
@@ -95,6 +97,8 @@
     <ClCompile Include="ACInputW.cpp" />
     <ClCompile Include="ACKeyboardW.cpp" />
     <ClCompile Include="ACMouseW.cpp" />
+    <ClCompile Include="ACNetworkDeviceW.cpp" />
+    <ClCompile Include="ACNetworkW.cpp" />
     <ClCompile Include="ACRenderDeviceW.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Stdafx.cpp">

@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Engine\InputEngine">
       <UniqueIdentifier>{054d29db-70fe-4719-a32d-b9203cdaa9b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Engine\NetworkEngine">
+      <UniqueIdentifier>{5d6ab766-1478-42e9-8e49-b603c33d842a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\NetworkEngine">
+      <UniqueIdentifier>{8ce866ca-7a95-45a0-839f-5263cc6185dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -60,6 +66,12 @@
     <ClInclude Include="ACKeyboardW.h">
       <Filter>Header Files\Engine\InputEngine</Filter>
     </ClInclude>
+    <ClInclude Include="ACNetworkW.h">
+      <Filter>Header Files\Engine\NetworkEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ACNetworkDeviceW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -88,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="ACKeyboardW.cpp">
       <Filter>Source Files\Engine\InputEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACNetworkW.cpp">
+      <Filter>Source Files\Engine\NetworkEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ACNetworkDeviceW.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

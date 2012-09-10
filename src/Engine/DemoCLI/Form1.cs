@@ -19,6 +19,8 @@ namespace DemoCLI
         ACInputDeviceW _inputDevice;
         ACMouseW _mouse;
         ACKeyboardW _keyboard;
+        ACNetworkW _network;
+        ACNetworkDeviceW _networkDevice;
 
         public Form1()
         {
@@ -46,6 +48,12 @@ namespace DemoCLI
 
             _input.CreateKeyboard();
             _keyboard = _input.GetKeyboard();
+
+            _network = new ACNetworkW(hInstance);
+            _network.CreateDevice("ACWSEngine.dll");
+            _networkDevice = _network.GetDevice();
+
+
         }
     }
 }
