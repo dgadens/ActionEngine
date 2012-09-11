@@ -93,6 +93,9 @@
     <ClInclude Include="ACContentManagerW.h">
       <Filter>Header Files\ContentManager</Filter>
     </ClInclude>
+    <ClInclude Include="MathConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="ACContentManagerW.cpp">
       <Filter>Source Files\ContentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MathConverter.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
