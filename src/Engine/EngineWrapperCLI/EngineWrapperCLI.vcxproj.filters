@@ -91,7 +91,7 @@
       <Filter>Header Files\Engine\AudioEngine</Filter>
     </ClInclude>
     <ClInclude Include="ACContentManagerW.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\ContentManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +135,7 @@
       <Filter>Source Files\Engine\AudioEngine</Filter>
     </ClCompile>
     <ClCompile Include="ACContentManagerW.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ContentManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
