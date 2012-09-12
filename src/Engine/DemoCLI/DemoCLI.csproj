@@ -77,6 +77,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EngineMathCLI\EngineMathCLI.csproj">
+      <Project>{6DE26760-8118-430C-AA94-AFB29714810F}</Project>
+      <Name>EngineMathCLI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EngineWrapperCLI\EngineWrapperCLI.vcxproj">
       <Project>{DB381140-FBA6-49EA-887A-6D5C9FB57E28}</Project>
       <Name>EngineWrapper</Name>

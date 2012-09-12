@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using EngineWrapper;
 using System.Runtime.InteropServices;
+using EngineMathCLI;
 
 namespace DemoCLI
 {
@@ -60,6 +61,7 @@ namespace DemoCLI
             _audio.CreateDevice("ACOpenALEngine.dll");
             _audioDevice = _audio.GetDevice();
             _audioDevice.Init(Handle, true);
+            _audioDevice.SetListener(Vector3.Zero, Vector3.Zero, Vector3.Zero, Vector3.Zero);
 
             _contentManager = new ACContentManagerW(_renderDevice, _audioDevice);
         }

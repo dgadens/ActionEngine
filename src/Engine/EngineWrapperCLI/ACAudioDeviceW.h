@@ -15,5 +15,6 @@ namespace EngineWrapper
 			ACAudioDeviceW(ACAudioDevice* device);
 
 			void Init(IntPtr windowPtr, bool log);
+			void SetListener(EngineMathCLI::Vector3^ position, EngineMathCLI::Vector3^ direction, EngineMathCLI::Vector3^ up, EngineMathCLI::Vector3^ velocity);
 	};
 }
