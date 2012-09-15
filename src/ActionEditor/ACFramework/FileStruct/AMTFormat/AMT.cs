@@ -128,35 +128,26 @@ namespace ACFramework.FileStructs
         public uint Flag;                             // Flags
     }
 
-    public struct AMT_KF_ROT
+    public struct AMT_KF
     {
         public float Time;                               // Time
-        public Vector3 Rotation;                           // Rotation
+        public Matrix bindMatrix;                        // Matrix
     }
 
-    public struct AMT_KF_POS
+    public class AMT_JOINT
     {
-        public float Time;                               // Time
-        public Vector3 Position;                           // Position
-    }
-
-    public struct AMT_JOINT
-    {
-        public uint ID;                                 //Id q ta na lista principal, armazeno para ser facil de achar
+        public uint ID;                                //Id q ta na lista principal, armazeno para ser facil de achar
         public string Name;                         
-        public string ParentName;                  
         public int ParentID;                           // ParentID
-        public Vector3 Rotation;                           // Rotation
-        public Vector3 Position;                           // Position
-        public uint NumKFRotation;                     // Number of KF_Rots
-        public uint NumKFPosition;                     // Number of KF_Pos
-        public List<AMT_KF_ROT> KFRotation;                        // KF Rotations
-        public List<AMT_KF_POS> KFPosition;                        // Position
-        public uint IsAnimated;                           // Animiert
-        public uint Flag;                             // Flags
-        public Matrix BindMatrix;                             // Bind Matrix (joint)
-        public Matrix MatrixAbsolute;                    // Matrix absolute
-        public Matrix InverseBindMatrix;                    // Inverse Bind Matrix (inverse joint)
+        public uint NumChildren;                        // Numero de filhos
+        public List<uint> JointChildren;               // Ids dos filhos do bone 
+        public uint NumKF;                             // Numero de Keyframes
+        public List<AMT_KF> KFData;                    // KF Matrix
+        public uint IsAnimated;                        // Animiert
+        public uint Flag;                              // Flags
+        public Matrix BindMatrix;                      // Bind Matrix (joint)
+        public Matrix MatrixAbsolute;                  // Matrix absolute
+        public Matrix InverseBindMatrix;               // Inverse Bind Matrix (inverse joint)
     }
 
     public struct AMT_ANIMATION

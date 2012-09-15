@@ -85,31 +85,22 @@ struct AMT_MESH
     UINT Flag;
 };
 
-struct AMT_KF_ROT
+struct AMT_KF
 {
     FLOAT Time;                             // Time
-    Vector3 Rotation;                       // Rotation
-};
-
-struct AMT_KF_POS
-{
-    FLOAT Time;                             // Time
-    Vector3 Position;                       // Position
+    Matrix bindMatrix;                      // Position
 };
 
 struct AMT_JOINT
 {
     UINT ID;                                //Id q ta na lista principal, armazeno para ser facil de achar
     CHAR Name [ 64 ];                         
-    CHAR ParentName [ 64 ];                  
     INT ParentID;                           // ParentID
-    Vector3 Rotation;                       // Rotation
-    Vector3 Position;                       // Position
-    UINT NumKFRotation;                     // Number of KF_Rots
-    UINT NumKFPosition;                     // Number of KF_Pos
-    std::vector<AMT_KF_ROT> KFRotation;     // KF Rotations
-    std::vector<AMT_KF_POS> KFPosition;     // Position
-    UINT IsAnimated;                        // Animierd
+	UINT NumChildren;                       // Numero de filhos
+	std::vector<UINT> JointChildren;
+	UINT NumKF;								// Number of KF
+    std::vector<AMT_KF> KFData;				// KF Data
+	UINT IsAnimated;                        // Animierd
     UINT Flag;                              // Flags
     Matrix BindMatrix;                      // Bind Matrix (joint)
     Matrix MatrixAbsolute;                  // Matrix absolute

@@ -78,19 +78,28 @@ namespace ACFramework.FileStruct
                 Matrix matrix = Matrix.Identity;
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
+                
                 AMT_JOINT newBone = new AMT_JOINT();
+                newBone.ID = 0;
                 newBone.ParentID = -1; //nao tem pai
-                newBone.ParentName = null;
                 newBone.Name = "Root";
-                newBone.Position = matrix.Translation;
-                newBone.Rotation = Vector3.Zero;
+                
+                newBone.NumChildren = 0;
+                newBone.JointChildren = new List<uint>();
+
+                newBone.NumKF = 0;
+                newBone.KFData = new List<AMT_KF>();
+
+                newBone.IsAnimated = 0;
+                newBone.Flag = 0;
+
                 newBone.BindMatrix = matrix;
                 newBone.MatrixAbsolute = matrix;
                 newBone.InverseBindMatrix = Matrix.Invert(matrix);
-                newBone.ID = 0;
+
                 amtModel.Joints.Add(newBone);
 
-                FillBoneNodes(newBone, rootNode, ref amtModel);
+                FillBoneNodes(ref newBone, rootNode, ref amtModel);
             }
         }
 
@@ -121,7 +130,7 @@ namespace ACFramework.FileStruct
             return rootNode;
         }
 
-        private void FillBoneNodes(AMT_JOINT? parentBone, XElement boneNode, ref AMT_MODEL amtModel)
+        private void FillBoneNodes(ref AMT_JOINT parentBone, XElement boneNode, ref AMT_MODEL amtModel)
         {
             //pego todos os nodes
             List<XElement> nodes = boneNode.Elements(XName.Get("node", Namespace)).ToList();
@@ -133,25 +142,41 @@ namespace ACFramework.FileStruct
                 {
                     Matrix matrix = Matrix.Identity;
 
+                    //pega o nome e a matrix do bone
+                    string boneName = node.Attribute("name").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
 
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
-                    newBone.ParentID = (int)parentBone.Value.ID;
-                    newBone.ParentName = parentBone.Value.Name;
-                    newBone.Position = matrix.Translation;
-                    newBone.Rotation = Vector3.Zero;
-                    newBone.BindMatrix = matrix;
-                    newBone.InverseBindMatrix = Matrix.Invert(matrix);
-                    //absoluta = absoluta do pai * a relativa do atual
-                    newBone.MatrixAbsolute = parentBone.Value.MatrixAbsolute * matrix;
-
                     newBone.ID = (uint)amtModel.Joints.Count();
+                    newBone.ParentID = (int)parentBone.ID; 
+                    newBone.Name = boneName;
+
+                    newBone.NumChildren = 0;
+                    newBone.JointChildren = new List<uint>();
+
+                    newBone.NumKF = 0;
+                    newBone.KFData = new List<AMT_KF>();
+
+                    newBone.IsAnimated = 0;
+                    newBone.Flag = 0;
+
+                    //atualiza o bone pai
+                    parentBone.NumChildren++;
+                    parentBone.JointChildren.Add(newBone.ID);
+
+                    //matrix relativa
+                    newBone.BindMatrix = matrix;
+                    //absoluta = relativa do atual * absoluta do pai
+                    newBone.MatrixAbsolute = matrix * parentBone.MatrixAbsolute;
+                    //inversa da absoluta atual usado no skinning
+                    newBone.InverseBindMatrix = Matrix.Invert(newBone.MatrixAbsolute);
+
                     amtModel.Joints.Add(newBone);
                     
                     // vai para os filhos
-                    FillBoneNodes(newBone, node, ref amtModel);
+                    FillBoneNodes(ref newBone, node, ref amtModel);
                 }
             }
         }

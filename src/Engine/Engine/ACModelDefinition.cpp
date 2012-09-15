@@ -15,6 +15,9 @@ ACModelDefinition::ACModelDefinition(ACRenderDevice* gDevice, ACContentManager* 
 
 	mNumIndices = 0;
 	mpIndices = nullptr;
+
+	mpVS = mpCManager->LoadVertexShader("Colored.VShlsl4", VertexFormat::VF_VertexPositionColored);
+	mpPS = mpCManager->LoadPixelShader("Colored.PShlsl4");
 };
 
 ACModelDefinition::~ACModelDefinition()
@@ -24,31 +27,33 @@ ACModelDefinition::~ACModelDefinition()
 
 void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 {
+	mpModel = amtModel;
+
 	//cria o minimo bb ao redor do modelo
 	Vector3* points = new Vector3[amtModel->Head.NumVertices];
-	for(int i=0;i<amtModel->Head.NumVertices;i++)
-		points[i] = amtModel->pVertices[i]->Position;
+	for(int i=0;i<mpModel->Head.NumVertices;i++)
+		points[i] = mpModel->pVertices[i]->Position;
 
 	//cria o bb
-	BoundingBox::CreateFromPoints(amtModel->Head.NumVertices, points, &BBOriginal);
+	BoundingBox::CreateFromPoints(mpModel->Head.NumVertices, points, &BBOriginal);
 	//cria o obb
 	OrientedBoundingBox::CreateFromBB(&BBOriginal, &OBBOriginal);
 
 	delete[] points;
 
-	HasSkeleton = amtModel->Head.HasSkeleton;
-	HasAnimation = amtModel->Head.NumAnimations > 0;
+	HasSkeleton = mpModel->Head.HasSkeleton;
+	HasAnimation = mpModel->Head.NumAnimations > 0;
 
 	//verifica o tipo de vertices se tiver bones entao é um skinnedmesh senao um mesh normal
 	if (amtModel->Head.HasSkeleton)
 	{
 		VFormat = VertexFormat::VF_VertexSkinnedMesh;
-		PrepareVSM(amtModel);
+		PrepareVSM(mpModel);
 	}
 	else
 	{
 		VFormat = VertexFormat::VF_VertexPositionNormalTextured;
-		PrepareVPNT(amtModel);
+		PrepareVPNT(mpModel);
 	}
 };
 
@@ -103,23 +108,11 @@ void ACModelDefinition::PrepareVPNT(AMT_MODEL* model)
 								  &pVertexBuffer);
 };
 
-void ACModelDefinition::SetSkin(ACSkin* skin)
-{
-	//se ja existe um skin entao ele deleta para remover todos os resource e tb referencias depois adiciona outro
-	if (pVertexBuffer->Skin != nullptr)
-		SAFE_DELETE(pVertexBuffer->Skin);
-
-	pVertexBuffer->Skin = mpCManager->CreateSkin();
-	mpCManager->CloneSkin(pVertexBuffer->Skin, skin);
-};
-
-const ACSkin const * ACModelDefinition::GetSkin()
-{
-	return pVertexBuffer->Skin;
-};
-
 void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 {
+	//cria a estrutura de bones
+	SetupBones(model);
+
 	mNumVertices = model->Head.NumVertices;
 	mpVSMCache = new ACVertexSkinnedMesh[mNumVertices];
 
@@ -176,6 +169,51 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 								  mpIndices, 
 								  pSkin,
 								  &pVertexBuffer);
+};
+
+void ACModelDefinition::SetupBones(AMT_MODEL* model)
+{
+	mpLines = new ACVertexPositionColored[model->Head.NumJoints * 2 - 1];
+	GenerateLines(model->pJoints[0]);
+};
+
+void ACModelDefinition::GenerateLines(AMT_JOINT* joint)
+{
+	//todo: metodo recursivo para buscar a arvore e adicionar as linhas
+	//joint->
+	//mpLines[i].position
+};
+
+void ACModelDefinition::SetSkin(ACSkin* skin)
+{
+	//se ja existe um skin entao ele deleta para remover todos os resource e tb referencias depois adiciona outro
+	if (pVertexBuffer->Skin != nullptr)
+		SAFE_DELETE(pVertexBuffer->Skin);
+
+	pVertexBuffer->Skin = mpCManager->CreateSkin();
+	mpCManager->CloneSkin(pVertexBuffer->Skin, skin);
+};
+
+const ACSkin const * ACModelDefinition::GetSkin()
+{
+	return pVertexBuffer->Skin;
+};
+
+void ACModelDefinition::RenderBones(ACCamera* camera)
+{
+	//ativa os shaders
+	mpGDevice->ActiveVS(mpVS);
+	mpGDevice->ActivePS(mpPS);
+
+	for (int i=0; i < mpModel->Head.NumJoints; i++)
+	{
+		mpGDevice->SetWorldMatrix(mpModel->pJoints[i]->MatrixAbsolute);
+
+		mpGDevice->ApplyConstants();
+
+		//renderiza
+		//mpGDevice->RenderLines(VertexFormat::VF_VertexPositionColored, );	
+	}
 };
 
 void ACModelDefinition::Release()

@@ -162,24 +162,21 @@ namespace ACFramework.FileStructs
                 char[] name = Tools.GetCharArray(joints[i].Name, 64);
                 bw.Write(name);
 
-                char[] parentName = Tools.GetCharArray(joints[i].ParentName, 64);
-                bw.Write(parentName);
-
-                _import.ProgressText = "Exporting Bones: Parent" + joints[i].ParentName + " name: " + joints[i].Name;
+                _import.ProgressText = "Exporting Bones: name: " + joints[i].Name;
 
                 bw.Write(joints[i].ID);
                 bw.Write(joints[i].ParentID);
 
-                WriteVector(bw, joints[i].Rotation);
-                WriteVector(bw, joints[i].Position);
+                //grava os ids dos filhos
+                bw.Write(joints[i].NumChildren);
+                if (joints[i].NumChildren > 0)
+                    foreach (var item in joints[i].JointChildren)
+                        bw.Write(item);
 
-                bw.Write(joints[i].NumKFRotation);
-                bw.Write(joints[i].NumKFPosition);
-
-                if (joints[i].NumKFRotation > 0)
-                    WriteKFRotations(bw, joints[i].KFRotation);
-                if (joints[i].NumKFPosition > 0)
-                    WriteKFRotations(bw, joints[i].KFPosition);               
+                //grava todos os keyframes desse joint
+                bw.Write(joints[i].NumKF);
+                if (joints[i].NumKF > 0)
+                    WriteKFData(bw, joints[i].KFData);
 
                 bw.Write(joints[i].IsAnimated);
 
@@ -191,21 +188,12 @@ namespace ACFramework.FileStructs
             }
         }
 
-        private void WriteKFRotations(BinaryWriter bw, List<AMT_KF_ROT> kfRots)
+        private void WriteKFData(BinaryWriter bw, List<AMT_KF> kfData)
         {
-            foreach (var item in kfRots)
+            foreach (var item in kfData)
             {
                 bw.Write(item.Time);
-                WriteVector(bw, item.Rotation);
-            }
-        }
-
-        private void WriteKFRotations(BinaryWriter bw, List<AMT_KF_POS> kfPos)
-        {
-            foreach (var item in kfPos)
-            {
-                bw.Write(item.Time);
-                WriteVector(bw, item.Position);
+                WriteMatrix(bw, item.bindMatrix);
             }
         }
 

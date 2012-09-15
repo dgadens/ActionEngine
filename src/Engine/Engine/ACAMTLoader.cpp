@@ -153,31 +153,25 @@ HRESULT ACAMTLoader::ReadJoints( AMT_MODEL* outModel )
 		pJoint = outModel->pJoints[ i ];
 		ZeroMemory( pJoint, sizeof( AMT_JOINT ) );
 		fread(&pJoint->Name, sizeof ( CHAR ), 64, mpFile); 
-		fread(&pJoint->ParentName, sizeof ( CHAR ), 64, mpFile); 
 		fread(&pJoint->ID, sizeof ( UINT ), 1, mpFile); 
 		fread(&pJoint->ParentID, sizeof ( UINT ), 1, mpFile); 
-		fread(&pJoint->Rotation, sizeof ( FLOAT ), 3, mpFile);
-		fread(&pJoint->Position, sizeof ( FLOAT ), 3, mpFile);
-		fread(&pJoint->NumKFRotation, sizeof ( UINT ), 1, mpFile);
-		fread(&pJoint->NumKFPosition, sizeof ( UINT ), 1, mpFile);
-
-		//leio os KF de animacao de rotacao e o tempo
-		for (int i = 0; i < pJoint->NumKFRotation; i++)
+		fread(&pJoint->NumChildren, sizeof ( UINT ), 1, mpFile);
+		for (int i=0; i<pJoint->NumChildren; i++)
 		{
-			AMT_KF_ROT kfRot;;
-			fread(&kfRot.Time, sizeof ( FLOAT ), 1, mpFile);
-			fread(&kfRot.Rotation, sizeof ( FLOAT ), 3, mpFile);
-			pJoint->KFRotation.push_back(kfRot);
+			UINT childID;
+			fread(&childID, sizeof ( UINT ), 1, mpFile); 
+			pJoint->JointChildren.push_back(childID);
 		}
 
-		//leio os KF de animacao de posicao e o tempo
-		for (int i = 0; i < pJoint->NumKFPosition; i++)
+		fread(&pJoint->NumKF, sizeof ( UINT ), 1, mpFile);
+		for (int i = 0; i < pJoint->NumKF; i++)
 		{
-			AMT_KF_POS kfPos;;
-			fread(&kfPos.Time, sizeof ( FLOAT ), 1, mpFile);
-			fread(&kfPos.Position, sizeof ( FLOAT ), 3, mpFile);
-			pJoint->KFPosition.push_back(kfPos);
+			AMT_KF kf;;
+			fread(&kf.Time, sizeof ( FLOAT ), 1, mpFile);
+			fread(&kf.bindMatrix, sizeof ( FLOAT ), 16, mpFile);
+			pJoint->KFData.push_back(kf);
 		}
+
 		fread(&pJoint->IsAnimated, sizeof ( UINT ), 1, mpFile);
 		fread(&pJoint->Flag, sizeof ( UINT ), 1, mpFile);
 		fread(&pJoint->BindMatrix, sizeof ( FLOAT ), 16, mpFile);

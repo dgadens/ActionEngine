@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Daniel</author>
+      <authoring_tool>OpenCOLLADA for 3ds Max;  Version: 1.3.1;  Revision: 847M;  Platform: x64;  Configuration: Release_Max2010_static</authoring_tool>
+    </contributor>
+    <created>2012-09-14T22:43:13</created>
+    <modified>2012-09-14T22:43:13</modified>
+    <unit name="inch" meter="0.0254"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="ColorEffectR57G8B136">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <ambient>
+              <color>0.2235294 0.03137255 0.5333334 1</color>
+            </ambient>
+            <diffuse>
+              <color>0.2235294 0.03137255 0.5333334 1</color>
+            </diffuse>
+            <specular>
+              <color>1 1 1 1</color>
+            </specular>
+            <shininess>
+              <float>10</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent>
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="ColorEffectR57G8B136-material" name="ColorEffectR57G8B136-material">
+      <instance_effect url="#ColorEffectR57G8B136"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="geom-Box01" name="Box01">
+      <mesh>
+        <source id="geom-Box01-positions">
+          <float_array id="geom-Box01-positions-array" count="36">-4.546745 -4.042248 -4.39586e-16 4.546745 -4.042248 -4.23522e-16 -4.546745 4.042248 -4.38615e-16 4.546745 4.042248 -4.22551e-16 -4.546745 -4.042248 22.76322 4.546745 -4.042248 22.76322 -4.546745 4.042248 22.76322 4.546745 4.042248 22.76322 -4.546745 -4.042248 11.38161 4.546745 -4.042248 11.38161 4.546745 4.042248 11.38161 -4.546745 4.042248 11.38161</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-positions-array" count="12" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-normals">
+          <float_array id="geom-Box01-normals-array" count="96">0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-normals-array" count="32" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-map1">
+          <float_array id="geom-Box01-map1-array" count="48">0 0 0 1 0 0 0 0.5 0 1 0.5 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0.5 0 1 0.5 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-map1-array" count="16" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-Box01-vertices">
+          <input semantic="POSITION" source="#geom-Box01-positions"/>
+        </vertices>
+        <triangles material="ColorMaterial" count="20">
+          <input semantic="VERTEX" source="#geom-Box01-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-Box01-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-Box01-map1" offset="2" set="0"/>
+          <p>0 0 13 2 1 15 3 2 14 3 2 14 1 3 12 0 0 13 4 4 12 5 5 13 7 6 15 7 6 15 6 7 14 4 4 12 0 8 6 1 9 7 9 10 9 9 10 9 8 11 8 0 8 6 8 11 8 9 10 9 5 12 11 5 12 11 4 13 10 8 11 8 1 14 0 3 15 1 10 16 3 10 16 3 9 17 2 1 14 0 9 17 2 10 16 3 7 18 5 7 18 5 5 19 4 9 17 2 3 20 6 2 21 7 11 22 9 11 22 9 10 23 8 3 20 6 10 23 8 11 22 9 6 24 11 6 24 11 7 25 10 10 23 8 2 26 0 0 27 1 8 28 3 8 28 3 11 29 2 2 26 0 11 29 2 8 28 3 4 30 5 4 30 5 6 31 4 11 29 2</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="geom-Box01-skin1">
+      <skin source="#geom-Box01">
+        <bind_shape_matrix>1 0 0 -0.03833514 0 1 0 -0.01515482 0 0 1.805312 0 0 0 0 1</bind_shape_matrix>
+        <source id="geom-Box01-skin1-joints">
+          <Name_array id="geom-Box01-skin1-joints-array" count="3">joint0 joint1 joint2</Name_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-joints-array" count="3" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-skin1-bind_poses">
+          <float_array id="geom-Box01-skin1-bind_poses-array" count="48">-6.39758e-7 -2.44048e-12 1 0 -1 1.02917e-6 -6.39758e-7 -1.07752e-14 -1.02917e-6 -1 -3.0989e-12 1.04698e-8 0 0 0 1 -7.35137e-8 6.4609e-9 1 -20.60437 -1 1.30944e-9 -7.35137e-8 2.23987e-6 -1.30944e-9 -1 6.4609e-9 2.06071e-6 0 0 0 1 -7.35137e-8 6.4609e-9 1 -40.72413 -1 1.30944e-9 -7.35137e-8 3.01473e-6 -1.30944e-9 -1 6.4609e-9 2.06071e-6 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-bind_poses-array" count="3" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-skin1-weights">
+          <float_array id="geom-Box01-skin1-weights-array" count="1">1</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-weights-array" count="1" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#geom-Box01-skin1-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#geom-Box01-skin1-bind_poses"/>
+        </joints>
+        <vertex_weights count="12">
+          <input semantic="JOINT" source="#geom-Box01-skin1-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#geom-Box01-skin1-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1</vcount>
+          <v>0 0 0 0 0 0 0 0 2 0 2 0 2 0 2 0 0 0 0 0 0 0 0 0</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_lights>
+    <light id="EnvironmentAmbientLight" name="EnvironmentAmbientLight">
+      <technique_common>
+        <ambient>
+          <color>0 0 0</color>
+        </ambient>
+      </technique_common>
+    </light>
+  </library_lights>
+  <library_visual_scenes>
+    <visual_scene id="MaxScene">
+      <node name="EnvironmentAmbientLight">
+        <instance_light url="#EnvironmentAmbientLight"/>
+      </node>
+      <node id="node-Bone01" name="Bone01" sid="joint0" type="JOINT">
+        <translate>-6.119296 1.04698e-8 0</translate>
+        <rotate>-0.5773498 0.5773508 -0.5773502 -120</rotate>
+        <node id="node-Bone02" name="Bone02" sid="joint1" type="JOINT">
+          <translate>20.60437 -1.43051e-5 -2.18343e-6</translate>
+          <rotate sid="rotationZ">0 0 1 -3.24434e-5</rotate>
+          <rotate>0 1 0 3.70355e-7</rotate>
+          <rotate>1 0 0 5.88922e-5</rotate>
+          <node id="node-Bone03" name="Bone03" sid="joint2" type="JOINT">
+            <translate>20.11976 -9.53674e-7 6.59384e-12</translate>
+            <rotate>0 0 1 0</rotate>
+            <rotate>0 1 0 0</rotate>
+            <rotate>1 0 0 0</rotate>
+          </node>
+        </node>
+      </node>
+      <node id="node-Box01" name="Box01">
+        <instance_controller url="#geom-Box01-skin1">
+          <skeleton>#node-Bone01</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="ColorMaterial" target="#ColorEffectR57G8B136-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <library_animations>
+    <animation>
+      <source id="node-Bone02_rotationZ.ANGLE-input">
+        <float_array id="node-Bone02_rotationZ.ANGLE-input-array" count="21">0 0.03333334 0.06666667 0.1 0.1333333 0.1666667 0.2 0.2333333 0.2666667 0.3 0.3333333 0.3666667 0.4 0.4333333 0.4666667 0.5 0.5333334 0.5666667 0.6 0.6333333 0.6666667</float_array>
+        <technique_common>
+          <accessor source="#node-Bone02_rotationZ.ANGLE-input-array" count="21" stride="1">
+            <param name="TIME" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="node-Bone02_rotationZ.ANGLE-output">
+        <float_array id="node-Bone02_rotationZ.ANGLE-output-array" count="21">-3.24434e-5 0.5201042 2.008771 4.358354 7.461237 11.20981 15.49645 20.21355 25.2535 30.50867 35.87146 41.23425 46.48943 51.52937 56.24647 60.53312 64.28169 67.38457 69.73415 71.22282 71.74296</float_array>
+        <technique_common>
+          <accessor source="#node-Bone02_rotationZ.ANGLE-output-array" count="21" stride="1">
+            <param name="ANGLE" type="float"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <source id="node-Bone02_rotationZ.ANGLE-interpolation">
+        <Name_array id="node-Bone02_rotationZ.ANGLE-interpolation-array" count="21">LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+        <technique_common>
+          <accessor source="#node-Bone02_rotationZ.ANGLE-interpolation-array" count="21" stride="1">
+            <param name="INTERPOLATION" type="name"/>
+          </accessor>
+        </technique_common>
+      </source>
+      <sampler id="node-Bone02_rotationZ.ANGLE-sampler">
+        <input semantic="INPUT" source="#node-Bone02_rotationZ.ANGLE-input"/>
+        <input semantic="OUTPUT" source="#node-Bone02_rotationZ.ANGLE-output"/>
+        <input semantic="INTERPOLATION" source="#node-Bone02_rotationZ.ANGLE-interpolation"/>
+      </sampler>
+      <channel source="#node-Bone02_rotationZ.ANGLE-sampler" target="node-Bone02/rotationZ.ANGLE"/>
+    </animation>
+  </library_animations>
+  <scene>
+    <instance_visual_scene url="#MaxScene"/>
+  </scene>
+</COLLADA>

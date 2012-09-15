@@ -164,6 +164,7 @@ void ACModel::Render(ACCamera* camera)
 	{
 		if (pModelDefinition->HasSkeleton)
 		{
+			//pModelDefinition->RenderBones(camera);
 		}
 	}
 

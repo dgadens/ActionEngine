@@ -106,11 +106,11 @@ namespace ACFramework
                     if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
                 }
 
-                //armazendo como column major o collada armazena como rowmajor
-                ret = new Matrix(mat[offset + 0], mat[offset + 4], mat[offset + 8], mat[offset + 12],
-                                 mat[offset + 1], mat[offset + 5], mat[offset + 9], mat[offset + 13],
-                                 mat[offset + 2], mat[offset + 6], mat[offset + 10], mat[offset + 14],
-                                 mat[offset + 3], mat[offset + 7], mat[offset + 11], mat[offset + 15]);
+                //armazendo como row major o collada armazena como rowmajor
+                ret = new Matrix(mat[offset + 0], mat[offset + 1], mat[offset + 2], mat[offset + 3],
+                                 mat[offset + 4], mat[offset + 5], mat[offset + 6], mat[offset + 7],
+                                 mat[offset + 8], mat[offset + 9], mat[offset + 10], mat[offset + 11],
+                                 mat[offset + 12], mat[offset + 13], mat[offset + 14], mat[offset + 15]);
             }
 
             return ret;

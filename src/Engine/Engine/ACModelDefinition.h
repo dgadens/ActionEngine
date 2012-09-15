@@ -14,7 +14,9 @@
 #include "EngineMath.h"
 #include "ACVertexBuffer.h"
 #include "ACVertexFormat.h"
+#include "ACShaders.h"
 #include "ACSkin.h"
+#include "ACCamera.h"
 
 class ACModelDefinition
 {   
@@ -23,6 +25,14 @@ private:
 	//assim o controle fica todo la
 	ACRenderDevice* mpGDevice;
 	ACContentManager* mpCManager;
+
+	AMT_MODEL* mpModel;
+
+	//linhas dos bones
+	ACVertexPositionColored* mpLines;
+
+	ACVertexShader* mpVS;
+	ACPixelShader* mpPS;
 
 	//indices q vao para o indexbuffer
 	UINT							mNumIndices; //numero de indices do array
@@ -37,6 +47,10 @@ private:
 	void PrepareVPNT(AMT_MODEL* model);
 	//prepara os dados para o skinnedmesh
 	void PrepareVSM(AMT_MODEL* model);
+
+	//prapare bones
+	void SetupBones(AMT_MODEL* model);
+	void GenerateLines(AMT_JOINT* joint);
 
 public:
 	UINT		   ID;								// id dentro do contentmanager
@@ -58,6 +72,8 @@ public:
 	const ACSkin const * GetSkin();
 
 	void Prepare(AMT_MODEL* pointer);
+
+	void RenderBones(ACCamera* camera);
 
 	void Release();
 
