@@ -16,8 +16,7 @@ ACModelDefinition::ACModelDefinition(ACRenderDevice* gDevice, ACContentManager* 
 	mNumIndices = 0;
 	mpIndices = nullptr;
 
-	mpVS = mpCManager->LoadVertexShader("Colored.VShlsl4", VertexFormat::VF_VertexPositionColored);
-	mpPS = mpCManager->LoadPixelShader("Colored.PShlsl4");
+	mpJointMark = nullptr;
 };
 
 ACModelDefinition::~ACModelDefinition()
@@ -47,6 +46,8 @@ void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 	//verifica o tipo de vertices se tiver bones entao é um skinnedmesh senao um mesh normal
 	if (amtModel->Head.HasSkeleton)
 	{
+		//cria as marcacoes dos bones
+		mpJointMark = new ACMark(mpGDevice, mpCManager); 
 		VFormat = VertexFormat::VF_VertexSkinnedMesh;
 		PrepareVSM(mpModel);
 	}
@@ -111,7 +112,7 @@ void ACModelDefinition::PrepareVPNT(AMT_MODEL* model)
 void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 {
 	//cria a estrutura de bones
-	SetupBones(model);
+	//SetupBones(model);
 
 	mNumVertices = model->Head.NumVertices;
 	mpVSMCache = new ACVertexSkinnedMesh[mNumVertices];
@@ -171,18 +172,18 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 								  &pVertexBuffer);
 };
 
-void ACModelDefinition::SetupBones(AMT_MODEL* model)
-{
-	mpLines = new ACVertexPositionColored[model->Head.NumJoints * 2 - 1];
-	GenerateLines(model->pJoints[0]);
-};
+//void ACModelDefinition::SetupBones(AMT_MODEL* model)
+//{
+	//mpLines = new ACVertexPositionColored[model->Head.NumJoints * 2 - 1];
+	//GenerateLines(model->pJoints[0]);
+//};
 
-void ACModelDefinition::GenerateLines(AMT_JOINT* joint)
-{
+//void ACModelDefinition::GenerateLines(AMT_JOINT* joint)
+//{
 	//todo: metodo recursivo para buscar a arvore e adicionar as linhas
 	//joint->
 	//mpLines[i].position
-};
+//};
 
 void ACModelDefinition::SetSkin(ACSkin* skin)
 {
@@ -201,25 +202,15 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::RenderBones(ACCamera* camera)
 {
-	//ativa os shaders
-	mpGDevice->ActiveVS(mpVS);
-	mpGDevice->ActivePS(mpPS);
-
 	for (int i=0; i < mpModel->Head.NumJoints; i++)
-	{
-		mpGDevice->SetWorldMatrix(mpModel->pJoints[i]->MatrixAbsolute);
-
-		mpGDevice->ApplyConstants();
-
-		//renderiza
-		//mpGDevice->RenderLines(VertexFormat::VF_VertexPositionColored, );	
-	}
+		mpJointMark->Render(camera, mpModel->pJoints[i]->MatrixAbsolute);
 };
 
 void ACModelDefinition::Release()
 {
 	//remove o skin e tb as texturas e tudo mais
 	SAFE_RELEASE(pVertexBuffer->Skin);
+	SAFE_DELETE(mpJointMark);
 
 	//remove o vb e ib da api
 	if (pVertexBuffer!=nullptr)

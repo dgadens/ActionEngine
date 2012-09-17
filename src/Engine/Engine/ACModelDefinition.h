@@ -17,6 +17,10 @@
 #include "ACShaders.h"
 #include "ACSkin.h"
 #include "ACCamera.h"
+#include "ACMark.h"
+
+class ACContentManager;
+class ACRenderDevice;
 
 class ACModelDefinition
 {   
@@ -27,6 +31,9 @@ private:
 	ACContentManager* mpCManager;
 
 	AMT_MODEL* mpModel;
+
+	//Renderizar o joints
+	ACMark* mpJointMark;
 
 	//linhas dos bones
 	ACVertexPositionColored* mpLines;
@@ -49,8 +56,8 @@ private:
 	void PrepareVSM(AMT_MODEL* model);
 
 	//prapare bones
-	void SetupBones(AMT_MODEL* model);
-	void GenerateLines(AMT_JOINT* joint);
+	//void SetupBones(AMT_MODEL* model);
+	//void GenerateLines(AMT_JOINT* joint);
 
 public:
 	UINT		   ID;								// id dentro do contentmanager

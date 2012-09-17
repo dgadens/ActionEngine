@@ -250,6 +250,9 @@
     <ClInclude Include="..\EngineCommon\ACConfigurations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ACMark.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACRenderer.cpp">
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="..\EngineCommon\ACConfigurations.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACMark.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

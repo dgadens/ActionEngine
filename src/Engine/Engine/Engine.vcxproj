@@ -118,6 +118,7 @@
     <ClInclude Include="ACAMTStructs.h" />
     <ClInclude Include="ACAudio.h" />
     <ClInclude Include="ACContentManager.h" />
+    <ClInclude Include="ACMark.h" />
     <ClInclude Include="ACMaterial.h" />
     <ClInclude Include="ACNetwork.h" />
     <ClInclude Include="ACNetworkDevice.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="ACInput.cpp" />
     <ClCompile Include="ACKeyboard.cpp" />
     <ClCompile Include="ACKeyboardState.cpp" />
+    <ClCompile Include="ACMark.cpp" />
     <ClCompile Include="ACMouse.cpp" />
     <ClCompile Include="ACMouseState.cpp" />
     <ClCompile Include="ACNetwork.cpp" />
