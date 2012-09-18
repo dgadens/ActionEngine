@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Daniel</author>
+      <authoring_tool>OpenCOLLADA for 3ds Max;  Version: 1.3.1;  Revision: 847M;  Platform: x64;  Configuration: Release_Max2010_static</authoring_tool>
+    </contributor>
+    <created>2012-09-17T22:04:11</created>
+    <modified>2012-09-17T22:04:11</modified>
+    <unit name="inch" meter="0.0254"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="ColorEffectR27G177B27">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <ambient>
+              <color>0.1058824 0.6941177 0.1058824 1</color>
+            </ambient>
+            <diffuse>
+              <color>0.1058824 0.6941177 0.1058824 1</color>
+            </diffuse>
+            <specular>
+              <color>1 1 1 1</color>
+            </specular>
+            <shininess>
+              <float>10</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent>
+              <color>1 1 1 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="ColorEffectR27G177B27-material" name="ColorEffectR27G177B27-material">
+      <instance_effect url="#ColorEffectR27G177B27"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="geom-Box01" name="Box01">
+      <mesh>
+        <source id="geom-Box01-positions">
+          <float_array id="geom-Box01-positions-array" count="60">-2.591787 -3.293729 0 2.591787 -3.293729 0 -2.591787 3.293729 0 2.591787 3.293729 0 -2.591787 -3.293729 -52.80766 2.591787 -3.293729 -52.80766 -2.591787 3.293729 -52.80766 2.591787 3.293729 -52.80766 -2.591787 -3.293729 -13.20191 2.591787 -3.293729 -13.20191 2.591787 3.293729 -13.20191 -2.591787 3.293729 -13.20191 -2.591787 -3.293729 -26.40383 2.591787 -3.293729 -26.40383 2.591787 3.293729 -26.40383 -2.591787 3.293729 -26.40383 -2.591787 -3.293729 -39.60574 2.591787 -3.293729 -39.60574 2.591787 3.293729 -39.60574 -2.591787 3.293729 -39.60574</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-positions-array" count="20" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-normals">
+          <float_array id="geom-Box01-normals-array" count="144">0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 1 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-normals-array" count="48" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-map1">
+          <float_array id="geom-Box01-map1-array" count="72">0 0 0 1 0 0 0 0.25 0 1 0.25 0 0 0.5 0 1 0.5 0 0 0.75 0 1 0.75 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0.25 0 1 0.25 0 0 0.5 0 1 0.5 0 0 0.75 0 1 0.75 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 1 0</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-map1-array" count="24" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-Box01-vertices">
+          <input semantic="POSITION" source="#geom-Box01-positions"/>
+        </vertices>
+        <triangles material="ColorMaterial" count="36">
+          <input semantic="VERTEX" source="#geom-Box01-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-Box01-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#geom-Box01-map1" offset="2" set="0"/>
+          <p>2 0 22 0 1 20 3 2 23 1 3 21 3 2 23 0 1 20 5 4 20 4 5 21 7 6 22 6 7 23 7 6 22 4 5 21 1 8 11 0 9 10 9 10 13 8 11 12 9 10 13 0 9 10 9 10 13 8 11 12 13 12 15 12 13 14 13 12 15 8 11 12 13 12 15 12 13 14 17 14 17 16 15 16 17 14 17 12 13 14 17 14 17 16 15 16 5 16 19 4 17 18 5 16 19 16 15 16 3 18 1 1 19 0 10 20 3 9 21 2 10 20 3 1 19 0 10 20 3 9 21 2 14 22 5 13 23 4 14 22 5 9 21 2 14 22 5 13 23 4 18 24 7 17 25 6 18 24 7 13 23 4 18 24 7 17 25 6 7 26 9 5 27 8 7 26 9 17 25 6 2 28 11 3 29 10 11 30 13 10 31 12 11 30 13 3 29 10 11 30 13 10 31 12 15 32 15 14 33 14 15 32 15 10 31 12 15 32 15 14 33 14 19 34 17 18 35 16 19 34 17 14 33 14 19 34 17 18 35 16 6 36 19 7 37 18 6 36 19 18 35 16 0 38 1 2 39 0 8 40 3 11 41 2 8 40 3 2 39 0 8 40 3 11 41 2 12 42 5 15 43 4 12 42 5 11 41 2 12 42 5 15 43 4 16 44 7 19 45 6 16 44 7 15 43 4 16 44 7 19 45 6 4 46 9 6 47 8 4 46 9 19 45 6</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="geom-Box01-skin1">
+      <skin source="#geom-Box01">
+        <bind_shape_matrix>1 0 0 0.05643272 0 -4.37114e-8 -1.575446 -2.05782e-9 0 1 -6.88649e-8 0.04707754 0 0 0 1</bind_shape_matrix>
+        <source id="geom-Box01-skin1-joints">
+          <Name_array id="geom-Box01-skin1-joints-array" count="6">joint0 joint1 joint2 joint3 joint4 joint5</Name_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-joints-array" count="6" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-skin1-bind_poses">
+          <float_array id="geom-Box01-skin1-bind_poses-array" count="96">-1.62921e-7 1 0 -0.239521 -1 -1.62921e-7 0 3.90229e-8 0 0 1 0 0 0 0 1 0.02380273 0.9997167 0 -20.83242 -0.9997167 0.02380273 0 -0.4960115 0 0 1 0 0 0 0 1 -0.05121476 0.9986876 0 -40.8798 -0.9986876 -0.05121476 0 2.576072 0 0 1 0 0 0 0 1 0.07124715 0.9974585 0 -59.45501 -0.9974585 0.07124715 0 -4.727056 0 0 1 0 0 0 0 1 -0.9999768 -0.006802863 0 1.500662 0.006802863 -0.9999768 0 79.75213 0 0 1 0 0 0 0 1 -0.9999768 -0.006802688 0 -68.92016 0.006802688 -0.9999768 0 79.75211 0 0 1 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-bind_poses-array" count="6" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-Box01-skin1-weights">
+          <float_array id="geom-Box01-skin1-weights-array" count="30">1 9.38474e-8 0.4999978 0.5000022 0.4999978 0.5000021 0.5000502 0.4999498 0.4995859 0.5004141 0.4995642 0.5004357 0.5000541 0.4999459 0.4570252 0.5429748 0.4961881 0.5038119 0.4960285 0.5039715 0.4538108 0.5461892 0.3274397 0.6725603 0.09219316 0.9078069 0.07312854 0.9268715 0.3195363 0.6804637</float_array>
+          <technique_common>
+            <accessor source="#geom-Box01-skin1-weights-array" count="30" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#geom-Box01-skin1-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#geom-Box01-skin1-bind_poses"/>
+        </joints>
+        <vertex_weights count="20">
+          <input semantic="JOINT" source="#geom-Box01-skin1-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#geom-Box01-skin1-weights" offset="1"/>
+          <vcount>1 1 1 1 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2</vcount>
+          <v>0 0 0 0 0 0 0 0 3 1 4 0 3 2 4 3 4 0 3 4 4 5 0 6 1 7 0 8 1 9 0 10 1 11 0 12 1 13 1 14 2 15 1 16 2 17 1 18 2 19 1 20 2 21 2 22 3 23 2 24 3 25 2 26 3 27 2 28 3 29</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_lights>
+    <light id="EnvironmentAmbientLight" name="EnvironmentAmbientLight">
+      <technique_common>
+        <ambient>
+          <color>0 0 0</color>
+        </ambient>
+      </technique_common>
+    </light>
+  </library_lights>
+  <library_visual_scenes>
+    <visual_scene id="MaxScene">
+      <node name="EnvironmentAmbientLight">
+        <instance_light url="#EnvironmentAmbientLight"/>
+      </node>
+      <node id="node-Bone01" name="Bone01" sid="joint0" type="JOINT">
+        <matrix>-1.62921e-7 -1 0 0 1 -1.62921e-7 0 0.239521 0 0 1 0 0 0 0 1</matrix>
+        <node id="node-Bone02" name="Bone02" sid="joint1" type="JOINT">
+          <matrix>0.9997167 0.02380289 0 20.5988 -0.02380289 0.9997167 0 -9.00402e-7 0 0 1 0 0 0 0 1</matrix>
+          <node id="node-Bone03" name="Bone03" sid="joint2" type="JOINT">
+            <matrix>0.9959384 -0.09003806 0 20.12546 0.09003806 0.9959384 0 -3.39746e-6 0 0 1 0 0 0 0 1</matrix>
+            <node id="node-Bone04" name="Bone04" sid="joint3" type="JOINT">
+              <matrix>0.992501 0.1222383 0 18.70718 -0.1222383 0.992501 0 0 0 0 1 0 0 0 0 1</matrix>
+              <node id="node-Bone05" name="Bone05" sid="joint4" type="JOINT">
+                <matrix>-0.07502407 -0.9971817 0 20.17103 0.9971817 -0.07502407 0 2.38419e-6 0 0 1 0 0 0 0 1</matrix>
+                <node id="node-Bone06" name="Bone06" sid="joint5" type="JOINT">
+                  <matrix>1 1.76951e-7 0 70.42081 -1.76951e-7 1 0 7.62939e-6 0 0 1 0 0 0 0 1</matrix>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node id="node-Box01" name="Box01">
+        <instance_controller url="#geom-Box01-skin1">
+          <skeleton>#node-Bone01</skeleton>
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="ColorMaterial" target="#ColorEffectR27G177B27-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_controller>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#MaxScene"/>
+  </scene>
+</COLLADA>

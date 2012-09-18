@@ -202,6 +202,8 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::RenderBones(ACCamera* camera)
 {
+	Matrix world;
+	Matrix::CreateScale(100, &world);
 	for (int i=0; i < mpModel->Head.NumJoints; i++)
 		mpJointMark->Render(camera, mpModel->pJoints[i]->MatrixAbsolute);
 };

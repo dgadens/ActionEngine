@@ -106,11 +106,11 @@ namespace ACFramework
                     if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
                 }
 
-                //armazendo como row major o collada armazena como rowmajor
-                ret = new Matrix(mat[offset + 0], mat[offset + 1], mat[offset + 2], mat[offset + 3],
-                                 mat[offset + 4], mat[offset + 5], mat[offset + 6], mat[offset + 7],
-                                 mat[offset + 8], mat[offset + 9], mat[offset + 10], mat[offset + 11],
-                                 mat[offset + 12], mat[offset + 13], mat[offset + 14], mat[offset + 15]);
+                //armazendo como column major o collada armazena como rowmajor
+                ret = new Matrix(mat[offset + 0], mat[offset + 4], mat[offset + 8], mat[offset + 12],
+                                 mat[offset + 1], mat[offset + 5], mat[offset + 9], mat[offset + 13],
+                                 mat[offset + 2], mat[offset + 6], mat[offset + 10], mat[offset + 14],
+                                 mat[offset + 3], mat[offset + 7], mat[offset + 11], mat[offset + 15]);
             }
 
             return ret;
@@ -160,23 +160,30 @@ namespace ACFramework
             }
 
             //redimensiona tb todos os bones e os keyframes
-            /*if (model.Joints != null)
+            if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
                 {
                     AMT_JOINT v = model.Joints[i];
-                    v.Position = v.Position * scalefactor;
+                    v.BindMatrix.Translation = v.BindMatrix.Translation * scalefactor;
+                    if (model.Joints[i].ParentID != -1)
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix *
+                                           model.Joints[model.Joints[i].ParentID].MatrixAbsolute;
+                    else
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    for (int j = 0; j < v.KFPosition.Count; j++)
+                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+
+                    for (int j = 0; j < v.KFData.Count; j++)
                     {
-                        AMT_KF_POS p = v.KFPosition[j];
-                        p.Position = p.Position * scalefactor;
-                        v.KFPosition[j] = p;
+                        AMT_KF p = v.KFData[j];
+                        p.bindMatrix.Translation = p.bindMatrix.Translation * scalefactor;
+                        v.KFData[j] = p;
                     }
 
                     model.Joints[i] = v;
                 }
-            }*/
+            }
         }
 
         public static void CenterPivot(ref AMT_MODEL model)
@@ -197,23 +204,38 @@ namespace ACFramework
             }
 
             //reposiciona tb todos os bones e os keyframes
-            /*if (model.Joints != null)
+            if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
                 {
                     AMT_JOINT v = model.Joints[i];
-                    v.Position = v.Position - new Vector4(positionAjust,0);
 
-                    for (int j = 0; j < v.KFPosition.Count; j++)
+                    //como ele mexeu na posicao entao mexe so no raiz
+                    if (v.Name == "Root")
+                        v.BindMatrix.Translation = v.BindMatrix.Translation - positionAjust;
+
+                    if (model.Joints[i].ParentID != -1)
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix *
+                                           model.Joints[model.Joints[i].ParentID].MatrixAbsolute;
+                    else
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix;
+
+                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+
+                    //mexe so no raiz
+                    if (v.Name == "Root")
                     {
-                        AMT_KF_POS p = v.KFPosition[j];
-                        p.Position = p.Position - positionAjust;
-                        v.KFPosition[j] = p;
+                        for (int j = 0; j < v.KFData.Count; j++)
+                        {
+                            AMT_KF p = v.KFData[j];
+                            p.bindMatrix.Translation = p.bindMatrix.Translation - positionAjust;
+                            v.KFData[j] = p;
+                        }
                     }
 
                     model.Joints[i] = v;
                 }
-            }*/
+            }
         }
 
         public static void SetYUp(ref AMT_MODEL model, Vector3 upVector)
