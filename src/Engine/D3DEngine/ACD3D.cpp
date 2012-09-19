@@ -651,6 +651,11 @@ void ACD3D::SetBlendState(ACBLENDSTATE state)
 	}
 };
 
+ACBLENDSTATE ACD3D::GetBlendState()
+{
+	return mCurrentBlendState;
+};
+
 void ACD3D::SetDepthBufferState(ACDEPTHBUFFERSTATE state)
 {
 	if (mCurrentDepthBufferState != state)
@@ -664,6 +669,11 @@ void ACD3D::SetDepthBufferState(ACDEPTHBUFFERSTATE state)
 			case ACDEPTHBUFFERSTATE::ACDBS_WriteDisable:	ACD3DConfigurations::DefineDepthStencilStateDisableDepthBuffer(); break;
 		}
 	}
+};
+
+ACDEPTHBUFFERSTATE ACD3D::GetDepthBufferState()
+{
+	return mCurrentDepthBufferState;
 };
 
 void ACD3D::SetRasterizeState(ACRASTERIZESTATE state)
@@ -703,6 +713,11 @@ void ACD3D::SetRasterizeState(ACRASTERIZESTATE state)
 	}
 };
 
+ACRASTERIZESTATE ACD3D::GetRasterizeState()
+{
+	return mCurrentRasterizationState;
+};
+
 void ACD3D::SetSamplerState(ACSAMPLERSTATE state, UINT slot)
 {
 	if (mCurrentSamplerState[slot] != state)
@@ -728,6 +743,11 @@ void ACD3D::SetSamplerState(ACSAMPLERSTATE state, UINT slot)
 			case ACSAMPLERSTATE::ACSS_Anisotropic_Border:	ACD3DConfigurations::DefineSamplerStateAnisotropicBorder(slot); break;
 		}
 	}
+};
+
+ACSAMPLERSTATE ACD3D::GetSamplerState(UINT slot)
+{
+	return mCurrentSamplerState[slot];
 };
 
 void ACD3D::SetShadeMode(ACSHADEMODE value)

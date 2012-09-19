@@ -261,26 +261,39 @@ namespace ACFramework
                 model.Vertices[i] = v;
             }
 
-            //TODO: resposicionar as rotacoes dos bones, nao fiz pq nao estou usando os bones nessa primeira versao da engine
 
-            //reposiciona tb todos os bones e os keyframes
-            //if (model.Joints != null)
-            //{
-            //    for (int i = 0; i < model.Joints.Count; i++)
-            //    {
-            //        AMT_JOINT v = model.Joints[i];
-            //        v.Position = v.Position - new Vector4(positionAjust, 0);
+            if (model.Joints != null)
+            {
+                for (int i = 0; i < model.Joints.Count; i++)
+                {
+                    AMT_JOINT v = model.Joints[i];
 
-            //        for (int j = 0; j < v.KFPosition.Count; j++)
-            //        {
-            //            AMT_KF_POS p = v.KFPosition[j];
-            //            p.Position = p.Position - positionAjust;
-            //            v.KFPosition[j] = p;
-            //        }
+                    //como ele mexeu na posicao entao mexe so no raiz
+                    if (v.Name == "Root")
+                        v.BindMatrix *= rotation;
 
-            //        model.Joints[i] = v;
-            //    }
-            //}
+                    if (model.Joints[i].ParentID != -1)
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix *
+                                           model.Joints[model.Joints[i].ParentID].MatrixAbsolute;
+                    else
+                        v.MatrixAbsolute = model.Joints[i].BindMatrix;
+
+                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+
+                    //mexe so no raiz
+                    if (v.Name == "Root")
+                    {
+                        for (int j = 0; j < v.KFData.Count; j++)
+                        {
+                            AMT_KF p = v.KFData[j];
+                            p.bindMatrix *= rotation;
+                            v.KFData[j] = p;
+                        }
+                    }
+
+                    model.Joints[i] = v;
+                }
+            }
         }
 
     }

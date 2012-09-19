@@ -147,9 +147,13 @@ public:
 
 	//states
 	virtual void SetBlendState(ACBLENDSTATE state) = 0;
+	virtual ACBLENDSTATE GetBlendState() = 0;
 	virtual void SetDepthBufferState(ACDEPTHBUFFERSTATE state) = 0;
+	virtual ACDEPTHBUFFERSTATE GetDepthBufferState() = 0;
 	virtual void SetRasterizeState(ACRASTERIZESTATE state) = 0;
+	virtual ACRASTERIZESTATE GetRasterizeState() = 0;
 	virtual void SetSamplerState(ACSAMPLERSTATE state, UINT slot) = 0;
+	virtual ACSAMPLERSTATE GetSamplerState(UINT slot) = 0;
 
 	//clear
 	virtual HRESULT Clear(BOOL clearPixels, BOOL clearDepth, BOOL clearStencil) = 0;

@@ -163,7 +163,7 @@ void ACModel::Render(ACCamera* camera)
 	if (mRenderBones)
 	{
 		if (pModelDefinition->HasSkeleton)
-			pModelDefinition->RenderBones(camera);
+			pModelDefinition->RenderBones(camera, World);
 	}
 
 	if (mRenderNormals)

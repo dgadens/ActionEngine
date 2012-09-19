@@ -33,6 +33,7 @@ private:
 	AMT_MODEL* mpModel;
 
 	//Renderizar o joints
+	Matrix mRootJointMatrix;
 	ACMark* mpJointMark;
 
 	//linhas dos bones
@@ -55,9 +56,8 @@ private:
 	//prepara os dados para o skinnedmesh
 	void PrepareVSM(AMT_MODEL* model);
 
-	//prapare bones
-	//void SetupBones(AMT_MODEL* model);
-	//void GenerateLines(AMT_JOINT* joint);
+	//renderiza a estrura de bones
+	void RenderBonesTree(ACCamera* camera, AMT_JOINT* joint);
 
 public:
 	UINT		   ID;								// id dentro do contentmanager
@@ -80,7 +80,7 @@ public:
 
 	void Prepare(AMT_MODEL* pointer);
 
-	void RenderBones(ACCamera* camera);
+	void RenderBones(ACCamera* camera, Matrix& world);
 
 	void Release();
 

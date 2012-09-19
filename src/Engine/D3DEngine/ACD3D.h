@@ -94,9 +94,13 @@ public:
 
 	//renderstates
 	void SetBlendState(ACBLENDSTATE state);
+	ACBLENDSTATE GetBlendState();
 	void SetDepthBufferState(ACDEPTHBUFFERSTATE state);
+	ACDEPTHBUFFERSTATE GetDepthBufferState();
 	void SetRasterizeState(ACRASTERIZESTATE state);
+	ACRASTERIZESTATE GetRasterizeState();
 	void SetSamplerState(ACSAMPLERSTATE state, UINT slot);
+	ACSAMPLERSTATE GetSamplerState(UINT slot);
 
 	HRESULT Clear(BOOL,BOOL,BOOL);
 	void SetClearColor(const Vector4& color);

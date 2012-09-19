@@ -6,7 +6,7 @@ ACCamera::ACCamera()
 
 	mFOV = PIOVER4;
     mNearPlane = 1.0f;
-    mFarPlane = 1000.0f;
+    mFarPlane = 10000.0f;
     mPosition.X  = 0.0f;
 	mPosition.Y  = 0.0f;
 	mPosition.Z  = 500.0f;

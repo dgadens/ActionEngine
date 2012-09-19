@@ -49,6 +49,7 @@ void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 		//cria as marcacoes dos bones
 		mpJointMark = new ACMark(mpGDevice, mpCManager); 
 		VFormat = VertexFormat::VF_VertexSkinnedMesh;
+		mRootJointMatrix = mpModel->pJoints[0]->BindMatrix; //armazena a matriz root pra usar sempre como base para aplicar a world
 		PrepareVSM(mpModel);
 	}
 	else
@@ -200,12 +201,36 @@ const ACSkin const * ACModelDefinition::GetSkin()
 	return pVertexBuffer->Skin;
 };
 
-void ACModelDefinition::RenderBones(ACCamera* camera)
+void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 {
-	Matrix world;
-	Matrix::CreateScale(100, &world);
-	for (int i=0; i < mpModel->Head.NumJoints; i++)
-		mpJointMark->Render(camera, mpModel->pJoints[i]->MatrixAbsolute);
+	//seta para nao ter culling nos triangulos
+	ACRASTERIZESTATE cr = mpGDevice->GetRasterizeState();
+	ACDEPTHBUFFERSTATE ds = mpGDevice->GetDepthBufferState();
+	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullNone);
+	mpGDevice->SetDepthBufferState(ACDEPTHBUFFERSTATE::ACDBS_WriteDisable);
+
+	mpModel->pJoints[0]->BindMatrix = mRootJointMatrix * world;
+	RenderBonesTree(camera, mpModel->pJoints[0]);
+
+	//seta a rasterizacao anterior
+	mpGDevice->SetRasterizeState(cr);
+	mpGDevice->SetDepthBufferState(ds);
+};
+
+void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
+{
+	if (joint->ParentID != -1)
+		joint->MatrixAbsolute = joint->BindMatrix * mpModel->pJoints[joint->ParentID]->MatrixAbsolute;
+	else
+		joint->MatrixAbsolute = joint->BindMatrix;
+
+	mpJointMark->Render(camera, joint->MatrixAbsolute);
+
+	if (joint->NumChildren <= 0)
+		return;
+
+	for (int i = 0; i < joint->NumChildren; i++)
+		RenderBonesTree(camera, mpModel->pJoints[joint->JointChildren[i]]);
 };
 
 void ACModelDefinition::Release()

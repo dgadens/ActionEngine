@@ -8,9 +8,9 @@ ACMark::ACMark(ACRenderDevice* gDevice, ACContentManager* cManager)
 	mpCManager = cManager;
 
 	mpVertices = new ACVertexPosition[3];
-	mpVertices[0].position = Vector3( 0,0.5f,0);
-	mpVertices[1].position = Vector3(-0.5f,-0.5f,0);
-	mpVertices[2].position = Vector3( 0.5f,-0.5f,0);
+	mpVertices[0].position = Vector3( 0,0.05f,0);
+	mpVertices[1].position = Vector3(-0.05f,-0.05f,0);
+	mpVertices[2].position = Vector3( 0.05f,-0.05f,0);
 	
 	mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexPosition, 3, 0, mpVertices, 0, nullptr, &mpVB);
 
