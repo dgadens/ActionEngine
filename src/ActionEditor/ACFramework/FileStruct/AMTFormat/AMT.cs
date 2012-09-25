@@ -148,6 +148,9 @@ namespace ACFramework.FileStructs
         public Matrix BindMatrix;                      // Bind Matrix (joint)
         public Matrix MatrixAbsolute;                  // Matrix absolute
         public Matrix InverseBindMatrix;               // Inverse Bind Matrix (inverse joint)
+
+        //nao expostar, utilizado apenas na importacao do collada
+        public string SID;  //identificador para utilizar na motagem das animacoes
     }
 
     public struct AMT_ANIMATION

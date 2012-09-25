@@ -77,9 +77,11 @@ namespace ACFramework.FileStruct
                 amtModel.Joints = new List<AMT_JOINT>();
                 Matrix matrix = Matrix.Identity;
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
+                string sid = matrixElement.Attribute("sid").Value;
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
                 
                 AMT_JOINT newBone = new AMT_JOINT();
+                newBone.SID = sid;
                 newBone.ID = 0;
                 newBone.ParentID = -1; //nao tem pai
                 newBone.Name = "Root";
@@ -145,10 +147,13 @@ namespace ACFramework.FileStruct
                     //pega o nome e a matrix do bone
                     string boneName = node.Attribute("name").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
+                    //pega o sid para depois procurar no sampler de animacao (matrix ou tranform)
+                    string sid = matrixElement.Attribute("sid").Value;
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
 
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
+                    newBone.SID = sid;
                     newBone.ID = (uint)amtModel.Joints.Count();
                     newBone.ParentID = (int)parentBone.ID; 
                     newBone.Name = boneName;
