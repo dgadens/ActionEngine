@@ -54,6 +54,8 @@ namespace ACFramework.FileStruct
 
             ConvertBones(rootElement, ref amtModel);
 
+            ConvertController(rootElement, ref amtModel);
+
             ConvertGeometries(rootElement, ref amtModel);
 
             Optimize(ref amtModel);
@@ -184,6 +186,34 @@ namespace ACFramework.FileStruct
                     FillBoneNodes(ref newBone, node, ref amtModel);
                 }
             }
+        }
+
+        private void ConvertController(XElement rootElement, ref AMT_MODEL amtModel)
+        {
+            XElement libraryController = rootElement.Element(XName.Get("library_controllers", Namespace));
+            List<XElement> controllers = libraryController.Elements(XName.Get("controller", Namespace)).ToList();
+            
+            foreach (XElement controller in controllers)
+	        {
+                XElement skin = controller.Element(XName.Get("skin", Namespace));
+
+                //pega o nome do source
+                XElement jointElement = skin.Element(XName.Get("joints", Namespace));
+                List<XElement> inputElements = jointElement.Elements(XName.Get("input", Namespace)).ToList();
+                XElement jointInputElement = inputElements.Find(item => { return item.Attribute("semantic").Value == "JOINT"; });
+                string sourceName = jointInputElement.Attribute("source").Value.Substring(1);
+
+                //pega o bindmatrix
+                string bindShapeMatrix = skin.Element(XName.Get("bind_shape_matrix", Namespace)).Value;
+                Matrix bindMatrix = Tools.ConvertStringToMatrix(bindShapeMatrix, 0);
+                
+
+                //procuro o source q acabei de descobrir
+                List<XElement> sourceElements = skin.Elements(XName.Get("source", Namespace)).ToList();
+                XElement jointSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == sourceName; });
+                string jointNames = jointSourceElement.Element(XName.Get("Name_array", Namespace)).Value;
+	        }
+            
         }
 
         private void ConvertGeometries(XElement rootElement, ref AMT_MODEL amtModel)
