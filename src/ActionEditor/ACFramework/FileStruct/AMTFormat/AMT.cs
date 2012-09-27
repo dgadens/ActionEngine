@@ -24,9 +24,10 @@ namespace ACFramework.FileStructs
         public uint NumFrames;
         public uint NumAnimations;
         public uint HasSkeleton;
+        public uint HasSkin;
     }
 
-    public struct AMT_VERTEX
+    public class AMT_VERTEX
     {
         public Vector3 Position;
         public Vector2 TexCoord1;                 // UV 0 Texturescoor.
@@ -148,9 +149,6 @@ namespace ACFramework.FileStructs
         public Matrix BindMatrix;                      // Bind Matrix (joint)
         public Matrix MatrixAbsolute;                  // Matrix absolute
         public Matrix InverseBindMatrix;               // Inverse Bind Matrix (inverse joint)
-
-        //nao expostar, utilizado apenas na importacao do collada
-        public string SID;  //identificador para utilizar na motagem das animacoes
     }
 
     public struct AMT_ANIMATION

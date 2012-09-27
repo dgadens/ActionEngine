@@ -52,11 +52,13 @@ namespace ACFramework.FileStruct
 
             amtModel.Vertices = new List<AMT_VERTEX>();
 
+            ConvertGeometries(rootElement, ref amtModel);
+
             ConvertBones(rootElement, ref amtModel);
 
             ConvertController(rootElement, ref amtModel);
 
-            ConvertGeometries(rootElement, ref amtModel);
+            ConvertHead(ref amtModel);
 
             Optimize(ref amtModel);
 
@@ -79,11 +81,9 @@ namespace ACFramework.FileStruct
                 amtModel.Joints = new List<AMT_JOINT>();
                 Matrix matrix = Matrix.Identity;
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
-                string sid = matrixElement.Attribute("sid").Value;
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
                 
                 AMT_JOINT newBone = new AMT_JOINT();
-                newBone.SID = sid;
                 newBone.ID = 0;
                 newBone.ParentID = -1; //nao tem pai
                 newBone.Name = "Root";
@@ -150,12 +150,12 @@ namespace ACFramework.FileStruct
                     string boneName = node.Attribute("name").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
                     //pega o sid para depois procurar no sampler de animacao (matrix ou tranform)
-                    string sid = matrixElement.Attribute("sid").Value;
+                    //string sid = matrixElement.Attribute("sid").Value;
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
 
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
-                    newBone.SID = sid;
+                    //newBone.SID = sid;
                     newBone.ID = (uint)amtModel.Joints.Count();
                     newBone.ParentID = (int)parentBone.ID; 
                     newBone.Name = boneName;
@@ -198,20 +198,91 @@ namespace ACFramework.FileStruct
                 XElement skin = controller.Element(XName.Get("skin", Namespace));
 
                 //pega o nome do source
-                XElement jointElement = skin.Element(XName.Get("joints", Namespace));
-                List<XElement> inputElements = jointElement.Elements(XName.Get("input", Namespace)).ToList();
+                XElement vWeightsElement = skin.Element(XName.Get("vertex_weights", Namespace));
+                int numberOfWeights = int.Parse(vWeightsElement.Attribute("count").Value);
+
+                //pego o numero de bones q influenciam cada vertice
+                string vCount = vWeightsElement.Element(XName.Get("vcount", Namespace)).Value;
+                //par (indice do bone seguido do indice do peso)
+                string v = vWeightsElement.Element(XName.Get("v", Namespace)).Value;
+
+                List<XElement> inputElements = vWeightsElement.Elements(XName.Get("input", Namespace)).ToList();
+
+                //procura o source joint
                 XElement jointInputElement = inputElements.Find(item => { return item.Attribute("semantic").Value == "JOINT"; });
-                string sourceName = jointInputElement.Attribute("source").Value.Substring(1);
+                string jointSourceName = jointInputElement.Attribute("source").Value.Substring(1);
+                //procura o source weight
+                XElement weightInputElement = inputElements.Find(item => { return item.Attribute("semantic").Value == "WEIGHT"; });
+                string weightSourceName = weightInputElement.Attribute("source").Value.Substring(1);
 
                 //pega o bindmatrix
                 string bindShapeMatrix = skin.Element(XName.Get("bind_shape_matrix", Namespace)).Value;
                 Matrix bindMatrix = Tools.ConvertStringToMatrix(bindShapeMatrix, 0);
                 
-
-                //procuro o source q acabei de descobrir
+                //vai no source Joint descoberto e pega a lista de joints e weights
                 List<XElement> sourceElements = skin.Elements(XName.Get("source", Namespace)).ToList();
-                XElement jointSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == sourceName; });
+
+                //pega a lista de nomes de bones na ordem
+                XElement jointSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == jointSourceName; });
                 string jointNames = jointSourceElement.Element(XName.Get("Name_array", Namespace)).Value;
+                //pega a lista de weights
+                XElement weightSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == weightSourceName; });
+                string weightValues = weightSourceElement.Element(XName.Get("float_array", Namespace)).Value;
+
+                //joga pra o array as influencias
+                string[] jointsOnSkin = jointNames.Split(' ');
+                string[] weights = weightValues.Replace('\n', ' ').Trim().Split(' ');
+                string[] influenceNumber = vCount.Split(' ');
+                string[] boneIndexWeight = v.Split(' ');
+
+                //atribui para os vertices o id dos joints e tb os pesos
+                int maxBonesPerVertex;
+                int vIndex = 0;
+                for (int i = 0; i < influenceNumber.Length; i++)
+                {
+                    //pra cada vertice ele procura no maximo 4 bones q o influenciam
+                    maxBonesPerVertex = 4;
+                    AMT_VERTEX vertex = amtModel.Vertices[i];
+
+                    int numInfluence = int.Parse(influenceNumber[i]);
+
+                    while (numInfluence > 0)
+                    {
+                        numInfluence--;
+                        uint boneIndex = uint.Parse(boneIndexWeight[vIndex++]);
+                        uint weightIndex = uint.Parse(boneIndexWeight[vIndex++]);
+
+                        if (maxBonesPerVertex == 4)
+                        {
+                            vertex.BoneID_A = boneIndex;
+                            vertex.BoneWeight_A = float.Parse(weights[weightIndex]);
+                            maxBonesPerVertex--;
+                            continue;
+                        }
+                        if (maxBonesPerVertex == 3)
+                        {
+                            vertex.BoneID_B = boneIndex;
+                            vertex.BoneWeight_B = float.Parse(weights[weightIndex]);
+                            maxBonesPerVertex--;
+                            continue;
+                        }
+                        if (maxBonesPerVertex == 2)
+                        {
+                            vertex.BoneID_C = boneIndex;
+                            vertex.BoneWeight_C = float.Parse(weights[weightIndex]);
+                            maxBonesPerVertex--;
+                            continue;
+                        }
+                        if (maxBonesPerVertex == 1)
+                        {
+                            vertex.BoneID_D = boneIndex;
+                            vertex.BoneWeight_D = float.Parse(weights[weightIndex]);
+                            maxBonesPerVertex--;
+                            continue;
+                        }
+
+                    }
+                }
 	        }
             
         }
@@ -269,8 +340,8 @@ namespace ACFramework.FileStruct
                         {
                             XElement controller = geometryScene.Element(XName.Get("instance_controller", Namespace));
                             string skeletonName = controller.Element(XName.Get("skeleton", Namespace)).Value.Substring(1);
-                            if (skeletonName!=null)
-                                amtModel.Head.HasSkeleton = '1';
+                            if (skeletonName != null)
+                                amtModel.Head.HasSkeleton = 1;
                             XElement bindMaterial = controller.Element(XName.Get("bind_material", Namespace));
                             XElement techniqueCommon = bindMaterial.Element(XName.Get("technique_common", Namespace));
                             List<XElement> materialsScene = techniqueCommon.Elements(XName.Get("instance_material", Namespace)).ToList();
@@ -307,9 +378,6 @@ namespace ACFramework.FileStruct
                         }
                     }
                 }
-
-                ConvertHead(ref amtModel);
-
             }
         }
 
@@ -625,7 +693,7 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumVertices = (uint)currentVertices;
         }
 
-        #region Get Data from file
+        #region Get Geometry Data
         private List<Vector3> GetPositions(XElement positionElement)
         {
             List<Vector3> positions = new List<Vector3>();
