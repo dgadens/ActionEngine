@@ -149,6 +149,9 @@ namespace ACFramework.FileStructs
         public Matrix BindMatrix;                      // Bind Matrix (joint)
         public Matrix MatrixAbsolute;                  // Matrix absolute
         public Matrix InverseBindMatrix;               // Inverse Bind Matrix (inverse joint)
+
+        //nao é exportado, usado para achar o indice do bone pelo controller do skin
+        public string SID;
     }
 
     public struct AMT_ANIMATION

@@ -80,10 +80,14 @@ namespace ACFramework.FileStruct
                 //adiciona o bone raiz
                 amtModel.Joints = new List<AMT_JOINT>();
                 Matrix matrix = Matrix.Identity;
+
+                string sid = rootNode.Attribute("sid").Value;
+
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
                 
                 AMT_JOINT newBone = new AMT_JOINT();
+                newBone.SID = sid;
                 newBone.ID = 0;
                 newBone.ParentID = -1; //nao tem pai
                 newBone.Name = "Root";
@@ -148,14 +152,13 @@ namespace ACFramework.FileStruct
 
                     //pega o nome e a matrix do bone
                     string boneName = node.Attribute("name").Value;
+                    string sid = node.Attribute("sid").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
-                    //pega o sid para depois procurar no sampler de animacao (matrix ou tranform)
-                    //string sid = matrixElement.Attribute("sid").Value;
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
 
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
-                    //newBone.SID = sid;
+                    newBone.SID = sid;
                     newBone.ID = (uint)amtModel.Joints.Count();
                     newBone.ParentID = (int)parentBone.ID; 
                     newBone.Name = boneName;
@@ -230,10 +233,28 @@ namespace ACFramework.FileStruct
                 string weightValues = weightSourceElement.Element(XName.Get("float_array", Namespace)).Value;
 
                 //joga pra o array as influencias
-                string[] jointsOnSkin = jointNames.Split(' ');
+                string[] jointsOnSkin = jointNames.Trim().Split(' ');
                 string[] weights = weightValues.Replace('\n', ' ').Trim().Split(' ');
-                string[] influenceNumber = vCount.Split(' ');
-                string[] boneIndexWeight = v.Split(' ');
+                string[] influenceNumber = vCount.Trim().Split(' ');
+                string[] boneIndexWeight = v.Trim().Split(' ');
+
+                //construo um de para, dos indices que estao na lista de joints do amtmodel
+                List<uint> _from = new List<uint>();
+                List<uint> _to = new List<uint>();
+
+                //converto os indices dos bones q estao no <v> para os indices da lista que ja esta na lista
+                for (uint i = 0; i < amtModel.Joints.Count; i++)
+                {
+                    for (uint j = 0; j < jointsOnSkin.Length; j++)
+                    {
+                        //procuro o joint na lista ja salva
+                        if (amtModel.Joints[(int)i].SID == jointsOnSkin[j])
+                        {
+                            _from.Add(j);
+                            _to.Add(i);
+                        }
+                    }
+                }
 
                 //atribui para os vertices o id dos joints e tb os pesos
                 int maxBonesPerVertex;
@@ -249,7 +270,16 @@ namespace ACFramework.FileStruct
                     while (numInfluence > 0)
                     {
                         numInfluence--;
+
+                        //seleciona o indice do bone na lista <v> e procura do de-para para achar o indice no amtmodel
                         uint boneIndex = uint.Parse(boneIndexWeight[vIndex++]);
+                        for (int j = 0; j < _from.Count; j++)
+                        {
+                            if (_from[j] == boneIndex)
+                                boneIndex = _to[j];
+                        }
+
+
                         uint weightIndex = uint.Parse(boneIndexWeight[vIndex++]);
 
                         if (maxBonesPerVertex == 4)
