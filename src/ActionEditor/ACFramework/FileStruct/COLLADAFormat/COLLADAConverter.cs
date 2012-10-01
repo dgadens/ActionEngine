@@ -285,28 +285,28 @@ namespace ACFramework.FileStruct
                         if (maxBonesPerVertex == 4)
                         {
                             vertex.BoneID_A = boneIndex;
-                            vertex.BoneWeight_A = float.Parse(weights[weightIndex]);
+                            vertex.BoneWeight_A = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 3)
                         {
                             vertex.BoneID_B = boneIndex;
-                            vertex.BoneWeight_B = float.Parse(weights[weightIndex]);
+                            vertex.BoneWeight_B = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 2)
                         {
                             vertex.BoneID_C = boneIndex;
-                            vertex.BoneWeight_C = float.Parse(weights[weightIndex]);
+                            vertex.BoneWeight_C = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 1)
                         {
                             vertex.BoneID_D = boneIndex;
-                            vertex.BoneWeight_D = float.Parse(weights[weightIndex]);
+                            vertex.BoneWeight_D = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
