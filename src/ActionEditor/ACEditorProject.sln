@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACEditor", "ACEditor\ACEditor.csproj", "{293A8B58-D247-4604-96BE-4BB0CD91F615}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACFramework", "ACFramework\ACFramework.csproj", "{232DFBE1-C605-4E63-A65A-6D7B0C38F391}"
