@@ -41,11 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\OpenAL 1.1 SDK\include;C:\Program Files (x86)\oggvorbis-win32sdk-1.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files (x86)\OpenAL 1.1 SDK\include;C:\Program Files (x86)\oggvorbis-win32sdk-1.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win32;C:\Program Files (x86)\oggvorbis-win32sdk-1.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files (x86)\OpenAL 1.1 SDK\include;C:\Program Files (x86)\oggvorbis-win32sdk-1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\OpenAL 1.1 SDK\libs\Win32;C:\Program Files (x86)\oggvorbis-win32sdk-1.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

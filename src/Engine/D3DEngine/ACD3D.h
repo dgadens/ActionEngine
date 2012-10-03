@@ -10,6 +10,9 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
+#include <string>
+#include <DxErr.h>
+
 #include <DXGI.h>
 #include <WTypes.h>
 #include <map>
