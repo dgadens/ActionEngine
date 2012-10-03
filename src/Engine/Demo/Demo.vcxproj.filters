@@ -16,14 +16,8 @@
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{f25d27e9-afee-41ec-893c-e4567a9be6e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\GameComponents">
-      <UniqueIdentifier>{0890caa1-69fb-45f8-9e83-85c03e0cfed4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{ef3da73a-1972-4b99-a7c8-012bd39f7b07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameComponents">
-      <UniqueIdentifier>{a58c2c16-ee33-4539-ac0b-4243bb78bf80}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Testes">
       <UniqueIdentifier>{c9ae126b-38bf-453e-b067-3c769b18eccc}</UniqueIdentifier>
@@ -66,9 +60,6 @@
     <ClCompile Include="VerifySelection.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>Source Files\GameComponents</Filter>
-    </ClCompile>
     <ClCompile Include="BasicTest.cpp">
       <Filter>Source Files\Testes</Filter>
     </ClCompile>
@@ -106,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="VerifySelection.h">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Background.h">
-      <Filter>Header Files\GameComponents</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Resource Files</Filter>
