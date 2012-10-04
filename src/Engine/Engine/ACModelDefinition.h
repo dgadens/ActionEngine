@@ -39,8 +39,8 @@ private:
 	//linhas dos bones
 	ACVertexPositionColored* mpLines;
 
-	ACVertexShader* mpVS;
-	ACPixelShader* mpPS;
+	//Current Skin
+	ACSkin* mpSkin;
 
 	//indices q vao para o indexbuffer
 	UINT							mNumIndices; //numero de indices do array

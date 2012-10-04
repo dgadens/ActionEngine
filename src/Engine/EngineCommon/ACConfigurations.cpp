@@ -8,8 +8,8 @@ std::string ACConfigurations::AC_PATH_TEXTURES;
 std::string ACConfigurations::AC_PATH_FONTS;
 std::string ACConfigurations::AC_PATH_SCRIPTS;
 
-UINT ACConfigurations::MAX_VERTICES_IN_BUFFER = 16384;
-UINT ACConfigurations::MAX_INDICES_IN_BUFFER = 16384;
+UINT ACConfigurations::MAX_VERTICES_IN_BUFFER;
+UINT ACConfigurations::MAX_INDICES_IN_BUFFER;
 		 
 UINT ACConfigurations::GlobalID = 0;
 bool ACConfigurations::ENABLE_LOG = false;
@@ -30,6 +30,8 @@ void ACConfigurations::Initialize()
         if (line.find("MaxIndicesInBuffer") != -1)
             sin >> MAX_INDICES_IN_BUFFER;
     }
+
+	fin.close();
 }
 
 const std::string ACConfigurations::ACGetCurrentDirectory()

@@ -157,7 +157,7 @@ void ACModel::Render(ACCamera* camera)
 		mpGDevice->ApplyConstants();
 
 		//renderiza
-		mpGDevice->Render(pModelDefinition->pVertexBuffer);	
+		//mpGDevice->Render(pModelDefinition->pVertexBuffer);	
 	}
 
 	if (mRenderBones)

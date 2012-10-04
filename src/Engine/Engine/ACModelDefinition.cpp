@@ -9,9 +9,13 @@ ACModelDefinition::ACModelDefinition(ACRenderDevice* gDevice, ACContentManager* 
 
 	pVertexBuffer = nullptr;
 
+	mpLines = nullptr;
+
 	mNumVertices = 0;
 	mpVPNTCache = nullptr;
 	mpVSMCache = nullptr;
+
+	mpSkin = nullptr;
 
 	mNumIndices = 0;
 	mpIndices = nullptr;
@@ -146,31 +150,31 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 		mpIndices[index++] = model->pFaces[i]->Indices[2];
 	}
 
-	ACSkin* pSkin = mpCManager->CreateSkin();
-	pSkin->Material.AmbientColor = model->pMaterials[0]->Ambient;
-	pSkin->Material.EmissiveColor = model->pMaterials[0]->Emissive;
-	pSkin->Material.SpecularColor = model->pMaterials[0]->Specular;
-	pSkin->Material.SpecularPower = model->pMaterials[0]->SpecularPower;
-	pSkin->Material.DiffuseColor = Vector4(&model->pMaterials[0]->Diffuse, model->pMaterials[0]->Transparency);
+	mpSkin = mpCManager->CreateSkin();
+	mpSkin->Material.AmbientColor = model->pMaterials[0]->Ambient;
+	mpSkin->Material.EmissiveColor = model->pMaterials[0]->Emissive;
+	mpSkin->Material.SpecularColor = model->pMaterials[0]->Specular;
+	mpSkin->Material.SpecularPower = model->pMaterials[0]->SpecularPower;
+	mpSkin->Material.DiffuseColor = Vector4(&model->pMaterials[0]->Diffuse, model->pMaterials[0]->Transparency);
 
 	//carrega as texturas
 	if (model->pMaterials[0]->DiffuseTexture[0] != '\0')
-		pSkin->Textures[0] = mpCManager->LoadTexture(model->pMaterials[0]->DiffuseTexture);
+		mpSkin->Textures[0] = mpCManager->LoadTexture(model->pMaterials[0]->DiffuseTexture);
 	if (model->pMaterials[0]->SpecularTexture[0]  != '\0')
-		pSkin->Textures[1] = mpCManager->LoadTexture(model->pMaterials[0]->SpecularTexture);
+		mpSkin->Textures[1] = mpCManager->LoadTexture(model->pMaterials[0]->SpecularTexture);
 	if (model->pMaterials[0]->NormalTexture[0]  != '\0')
-		pSkin->Textures[2] = mpCManager->LoadTexture(model->pMaterials[0]->NormalTexture);
+		mpSkin->Textures[2] = mpCManager->LoadTexture(model->pMaterials[0]->NormalTexture);
 	if (model->pMaterials[0]->AnimatedTexture[0]  != '\0')
-		pSkin->Textures[3] = mpCManager->LoadTexture(model->pMaterials[0]->AnimatedTexture);
+		mpSkin->Textures[3] = mpCManager->LoadTexture(model->pMaterials[0]->AnimatedTexture);
 
 	//ja cria o vertexbuffer na api
-	mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexSkinnedMesh, 
+	/*mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexSkinnedMesh, 
 								  mNumVertices, 
 								  mNumIndices, 
 								  mpVSMCache, 
 								  mpIndices, 
 								  pSkin,
-								  &pVertexBuffer);
+								  &pVertexBuffer);*/
 };
 
 //void ACModelDefinition::SetupBones(AMT_MODEL* model)
@@ -189,20 +193,30 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 void ACModelDefinition::SetSkin(ACSkin* skin)
 {
 	//se ja existe um skin entao ele deleta para remover todos os resource e tb referencias depois adiciona outro
-	if (pVertexBuffer->Skin != nullptr)
-		SAFE_DELETE(pVertexBuffer->Skin);
+	if (mpSkin != nullptr)
+		SAFE_DELETE(mpSkin);
 
-	pVertexBuffer->Skin = mpCManager->CreateSkin();
-	mpCManager->CloneSkin(pVertexBuffer->Skin, skin);
+	mpSkin = mpCManager->CreateSkin();
+	mpCManager->CloneSkin(mpSkin, skin);
+
+	//pVertexBuffer->Skin = mpSkin;
 };
 
 const ACSkin const * ACModelDefinition::GetSkin()
 {
-	return pVertexBuffer->Skin;
+	return mpSkin;
 };
 
 void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 {
+	mpGDevice->Render(VertexFormat::VF_VertexSkinnedMesh, 
+								  mNumVertices, 
+								  mNumIndices, 
+								  mpVSMCache, 
+								  mpIndices, 
+								  mpSkin);
+
+
 	//seta para nao ter culling nos triangulos
 	ACRASTERIZESTATE cr = mpGDevice->GetRasterizeState();
 	ACDEPTHBUFFERSTATE ds = mpGDevice->GetDepthBufferState();
