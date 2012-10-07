@@ -209,6 +209,35 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 {
+	for (int i = 0; i < mNumVertices; i++)
+	{
+		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
+		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
+		Matrix invAbcMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
+
+		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
+		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
+		Matrix invAbcMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix;
+
+		Matrix relMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->BindMatrix;
+		Matrix absMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
+		Matrix invAbcMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix;
+
+		Matrix relMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->BindMatrix;
+		Matrix absMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
+		Matrix invAbcMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix;
+
+		Matrix skinTransform;
+
+		skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
+		skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
+		skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
+		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
+
+		Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform, &mpVSMCache[i].position);
+		Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
+	}
+
 	mpGDevice->Render(VertexFormat::VF_VertexSkinnedMesh, 
 								  mNumVertices, 
 								  mNumIndices, 
@@ -250,7 +279,7 @@ void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
 void ACModelDefinition::Release()
 {
 	//remove o skin e tb as texturas e tudo mais
-	SAFE_RELEASE(pVertexBuffer->Skin);
+	SAFE_RELEASE(mpSkin);
 	SAFE_DELETE(mpJointMark);
 
 	//remove o vb e ib da api

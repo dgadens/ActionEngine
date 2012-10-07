@@ -16,40 +16,50 @@
 	#define GetCurrentDir getcwd 
 #endif 
 
+
+
 class ACConfigurations
 {
 private:
 
-	static const std::string ACGetCurrentDirectory();
-	static std::string AC_CURRENT_DIRECTORY;
-	static std::string AC_PATH_MODELS;
-	static std::string AC_PATH_TEXTURES;
-	static std::string AC_PATH_SHADERS;
-	static std::string AC_PATH_SOUNDS;
-	static std::string AC_PATH_FONTS;
-	static std::string AC_PATH_SCRIPTS;
+	static ACConfigurations* mpInstance;
 
-	static UINT MAX_VERTICES_IN_BUFFER;
-	static UINT MAX_INDICES_IN_BUFFER;
+	ACConfigurations();
+	~ACConfigurations();
+
+	const std::string ACGetCurrentDirectory();
+	std::string AC_CURRENT_DIRECTORY;
+	std::string AC_PATH_MODELS;
+	std::string AC_PATH_TEXTURES;
+	std::string AC_PATH_SHADERS;
+	std::string AC_PATH_SOUNDS;
+	std::string AC_PATH_FONTS;
+	std::string AC_PATH_SCRIPTS;
+
+	UINT MAX_VERTICES_IN_BUFFER;
+	UINT MAX_INDICES_IN_BUFFER;
 
 
 public:
 
 	//mantem o id globals dos objetos
-	__declspec(dllexport) static void Initialize();
-	static bool ENABLE_LOG;
-	static UINT GlobalID;
-	static bool EDITOR_MODE;
-	static const std::string& GetCurrentDirectory();
-	static const std::string& GetPathModels();
-	static const std::string& GetPathTextures();
-	static const std::string& GetPathShaders();
-	static const std::string& GetPathSounds();
-	static const std::string& GetPathFonts();
-	static const std::string& GetPathScripts();
+	static ACConfigurations* Instance();
 
-	static const UINT GetMaxVerticesInBuffer();
-	static const UINT GetMaxIndicesInBuffer();
+	void Initialize();
+
+	bool ENABLE_LOG;
+	UINT GlobalID;
+	bool EDITOR_MODE;
+	const std::string& GetCurrentDirectory();
+	const std::string& GetPathModels();
+	const std::string& GetPathTextures();
+	const std::string& GetPathShaders();
+	const std::string& GetPathSounds();
+	const std::string& GetPathFonts();
+	const std::string& GetPathScripts();
+
+	const UINT GetMaxVerticesInBuffer();
+	const UINT GetMaxIndicesInBuffer();
 };
 
 #endif

@@ -1,19 +1,30 @@
 #include "ACConfigurations.h"
 
-std::string ACConfigurations::AC_CURRENT_DIRECTORY;
-std::string ACConfigurations::AC_PATH_MODELS;
-std::string ACConfigurations::AC_PATH_SHADERS;
-std::string ACConfigurations::AC_PATH_SOUNDS;
-std::string ACConfigurations::AC_PATH_TEXTURES;
-std::string ACConfigurations::AC_PATH_FONTS;
-std::string ACConfigurations::AC_PATH_SCRIPTS;
+ACConfigurations* ACConfigurations::mpInstance = nullptr;
 
-UINT ACConfigurations::MAX_VERTICES_IN_BUFFER;
-UINT ACConfigurations::MAX_INDICES_IN_BUFFER;
-		 
-UINT ACConfigurations::GlobalID = 0;
-bool ACConfigurations::ENABLE_LOG = false;
-bool ACConfigurations::EDITOR_MODE = false;
+ACConfigurations* ACConfigurations::Instance()
+{
+	if (mpInstance == nullptr)
+	{
+		mpInstance = new ACConfigurations();
+		mpInstance->Initialize();
+	}
+
+	return mpInstance;
+};
+
+ACConfigurations::ACConfigurations()
+{
+	GlobalID = 0;
+	ENABLE_LOG = false;
+	EDITOR_MODE = false;
+};
+
+ACConfigurations::~ACConfigurations()
+{
+	int a = 1;
+	int b = a;
+};
 
 void ACConfigurations::Initialize() 
 {

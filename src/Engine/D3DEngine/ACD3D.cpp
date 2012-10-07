@@ -100,7 +100,7 @@ HRESULT ACD3D::Init(HWND hWnd, BOOL enableVSync, BOOL log)
 	}
 
 	//cria o vertexmanager
-	mpVManager = new ACD3DVertexManager(this, ACD3DGlobals::G_pD3dDevice, ACConfigurations::GetMaxVerticesInBuffer(), ACConfigurations::GetMaxIndicesInBuffer(), mpLOG);
+	mpVManager = new ACD3DVertexManager(this, ACD3DGlobals::G_pD3dDevice, ACConfigurations::Instance()->GetMaxVerticesInBuffer(), ACConfigurations::Instance()->GetMaxIndicesInBuffer(), mpLOG);
 	ACD3DGlobals::G_pVertexManager = static_cast<ACD3DVertexManager*>(mpVManager);
 	
 	Log("Init Success");

@@ -180,8 +180,8 @@ namespace ACFramework.FileStruct
                     newBone.BindMatrix = matrix;
                     //absoluta = relativa do atual * absoluta do pai
                     newBone.MatrixAbsolute = matrix * parentBone.MatrixAbsolute;
-                    //inversa da absoluta atual usado no skinning
-                    newBone.InverseBindMatrix = Matrix.Invert(newBone.MatrixAbsolute);
+                    //inversa da matriz relativa
+                    newBone.InverseBindMatrix = Matrix.Invert(newBone.BindMatrix);
 
                     amtModel.Joints.Add(newBone);
                     

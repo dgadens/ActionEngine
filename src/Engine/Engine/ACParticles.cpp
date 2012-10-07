@@ -5,7 +5,7 @@ ACParticles::ACParticles(ACRenderDevice* gDevice, ACContentManager* cManager,
 						UINT numberOfParticles, std::string textureName, ACBLENDSTATE blendState, 
 						BOOL enableDead)
 {
-	GlobalID = ACConfigurations::GlobalID++;
+	GlobalID = ACConfigurations::Instance()->GlobalID++;
 	ppParticles = nullptr;
 
 	mpGDevice = gDevice;
