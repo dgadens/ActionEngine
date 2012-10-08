@@ -209,11 +209,26 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 {
+	//seta para nao ter culling nos triangulos
+	ACRASTERIZESTATE cr = mpGDevice->GetRasterizeState();
+	ACDEPTHBUFFERSTATE ds = mpGDevice->GetDepthBufferState();
+	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullNone);
+	mpGDevice->SetDepthBufferState(ACDEPTHBUFFERSTATE::ACDBS_WriteDisable);
+
+	mpModel->pJoints[0]->BindMatrix = mRootJointMatrix * world;
+	RenderBonesTree(camera, mpModel->pJoints[0]);
+
+	//seta a rasterizacao anterior
+	mpGDevice->SetRasterizeState(cr);
+	mpGDevice->SetDepthBufferState(ds);
+
+
 	for (int i = 0; i < mNumVertices; i++)
 	{
 		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
 		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
 		Matrix invAbcMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
+		Matrix::Invert(&absMatA, &invAbcMatA);
 
 		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
 		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
@@ -229,35 +244,24 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 
 		Matrix skinTransform;
 
-		skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
-		skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
-		skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
-		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
+		skinTransform = (invAbcMatA * relMatA) * 1;
+
+		//skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
+		//skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
+		//skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
+		//skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
 
 		Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform, &mpVSMCache[i].position);
 		Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
 	}
-
+	Matrix abc;
+	mpGDevice->SetWorldMatrix(abc);
 	mpGDevice->Render(VertexFormat::VF_VertexSkinnedMesh, 
 								  mNumVertices, 
 								  mNumIndices, 
 								  mpVSMCache, 
 								  mpIndices, 
 								  mpSkin);
-
-
-	//seta para nao ter culling nos triangulos
-	ACRASTERIZESTATE cr = mpGDevice->GetRasterizeState();
-	ACDEPTHBUFFERSTATE ds = mpGDevice->GetDepthBufferState();
-	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullNone);
-	mpGDevice->SetDepthBufferState(ACDEPTHBUFFERSTATE::ACDBS_WriteDisable);
-
-	mpModel->pJoints[0]->BindMatrix = mRootJointMatrix * world;
-	RenderBonesTree(camera, mpModel->pJoints[0]);
-
-	//seta a rasterizacao anterior
-	mpGDevice->SetRasterizeState(cr);
-	mpGDevice->SetDepthBufferState(ds);
 };
 
 void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
