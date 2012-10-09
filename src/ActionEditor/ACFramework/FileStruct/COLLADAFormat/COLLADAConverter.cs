@@ -181,7 +181,7 @@ namespace ACFramework.FileStruct
                     //absoluta = relativa do atual * absoluta do pai
                     newBone.MatrixAbsolute = matrix * parentBone.MatrixAbsolute;
                     //inversa da matriz relativa
-                    newBone.InverseBindMatrix = Matrix.Invert(newBone.BindMatrix);
+                    newBone.InverseBindMatrix = Matrix.Invert(newBone.MatrixAbsolute);
 
                     amtModel.Joints.Add(newBone);
                     
@@ -199,6 +199,13 @@ namespace ACFramework.FileStruct
             foreach (XElement controller in controllers)
 	        {
                 XElement skin = controller.Element(XName.Get("skin", Namespace));
+
+                //joints elements
+                XElement jointsElements = skin.Element(XName.Get("joints", Namespace));
+                List<XElement> inputJointsElements = jointsElements.Elements(XName.Get("input", Namespace)).ToList();
+                XElement inverseBindMatrixElement = inputJointsElements.Find(item => { return item.Attribute("semantic").Value == "INV_BIND_MATRIX"; });
+                string inverseBindMatrixName = inverseBindMatrixElement.Attribute("source").Value.Substring(1); 
+
 
                 //pega o nome do source
                 XElement vWeightsElement = skin.Element(XName.Get("vertex_weights", Namespace));
@@ -224,6 +231,17 @@ namespace ACFramework.FileStruct
                 
                 //vai no source Joint descoberto e pega a lista de joints e weights
                 List<XElement> sourceElements = skin.Elements(XName.Get("source", Namespace)).ToList();
+
+                //pega todas as matrizes inversas
+                XElement invBindMatSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == inverseBindMatrixName; });
+                XElement floatArrayInvBind = invBindMatSourceElement.Element(XName.Get("float_array", Namespace));
+                int numberOfFloats = int.Parse(floatArrayInvBind.Attribute("count").Value);
+                string invBindMatFloats = floatArrayInvBind.Value;
+                invBindMatFloats = invBindMatFloats.Replace('\n', ' ').Trim();
+                Matrix[] invBindMat = new Matrix[numberOfFloats / 16];
+                for (int i = 0, j = 0; i < numberOfFloats; i+=16, j++)
+                    invBindMat[j] = Tools.ConvertStringToMatrix(invBindMatFloats, i);
+
 
                 //pega a lista de nomes de bones na ordem
                 XElement jointSourceElement = sourceElements.Find(item => { return item.Attribute("id").Value == jointSourceName; });
@@ -252,6 +270,9 @@ namespace ACFramework.FileStruct
                         {
                             _from.Add(j);
                             _to.Add(i);
+
+                            //seta a invesa da matrix
+                            amtModel.Joints[(int)i].InverseBindMatrix = invBindMat[j];
                         }
                     }
                 }

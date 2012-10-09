@@ -228,7 +228,6 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
 		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
 		Matrix invAbcMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
-		Matrix::Invert(&absMatA, &invAbcMatA);
 
 		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
 		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
@@ -244,12 +243,10 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 
 		Matrix skinTransform;
 
-		skinTransform = (invAbcMatA * relMatA) * 1;
-
-		//skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
-		//skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
-		//skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
-		//skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
+		skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
+		skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
+		skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
+		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
 
 		Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform, &mpVSMCache[i].position);
 		Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
