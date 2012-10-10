@@ -66,7 +66,7 @@
             this.txtDestination.Name = "txtDestination";
             this.txtDestination.Size = new System.Drawing.Size(552, 22);
             this.txtDestination.TabIndex = 11;
-            this.txtDestination.Text = "C:\\Projetos\\ShipGameProject\\ShadowWorld\\Demo\\Contents\\Models";
+            this.txtDestination.Text = "C:\\GitHub\\ActionEngine\\src\\Engine\\Demo\\Contents\\Models";
             // 
             // btnImport
             // 

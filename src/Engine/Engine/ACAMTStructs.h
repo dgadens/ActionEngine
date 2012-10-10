@@ -123,6 +123,7 @@ struct AMT_MODEL
 	std::vector<AMT_MESH*>	   pMeshes;              // Meshs
 	std::vector<AMT_MATERIAL*> pMaterials;           // Materials
 	std::vector<AMT_JOINT*>    pJoints;				 // Bones	
+	std::vector<AMT_JOINT*>    pOriginalJoints;		 // Original bones
 };
 
 // -----------------------------------------------------------------

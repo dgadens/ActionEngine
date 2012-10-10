@@ -39,7 +39,7 @@ namespace ACFramework.FileStruct
             #endregion
 
             AMT_MODEL amtModel = ConvertDAEtoAMT(colladaNode);
-            Tools.CenterPivot(ref amtModel);
+          //  Tools.CenterPivot(ref amtModel);
             Tools.UniformScale(ref amtModel);
             Tools.SetYUp(ref amtModel, upVector);
 
@@ -297,7 +297,10 @@ namespace ACFramework.FileStruct
                         for (int j = 0; j < _from.Count; j++)
                         {
                             if (_from[j] == boneIndex)
+                            {
                                 boneIndex = _to[j];
+                                break;
+                            }
                         }
 
 

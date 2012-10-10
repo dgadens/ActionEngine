@@ -114,7 +114,7 @@ void Game::Draw()
 		//mpGDevice->RenderTargetClear(mRenderTargetID, Vector4(0,0,0,1));
 		//mpGDevice->RenderTargetActivate(mRenderTargetID);
 
-		mpFloor->Draw(mpCamera);
+		//mpFloor->Draw(mpCamera);
 		mpPowerCube->Draw(mpCamera);
 
 		//seta o render target para screen

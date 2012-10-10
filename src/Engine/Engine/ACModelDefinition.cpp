@@ -216,6 +216,7 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 	mpGDevice->SetDepthBufferState(ACDEPTHBUFFERSTATE::ACDBS_WriteDisable);
 
 	mpModel->pJoints[0]->BindMatrix = mRootJointMatrix * world;
+	mpModel->pJoints[0]->MatrixAbsolute = mpModel->pJoints[0]->BindMatrix;
 	RenderBonesTree(camera, mpModel->pJoints[0]);
 
 	//seta a rasterizacao anterior
@@ -227,29 +228,49 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 	{
 		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
 		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
-		Matrix invAbcMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
+	
+		Matrix invAbcMatA = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
+
+//		Matrix invAbcMatA;
+//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute, &invAbcMatA);
 
 		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
 		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
-		Matrix invAbcMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix;
+		
+		Matrix invAbcMatB = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix;
+//		Matrix invAbcMatB;
+//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute, &invAbcMatB);
+
 
 		Matrix relMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->BindMatrix;
 		Matrix absMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
-		Matrix invAbcMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix;
+
+		Matrix invAbcMatC = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix;
+//		Matrix invAbcMatC;
+//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute, &invAbcMatC);
+
 
 		Matrix relMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->BindMatrix;
 		Matrix absMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
-		Matrix invAbcMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix;
+
+		Matrix invAbcMatD = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix;
+//		Matrix invAbcMatD;
+//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute, &invAbcMatD);
+
 
 		Matrix skinTransform;
+		//skinTransform.M11 = skinTransform.M22 = skinTransform.M33 = skinTransform.M44 = 0;
 
-		skinTransform = skinTransform + ((invAbcMatA * absMatA) * mpModel->pVertices[i]->BoneWeight_A);
-		skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
+		Vector3::Transform(&mpModel->pVertices[i]->Position, &invAbcMatA, &mpVSMCache[i].position);
+
+		skinTransform = absMatA; //* mpModel->pVertices[i]->BoneWeight_A;
+		//skinTransform = skinTransform +  (absMatA * mpModel->pVertices[i]->BoneWeight_A);
+		/*skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
 		skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
-		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);
+		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);*/
 
-		Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform, &mpVSMCache[i].position);
-		Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
+		Vector3::Transform(&mpVSMCache[i].position, &skinTransform, &mpVSMCache[i].position);
+		//Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
 	}
 	Matrix abc;
 	mpGDevice->SetWorldMatrix(abc);

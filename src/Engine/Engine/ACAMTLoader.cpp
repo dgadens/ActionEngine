@@ -179,6 +179,13 @@ HRESULT ACAMTLoader::ReadJoints( AMT_MODEL* outModel )
 		fread(&pJoint->InverseBindMatrix, sizeof ( FLOAT ), 16, mpFile);
 	}
 
+	for (int i = 0; i < numJoints; i++)
+	{
+		AMT_JOINT* joint = new AMT_JOINT();
+		memcpy(joint, outModel->pJoints[i], sizeof (AMT_JOINT));
+		outModel->pOriginalJoints.push_back(joint);
+	}
+
 	return AC_OK;
 };
 
