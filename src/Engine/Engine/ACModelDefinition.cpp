@@ -229,51 +229,36 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
 		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
 	
-		Matrix invAbcMatA = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix;
-
-//		Matrix invAbcMatA;
-//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute, &invAbcMatA);
-
 		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
 		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
 		
-		Matrix invAbcMatB = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix;
-//		Matrix invAbcMatB;
-//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute, &invAbcMatB);
-
-
 		Matrix relMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->BindMatrix;
 		Matrix absMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
-
-		Matrix invAbcMatC = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix;
-//		Matrix invAbcMatC;
-//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute, &invAbcMatC);
-
-
+	
 		Matrix relMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->BindMatrix;
 		Matrix absMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
 
-		Matrix invAbcMatD = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix;
-//		Matrix invAbcMatD;
-//		Matrix::Invert(&mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute, &invAbcMatD);
-
 
 		Matrix skinTransform;
-		//skinTransform.M11 = skinTransform.M22 = skinTransform.M33 = skinTransform.M44 = 0;
+		skinTransform.M41 = 0;
+		skinTransform.M42 = 0;
+		skinTransform.M43 = 0;
+		skinTransform.M44 = 0;
 
-		Vector3::Transform(&mpModel->pVertices[i]->Position, &invAbcMatA, &mpVSMCache[i].position);
+		Matrix pqp1 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
+		Matrix pqp2 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
+		Matrix pqp3 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
+		Matrix pqp4 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
 
-		skinTransform = absMatA; //* mpModel->pVertices[i]->BoneWeight_A;
-		//skinTransform = skinTransform +  (absMatA * mpModel->pVertices[i]->BoneWeight_A);
-		/*skinTransform = skinTransform + ((invAbcMatB * absMatB) * mpModel->pVertices[i]->BoneWeight_B);
-		skinTransform = skinTransform + ((invAbcMatC * absMatC) * mpModel->pVertices[i]->BoneWeight_C);
-		skinTransform = skinTransform + ((invAbcMatD * absMatD) * mpModel->pVertices[i]->BoneWeight_D);*/
-
-		Vector3::Transform(&mpVSMCache[i].position, &skinTransform, &mpVSMCache[i].position);
-		//Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform, &mpVSMCache[i].normal);
+		skinTransform = skinTransform + pqp1 * mpModel->pVertices[i]->BoneWeight_A;
+		skinTransform = skinTransform + pqp2 * mpModel->pVertices[i]->BoneWeight_B;
+		skinTransform = skinTransform + pqp3 * mpModel->pVertices[i]->BoneWeight_C;
+		skinTransform = skinTransform + pqp4 * mpModel->pVertices[i]->BoneWeight_D;
+		
+		Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform , &mpVSMCache[i].position);
 	}
-	Matrix abc;
-	mpGDevice->SetWorldMatrix(abc);
+	
+	mpGDevice->SetWorldMatrix(world);
 	mpGDevice->Render(VertexFormat::VF_VertexSkinnedMesh, 
 								  mNumVertices, 
 								  mNumIndices, 
@@ -288,6 +273,8 @@ void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
 		joint->MatrixAbsolute = joint->BindMatrix * mpModel->pJoints[joint->ParentID]->MatrixAbsolute;
 	else
 		joint->MatrixAbsolute = joint->BindMatrix;
+
+	Matrix::Invert(&joint->MatrixAbsolute, &joint->InverseBindMatrix);
 
 	mpJointMark->Render(camera, joint->MatrixAbsolute);
 
