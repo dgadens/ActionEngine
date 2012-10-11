@@ -87,22 +87,22 @@ void ACModelDefinition::PrepareVPNT(AMT_MODEL* model)
 		mpIndices[index++] = model->pFaces[i]->Indices[2];
 	}
 
-	ACSkin* pSkin = mpCManager->CreateSkin();
-	pSkin->Material.AmbientColor = model->pMaterials[0]->Ambient;
-	pSkin->Material.EmissiveColor = model->pMaterials[0]->Emissive;
-	pSkin->Material.SpecularColor = model->pMaterials[0]->Specular;
-	pSkin->Material.SpecularPower = model->pMaterials[0]->SpecularPower;
-	pSkin->Material.DiffuseColor = Vector4(&model->pMaterials[0]->Diffuse, model->pMaterials[0]->Transparency);
+	mpSkin = mpCManager->CreateSkin();
+	mpSkin->Material.AmbientColor = model->pMaterials[0]->Ambient;
+	mpSkin->Material.EmissiveColor = model->pMaterials[0]->Emissive;
+	mpSkin->Material.SpecularColor = model->pMaterials[0]->Specular;
+	mpSkin->Material.SpecularPower = model->pMaterials[0]->SpecularPower;
+	mpSkin->Material.DiffuseColor = Vector4(&model->pMaterials[0]->Diffuse, model->pMaterials[0]->Transparency);
 
 	//carrega as texturas
 	if (model->pMaterials[0]->DiffuseTexture[0] != '\0')
-		pSkin->Textures[0] = mpCManager->LoadTexture(model->pMaterials[0]->DiffuseTexture);
+		mpSkin->Textures[0] = mpCManager->LoadTexture(model->pMaterials[0]->DiffuseTexture);
 	if (model->pMaterials[0]->SpecularTexture[0]  != '\0')
-		pSkin->Textures[1] = mpCManager->LoadTexture(model->pMaterials[0]->SpecularTexture);
+		mpSkin->Textures[1] = mpCManager->LoadTexture(model->pMaterials[0]->SpecularTexture);
 	if (model->pMaterials[0]->NormalTexture[0]  != '\0')
-		pSkin->Textures[2] = mpCManager->LoadTexture(model->pMaterials[0]->NormalTexture);
+		mpSkin->Textures[2] = mpCManager->LoadTexture(model->pMaterials[0]->NormalTexture);
 	if (model->pMaterials[0]->AnimatedTexture[0]  != '\0')
-		pSkin->Textures[3] = mpCManager->LoadTexture(model->pMaterials[0]->AnimatedTexture);
+		mpSkin->Textures[3] = mpCManager->LoadTexture(model->pMaterials[0]->AnimatedTexture);
 
 	//ja cria o vertexbuffer na api
 	mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexPositionNormalTextured, 
@@ -110,7 +110,7 @@ void ACModelDefinition::PrepareVPNT(AMT_MODEL* model)
 								  mNumIndices, 
 								  mpVPNTCache, 
 								  mpIndices, 
-								  pSkin,
+								  mpSkin,
 								  &pVertexBuffer);
 };
 
@@ -173,22 +173,9 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 								  mNumIndices, 
 								  mpVSMCache, 
 								  mpIndices, 
-								  pSkin,
+								  mpSkin,
 								  &pVertexBuffer);*/
 };
-
-//void ACModelDefinition::SetupBones(AMT_MODEL* model)
-//{
-	//mpLines = new ACVertexPositionColored[model->Head.NumJoints * 2 - 1];
-	//GenerateLines(model->pJoints[0]);
-//};
-
-//void ACModelDefinition::GenerateLines(AMT_JOINT* joint)
-//{
-	//todo: metodo recursivo para buscar a arvore e adicionar as linhas
-	//joint->
-	//mpLines[i].position
-//};
 
 void ACModelDefinition::SetSkin(ACSkin* skin)
 {
@@ -209,6 +196,8 @@ const ACSkin const * ACModelDefinition::GetSkin()
 
 void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 {
+
+
 	//seta para nao ter culling nos triangulos
 	ACRASTERIZESTATE cr = mpGDevice->GetRasterizeState();
 	ACDEPTHBUFFERSTATE ds = mpGDevice->GetDepthBufferState();
@@ -224,32 +213,24 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 	mpGDevice->SetDepthBufferState(ds);
 
 
-	for (int i = 0; i < mNumVertices; i++)
+			for (int i = 0; i < mNumVertices; i++)
 	{
-		Matrix relMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->BindMatrix;
-		Matrix absMatA = mpModel->pJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
-	
-		Matrix relMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->BindMatrix;
-		Matrix absMatB = mpModel->pJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
-		
-		Matrix relMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->BindMatrix;
-		Matrix absMatC = mpModel->pJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
-	
-		Matrix relMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->BindMatrix;
-		Matrix absMatD = mpModel->pJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
-
-
 		Matrix skinTransform;
 		skinTransform.M41 = 0;
 		skinTransform.M42 = 0;
 		skinTransform.M43 = 0;
 		skinTransform.M44 = 0;
 
-		Matrix pqp1 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_A]->MatrixAbsolute;
-		Matrix pqp2 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_B]->MatrixAbsolute;
-		Matrix pqp3 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_C]->MatrixAbsolute;
-		Matrix pqp4 = mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->InverseBindMatrix * mpModel->pOriginalJoints[mpModel->pVertices[i]->BoneID_D]->MatrixAbsolute;
+		int indexBoneA = mpModel->pVertices[i]->BoneID_A;
+		int indexBoneB = mpModel->pVertices[i]->BoneID_B;
+		int indexBoneC = mpModel->pVertices[i]->BoneID_C;
+		int indexBoneD = mpModel->pVertices[i]->BoneID_D;
 
+		Matrix pqp1 = mpModel->pOriginalJoints[indexBoneA]->InverseBindMatrix * mpModel->pOriginalJoints[indexBoneA]->MatrixAbsolute;
+		Matrix pqp2 = mpModel->pOriginalJoints[indexBoneB]->InverseBindMatrix * mpModel->pOriginalJoints[indexBoneB]->MatrixAbsolute;
+		Matrix pqp3 = mpModel->pOriginalJoints[indexBoneC]->InverseBindMatrix * mpModel->pOriginalJoints[indexBoneC]->MatrixAbsolute;
+		Matrix pqp4 = mpModel->pOriginalJoints[indexBoneD]->InverseBindMatrix * mpModel->pOriginalJoints[indexBoneD]->MatrixAbsolute;
+		
 		skinTransform = skinTransform + pqp1 * mpModel->pVertices[i]->BoneWeight_A;
 		skinTransform = skinTransform + pqp2 * mpModel->pVertices[i]->BoneWeight_B;
 		skinTransform = skinTransform + pqp3 * mpModel->pVertices[i]->BoneWeight_C;
@@ -265,6 +246,7 @@ void ACModelDefinition::RenderBones(ACCamera* camera, Matrix& world)
 								  mpVSMCache, 
 								  mpIndices, 
 								  mpSkin);
+
 };
 
 void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
@@ -273,8 +255,6 @@ void ACModelDefinition::RenderBonesTree(ACCamera* camera, AMT_JOINT* joint)
 		joint->MatrixAbsolute = joint->BindMatrix * mpModel->pJoints[joint->ParentID]->MatrixAbsolute;
 	else
 		joint->MatrixAbsolute = joint->BindMatrix;
-
-	Matrix::Invert(&joint->MatrixAbsolute, &joint->InverseBindMatrix);
 
 	mpJointMark->Render(camera, joint->MatrixAbsolute);
 

@@ -43,6 +43,8 @@ namespace ACFramework.FileStructs
         public float BoneWeight_D;              // peso do bone sobre o vertices
         public uint Flag;                          // flag para objetivos diversos
 
+        public int SID;    //id original do vertices (nao é exportado) é apenas um auxilio para achar o vertice quando for atualizar o peso dos bones
+
         public static bool operator ==(AMT_VERTEX v1, AMT_VERTEX v2)
         {
             if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 ||

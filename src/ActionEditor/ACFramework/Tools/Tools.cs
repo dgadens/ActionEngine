@@ -101,7 +101,7 @@ namespace ACFramework
             {
                 mat[i] = float.Parse(splitValue[i], CultureInfo.InvariantCulture);
 
-                if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
+                //if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
             }
 
             //armazendo como column major o collada armazena como rowmajor
@@ -157,19 +157,24 @@ namespace ACFramework
             }
 
             //redimensiona tb todos os bones e os keyframes
+            Matrix scale = Matrix.CreateScale(scalefactor);
             if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
                 {
                     AMT_JOINT v = model.Joints[i];
-                    v.BindMatrix.Translation = v.BindMatrix.Translation * scalefactor;
+
+                    //como ele mexeu na posicao entao mexe so no raiz
+                    if (v.Name == "Root")
+                        v.BindMatrix *= scale;
+
                     if (model.Joints[i].ParentID != -1)
                         v.MatrixAbsolute = model.Joints[i].BindMatrix *
                                            model.Joints[model.Joints[i].ParentID].MatrixAbsolute;
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+                    v.InverseBindMatrix *= scale;
 
                     for (int j = 0; j < v.KFData.Count; j++)
                     {
@@ -217,7 +222,7 @@ namespace ACFramework
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+                    v.InverseBindMatrix.Translation = v.InverseBindMatrix.Translation - positionAjust;
 
                     //mexe so no raiz
                     if (v.Name == "Root")
@@ -275,7 +280,7 @@ namespace ACFramework
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix = Matrix.Invert(v.MatrixAbsolute);
+                    v.InverseBindMatrix *= rotation;
 
                     //mexe so no raiz
                     if (v.Name == "Root")

@@ -39,7 +39,7 @@ namespace ACFramework.FileStruct
             #endregion
 
             AMT_MODEL amtModel = ConvertDAEtoAMT(colladaNode);
-          //  Tools.CenterPivot(ref amtModel);
+            Tools.CenterPivot(ref amtModel);
             Tools.UniformScale(ref amtModel);
             Tools.SetYUp(ref amtModel, upVector);
 
@@ -284,10 +284,21 @@ namespace ACFramework.FileStruct
                 {
                     //pra cada vertice ele procura no maximo 4 bones q o influenciam
                     maxBonesPerVertex = 4;
-                    AMT_VERTEX vertex = amtModel.Vertices[i];
+
+                    //primeira coisa encontrar todos os vertices da lista q ja existe com o SID = i
+                    List<int> finalVertexListIndices = new List<int>();
+                    for (int vi = 0; vi < amtModel.Vertices.Count; vi++)
+			        {
+                        if (amtModel.Vertices[vi].SID == i)
+                            finalVertexListIndices.Add(vi);
+			        }
+                    
+                    //pega o primeiro vertices na lista ai de cima e atualiza os pesos e os indices
+                    AMT_VERTEX firstVertex = amtModel.Vertices[finalVertexListIndices[0]];
 
                     int numInfluence = int.Parse(influenceNumber[i]);
 
+                    #region PROCURA OS PESOS E INDICES PRO PRIMEIRO VERTICES DA LISTA
                     while (numInfluence > 0)
                     {
                         numInfluence--;
@@ -303,38 +314,52 @@ namespace ACFramework.FileStruct
                             }
                         }
 
-
                         uint weightIndex = uint.Parse(boneIndexWeight[vIndex++]);
 
                         if (maxBonesPerVertex == 4)
                         {
-                            vertex.BoneID_A = boneIndex;
-                            vertex.BoneWeight_A = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneID_A = boneIndex;
+                            firstVertex.BoneWeight_A = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 3)
                         {
-                            vertex.BoneID_B = boneIndex;
-                            vertex.BoneWeight_B = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneID_B = boneIndex;
+                            firstVertex.BoneWeight_B = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 2)
                         {
-                            vertex.BoneID_C = boneIndex;
-                            vertex.BoneWeight_C = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneID_C = boneIndex;
+                            firstVertex.BoneWeight_C = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 1)
                         {
-                            vertex.BoneID_D = boneIndex;
-                            vertex.BoneWeight_D = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneID_D = boneIndex;
+                            firstVertex.BoneWeight_D = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
+                    }
+                    #endregion
 
+                    //depois de achar os pesos e indices do primeiro vertice da finalVertexListIndices entao ele so copia para os outros da lista
+                    for (int vi = 1; vi < finalVertexListIndices.Count; vi++)
+                    {
+                        AMT_VERTEX vertex = amtModel.Vertices[finalVertexListIndices[vi]];
+                        vertex.BoneID_A = firstVertex.BoneID_A;
+                        vertex.BoneID_B = firstVertex.BoneID_B;
+                        vertex.BoneID_C = firstVertex.BoneID_C;
+                        vertex.BoneID_D = firstVertex.BoneID_D;
+
+                        vertex.BoneWeight_A = firstVertex.BoneWeight_A;
+                        vertex.BoneWeight_B = firstVertex.BoneWeight_B;
+                        vertex.BoneWeight_C = firstVertex.BoneWeight_C;
+                        vertex.BoneWeight_D = firstVertex.BoneWeight_D;
                     }
                 }
 	        }
@@ -503,6 +528,7 @@ namespace ACFramework.FileStruct
             for (int i = 0; i < positionIndices.Count; i++)
             {
                 AMT_VERTEX v = new AMT_VERTEX();
+                v.SID = positionIndices[i]; //utilizado para encontrar esses vertices depois quando for atualizar o peso dos bones
                 v.Position = positions[positionIndices[i]];
                 v.Normal = normals[normalIndices[i]];
                 v.TexCoord1 = texcoords[texcoordIndices[i]];
