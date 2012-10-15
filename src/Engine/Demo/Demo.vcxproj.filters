@@ -69,9 +69,6 @@
     <ClCompile Include="LinePointTest.cpp">
       <Filter>Source Files\Testes</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GPowerCube.cpp">
       <Filter>Source Files\Testes</Filter>
     </ClCompile>
@@ -90,6 +87,7 @@
     <ClCompile Include="GGameInput.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h">

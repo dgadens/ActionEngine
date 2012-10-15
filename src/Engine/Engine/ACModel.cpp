@@ -103,7 +103,7 @@ void ACModel::Load(const std::string& name)
 	if (pModelDefinition->HasSkeleton)
 		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexSkinnedMesh);
 	else
-		mpVS = mpCManager->LoadVertexShader("LightingTextured.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
+		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
 
 	mpPS = mpCManager->LoadPixelShader("LightingTextured.PShlsl4");
 };
@@ -135,6 +135,9 @@ void ACModel::Update(FLOAT elapsedTime)
 	/*		OrientedBoundingBox::TransformOBB(&pModelDefinition->OBBOriginal, &World, &OBB);
 			BoundingBox::CreateFromPoints(OrientedBoundingBox::CORNER_COUNT, OBB.pEdges, &BB);*/
 
+			if (pModelDefinition->HasSkeleton)
+				pModelDefinition->UpdateBones(World);
+
 			mChangeTransformation = FALSE;
 		}
 	}
@@ -152,18 +155,25 @@ void ACModel::Render(ACCamera* camera)
 		mpGDevice->ActiveVS(mpVS);
 		mpGDevice->ActivePS(mpPS);
 
-		mpGDevice->SetWorldMatrix(World);
+		//se tiver esqueleto entao a matriz world tem q ser a identidade
+		if (pModelDefinition->HasSkeleton)
+		{
+			Matrix identity;
+			mpGDevice->SetWorldMatrix(identity);
+		}
+		else
+			mpGDevice->SetWorldMatrix(World);
 
 		mpGDevice->ApplyConstants();
 
 		//renderiza
-//		mpGDevice->Render(pModelDefinition->pVertexBuffer);	
+		pModelDefinition->RenderModel(camera);
 	}
 
 	if (mRenderBones)
 	{
 		if (pModelDefinition->HasSkeleton)
-			pModelDefinition->RenderBones(camera, World);
+			pModelDefinition->RenderBones(camera);
 	}
 
 	if (mRenderNormals)

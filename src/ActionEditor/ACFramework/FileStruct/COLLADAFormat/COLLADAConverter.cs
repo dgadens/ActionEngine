@@ -39,9 +39,9 @@ namespace ACFramework.FileStruct
             #endregion
 
             AMT_MODEL amtModel = ConvertDAEtoAMT(colladaNode);
-            Tools.CenterPivot(ref amtModel);
             Tools.UniformScale(ref amtModel);
             Tools.SetYUp(ref amtModel, upVector);
+            Tools.CenterPivot(ref amtModel);
 
             return amtModel;
         }
@@ -228,6 +228,11 @@ namespace ACFramework.FileStruct
                 //pega o bindmatrix
                 string bindShapeMatrix = skin.Element(XName.Get("bind_shape_matrix", Namespace)).Value;
                 Matrix bindMatrix = Tools.ConvertStringToMatrix(bindShapeMatrix, 0);
+                foreach (var item in amtModel.Joints)
+                {
+                    if (item.Name == "Root")
+                        item.BindMatrix *= bindMatrix;
+                }
                 
                 //vai no source Joint descoberto e pega a lista de joints e weights
                 List<XElement> sourceElements = skin.Elements(XName.Get("source", Namespace)).ToList();
@@ -319,28 +324,28 @@ namespace ACFramework.FileStruct
                         if (maxBonesPerVertex == 4)
                         {
                             firstVertex.BoneID_A = boneIndex;
-                            firstVertex.BoneWeight_A = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneWeight_A = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 3)
                         {
                             firstVertex.BoneID_B = boneIndex;
-                            firstVertex.BoneWeight_B = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneWeight_B = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 2)
                         {
                             firstVertex.BoneID_C = boneIndex;
-                            firstVertex.BoneWeight_C = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneWeight_C = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
                         if (maxBonesPerVertex == 1)
                         {
                             firstVertex.BoneID_D = boneIndex;
-                            firstVertex.BoneWeight_D = float.Parse(weights[weightIndex], CultureInfo.InvariantCulture);
+                            firstVertex.BoneWeight_D = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
                             maxBonesPerVertex--;
                             continue;
                         }
@@ -662,7 +667,7 @@ namespace ACFramework.FileStruct
                 {
                     string transparencyFactor = transparency.Element(XName.Get("float", Namespace)).Value;
                     if (!string.IsNullOrEmpty(transparencyFactor))
-                        material.Transparency = float.Parse(transparencyFactor, CultureInfo.InvariantCulture);
+                        material.Transparency = System.Convert.ToSingle(transparencyFactor, CultureInfo.InvariantCulture);
                     else
                         material.Transparency = 0.0f; //opaco
                 }
@@ -805,9 +810,9 @@ namespace ACFramework.FileStruct
                 //adiciona os valores na ordem certa XYZ
                 for (int i = 0; i < values.Length; i+=stride)
 			    {
-                    positions.Add(new Vector3(float.Parse(values[i + X], CultureInfo.InvariantCulture), 
-                                              float.Parse(values[i + Y], CultureInfo.InvariantCulture), 
-                                              float.Parse(values[i + Z], CultureInfo.InvariantCulture)));			 
+                    positions.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));			 
 			    }
             }
 
@@ -846,9 +851,9 @@ namespace ACFramework.FileStruct
                 //adiciona os valores na ordem certa XYZ
                 for (int i = 0; i < values.Length; i+=stride)
 			    {
-                    normals.Add(new Vector3(float.Parse(values[i + X], CultureInfo.InvariantCulture), 
-                                            float.Parse(values[i + Y], CultureInfo.InvariantCulture), 
-                                            float.Parse(values[i + Z], CultureInfo.InvariantCulture)));			 
+                    normals.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
+                                            System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
+                                            System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));			 
 			    }
             }
 
@@ -885,8 +890,8 @@ namespace ACFramework.FileStruct
                 //adiciona os valores na ordem certa XYZ
                 for (int i = 0; i < values.Length; i += stride)
 			    {
-                    texcoords.Add(new Vector2(float.Parse(values[i + S], CultureInfo.InvariantCulture), 
-                                              float.Parse(values[i + T], CultureInfo.InvariantCulture)));			 
+                    texcoords.Add(new Vector2(System.Convert.ToSingle(values[i + S], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + T], CultureInfo.InvariantCulture)));			 
 			    }
             }
 

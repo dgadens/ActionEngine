@@ -40,11 +40,8 @@ namespace ACFramework
 
             if (splitValue.Length >= 2)
             {
-                ret.X = float.Parse(splitValue[0], CultureInfo.InvariantCulture);
-                ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
-
-                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
-                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
+                ret.X = Convert.ToSingle(splitValue[0], CultureInfo.InvariantCulture);
+                ret.Y = Convert.ToSingle(splitValue[1], CultureInfo.InvariantCulture);
             }
 
             return ret;
@@ -57,13 +54,9 @@ namespace ACFramework
 
             if (splitValue.Length >= 3)
             {
-                ret.X = float.Parse(splitValue[0], CultureInfo.InvariantCulture);
-                ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
-                ret.Z = float.Parse(splitValue[2], CultureInfo.InvariantCulture);
-
-                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
-                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
-                if (Math.Abs(ret.Z) < 0.000001f) ret.Z = 0.0f;
+                ret.X = Convert.ToSingle(splitValue[0], CultureInfo.InvariantCulture);
+                ret.Y = Convert.ToSingle(splitValue[1], CultureInfo.InvariantCulture);
+                ret.Z = Convert.ToSingle(splitValue[2], CultureInfo.InvariantCulture);                       
             }
 
             return ret;
@@ -76,15 +69,10 @@ namespace ACFramework
 
             if (splitValue.Length == 4)
             {
-                ret.X = float.Parse(splitValue[0], CultureInfo.InvariantCulture);
-                ret.Y = float.Parse(splitValue[1], CultureInfo.InvariantCulture);
-                ret.Z = float.Parse(splitValue[2], CultureInfo.InvariantCulture);
-                ret.W = float.Parse(splitValue[3], CultureInfo.InvariantCulture);
-
-                if (Math.Abs(ret.X) < 0.000001f) ret.X = 0.0f;
-                if (Math.Abs(ret.Y) < 0.000001f) ret.Y = 0.0f;
-                if (Math.Abs(ret.Z) < 0.000001f) ret.Z = 0.0f;
-                if (Math.Abs(ret.W) < 0.000001f) ret.W = 0.0f;
+                ret.X = Convert.ToSingle(splitValue[0], CultureInfo.InvariantCulture);
+                ret.Y = Convert.ToSingle(splitValue[1], CultureInfo.InvariantCulture);
+                ret.Z = Convert.ToSingle(splitValue[2], CultureInfo.InvariantCulture);
+                ret.W = Convert.ToSingle(splitValue[3], CultureInfo.InvariantCulture);
             }
 
             return ret;
@@ -98,11 +86,7 @@ namespace ACFramework
             //crio um array de floats
             float[] mat = new float[splitValue.Length];
             for (int i = 0; i < mat.Length; i++)
-            {
-                mat[i] = float.Parse(splitValue[i], CultureInfo.InvariantCulture);
-
-                //if (Math.Abs(mat[i]) < 0.000001f) mat[i] = 0.0f;
-            }
+                mat[i] = Convert.ToSingle(splitValue[i], CultureInfo.InvariantCulture);
 
             //armazendo como column major o collada armazena como rowmajor
             ret = new Matrix(mat[offset + 0], mat[offset + 4], mat[offset + 8], mat[offset + 12],
@@ -141,23 +125,22 @@ namespace ACFramework
         {
             List<Vector3> vertices = new List<Vector3>();
             for (int i = 0; i < model.Vertices.Count; i++)
-            {
                 vertices.Add(model.Vertices[i].Position);
-            }
 
             BoundingSphere sphere = BoundingSphere.CreateFromPoints(vertices);
 
             //redimensiona os vertices
             float scalefactor = 1.0f / sphere.Radius;
-            for (int i = 0; i < model.Vertices.Count; i++)
-            {
-                AMT_VERTEX v = model.Vertices[i];
-                v.Position = v.Position * scalefactor;
-                model.Vertices[i] = v;
-            }
 
             //redimensiona tb todos os bones e os keyframes
             Matrix scale = Matrix.CreateScale(scalefactor);
+
+            for (int i = 0; i < model.Vertices.Count; i++)
+            {
+                model.Vertices[i].Position = Vector3.Transform(model.Vertices[i].Position, scale);
+                model.Vertices[i].Normal = Vector3.TransformNormal(model.Vertices[i].Normal, scale);
+            }
+
             if (model.Joints != null)
             {
                 for (int i = 0; i < model.Joints.Count; i++)
@@ -174,12 +157,12 @@ namespace ACFramework
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix *= scale;
+                    v.InverseBindMatrix = Matrix.Invert(scale) * v.InverseBindMatrix;
 
                     for (int j = 0; j < v.KFData.Count; j++)
                     {
                         AMT_KF p = v.KFData[j];
-                        p.bindMatrix.Translation = p.bindMatrix.Translation * scalefactor;
+                        p.bindMatrix *= scale;
                         v.KFData[j] = p;
                     }
 
@@ -195,15 +178,13 @@ namespace ACFramework
                 vertices.Add(model.Vertices[i].Position);
 
             BoundingBox bb = BoundingBox.CreateFromPoints(vertices);
-            Vector3 positionAjust = (bb.Max + bb.Min) / 2;
+            Vector3 positionAjust = -(bb.Max + bb.Min) / 2;
+
+            Matrix translation = Matrix.CreateTranslation(positionAjust);
 
             //redimensiona os vertices
             for (int i = 0; i < model.Vertices.Count; i++)
-            {
-                AMT_VERTEX v = model.Vertices[i];
-                v.Position = v.Position - positionAjust;
-                model.Vertices[i] = v;
-            }
+                model.Vertices[i].Position = Vector3.Transform(model.Vertices[i].Position, translation);
 
             //reposiciona tb todos os bones e os keyframes
             if (model.Joints != null)
@@ -214,7 +195,7 @@ namespace ACFramework
 
                     //como ele mexeu na posicao entao mexe so no raiz
                     if (v.Name == "Root")
-                        v.BindMatrix.Translation = v.BindMatrix.Translation - positionAjust;
+                        v.BindMatrix *= translation;
 
                     if (model.Joints[i].ParentID != -1)
                         v.MatrixAbsolute = model.Joints[i].BindMatrix *
@@ -222,7 +203,7 @@ namespace ACFramework
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix.Translation = v.InverseBindMatrix.Translation - positionAjust;
+                    v.InverseBindMatrix = Matrix.Invert(translation) * v.InverseBindMatrix;
 
                     //mexe so no raiz
                     if (v.Name == "Root")
@@ -230,7 +211,7 @@ namespace ACFramework
                         for (int j = 0; j < v.KFData.Count; j++)
                         {
                             AMT_KF p = v.KFData[j];
-                            p.bindMatrix.Translation = p.bindMatrix.Translation - positionAjust;
+                            p.bindMatrix *= translation;
                             v.KFData[j] = p;
                         }
                     }
@@ -257,12 +238,7 @@ namespace ACFramework
                 AMT_VERTEX v = model.Vertices[i];
                 Vector3.Transform(ref v.Position, ref rotation, out v.Position);
                 Vector3.TransformNormal(ref v.Normal, ref rotation, out v.Normal);
-                v.Normal.X = Math.Abs(v.Normal.X) < 0.00001f ? 0 : v.Normal.X;
-                v.Normal.Y = Math.Abs(v.Normal.Y) < 0.00001f ? 0 : v.Normal.Y;
-                v.Normal.Z = Math.Abs(v.Normal.Z) < 0.00001f ? 0 : v.Normal.Z;
-                model.Vertices[i] = v;
             }
-
 
             if (model.Joints != null)
             {
@@ -280,8 +256,8 @@ namespace ACFramework
                     else
                         v.MatrixAbsolute = model.Joints[i].BindMatrix;
 
-                    v.InverseBindMatrix *= rotation;
-
+                    v.InverseBindMatrix = Matrix.Invert(rotation) * v.InverseBindMatrix;
+                      
                     //mexe so no raiz
                     if (v.Name == "Root")
                     {
