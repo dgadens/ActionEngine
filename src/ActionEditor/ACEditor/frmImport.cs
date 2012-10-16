@@ -49,10 +49,6 @@ namespace ACEditor
 
                 switch (fileType)
                 {
-                    case ".MS3D":
-                        converter = new MS3DConverter();
-                        model = converter.Convert(txtFilePath.Text, _import);
-                        break;
                     case ".DAE":
                         converter = new COLLADAConverter();
                         model = converter.Convert(txtFilePath.Text, _import);

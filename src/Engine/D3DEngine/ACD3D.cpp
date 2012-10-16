@@ -1083,6 +1083,10 @@ void ACD3D::ActiveVS(ACVertexShader* vertexShader)
 				case VF_VertexSprite: 	
 					 ACD3DGlobals::G_pContext->IASetInputLayout(ACD3DVertexLayoutProvider::pVertexSpriteLayout); 
 				break;
+				case VF_VertexSkinnedMesh: 	
+					 ACD3DGlobals::G_pContext->IASetInputLayout(ACD3DVertexLayoutProvider::pVertexSkinnedMeshLayout); 
+				break;
+
 			};
 		}
 		else

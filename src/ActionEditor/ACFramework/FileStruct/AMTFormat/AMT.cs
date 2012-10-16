@@ -33,30 +33,26 @@ namespace ACFramework.FileStructs
         public Vector2 TexCoord1;                 // UV 0 Texturescoor.
         public Vector2 TexCoord2;                 // UV 1 Texturescoor.
         public Vector3 Normal;                    // Normalvector
-        public uint BoneID_A;                  // Id dos bones q influenciam o vertice
-        public float BoneWeight_A;              // peso do bone sobre o vertices
-        public uint BoneID_B;                  // Id dos bones q influenciam o vertice
-        public float BoneWeight_B;              // peso do bone sobre o vertices
-        public uint BoneID_C;                  // Id dos bones q influenciam o vertice
-        public float BoneWeight_C;              // peso do bone sobre o vertices
-        public uint BoneID_D;                  // Id dos bones q influenciam o vertice
-        public float BoneWeight_D;              // peso do bone sobre o vertices
+        public uint[] BoneIndices;
+        public float[] BoneWeights;
         public uint Flag;                          // flag para objetivos diversos
 
         public int SID;    //id original do vertices (nao é exportado) é apenas um auxilio para achar o vertice quando for atualizar o peso dos bones
 
         public static bool operator ==(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 ||
-                v1.Normal != v2.Normal || 
-                v1.BoneID_A != v2.BoneID_A ||
-                v1.BoneID_B != v2.BoneID_B ||
-                v1.BoneID_C != v2.BoneID_C ||
-                v1.BoneID_D != v2.BoneID_D || 
-                v1.BoneWeight_A != v2.BoneWeight_A ||
-                v1.BoneWeight_B != v2.BoneWeight_B ||
-                v1.BoneWeight_C != v2.BoneWeight_C ||
-                v1.BoneWeight_D != v2.BoneWeight_D)
+            for (int i = 0; i < 4; i++)
+			{
+                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                    v1.BoneWeights[i] != v2.BoneWeights[i])
+                    return false;
+			} 
+
+            if (v1.Position != v2.Position || 
+                v1.TexCoord1 != v2.TexCoord1 || 
+                v1.TexCoord2 != v2.TexCoord2 ||
+                v1.Normal != v2.Normal
+                )
                 return false;
 
             return (v1.Flag == v2.Flag);
@@ -64,16 +60,17 @@ namespace ACFramework.FileStructs
 
         public static bool operator !=(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 ||
-                v1.Normal != v2.Normal ||          
-                v1.BoneID_A != v2.BoneID_A ||
-                v1.BoneID_B != v2.BoneID_B ||
-                v1.BoneID_C != v2.BoneID_C ||
-                v1.BoneID_D != v2.BoneID_D || 
-                v1.BoneWeight_A != v2.BoneWeight_A ||
-                v1.BoneWeight_B != v2.BoneWeight_B ||
-                v1.BoneWeight_C != v2.BoneWeight_C ||
-                v1.BoneWeight_D != v2.BoneWeight_D)
+            for (int i = 0; i < 4; i++)
+            {
+                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                    v1.BoneWeights[i] != v2.BoneWeights[i])
+                    return true;
+            } 
+
+            if (v1.Position != v2.Position || 
+                v1.TexCoord1 != v2.TexCoord1 || 
+                v1.TexCoord2 != v2.TexCoord2 ||
+                v1.Normal != v2.Normal)
                 return true;
 
             return (v1.Flag != v2.Flag);
@@ -81,16 +78,17 @@ namespace ACFramework.FileStructs
 
         public static bool EqualsWithoutFlagTest(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            if (v1.Position != v2.Position || v1.TexCoord1 != v2.TexCoord1 || v1.TexCoord2 != v2.TexCoord2 ||
-                v1.Normal != v2.Normal ||
-                v1.BoneID_A != v2.BoneID_A ||
-                v1.BoneID_B != v2.BoneID_B ||
-                v1.BoneID_C != v2.BoneID_C ||
-                v1.BoneID_D != v2.BoneID_D ||
-                v1.BoneWeight_A != v2.BoneWeight_A ||
-                v1.BoneWeight_B != v2.BoneWeight_B ||
-                v1.BoneWeight_C != v2.BoneWeight_C ||
-                v1.BoneWeight_D != v2.BoneWeight_D)
+            for (int i = 0; i < 4; i++)
+            {
+                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                    v1.BoneWeights[i] != v2.BoneWeights[i])
+                    return false;
+            } 
+
+            if (v1.Position != v2.Position || 
+                v1.TexCoord1 != v2.TexCoord1 || 
+                v1.TexCoord2 != v2.TexCoord2 ||
+                v1.Normal != v2.Normal)
                 return false;
 
             return true;

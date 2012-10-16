@@ -63,17 +63,11 @@ namespace ACFramework.FileStructs
                 WriteVector(bw, vertices[i].TexCoord2);
                 WriteVector(bw, vertices[i].Normal);
 
-                bw.Write(vertices[i].BoneID_A);
-                bw.Write(vertices[i].BoneWeight_A);
-
-                bw.Write(vertices[i].BoneID_B);
-                bw.Write(vertices[i].BoneWeight_B);
-
-                bw.Write(vertices[i].BoneID_C);
-                bw.Write(vertices[i].BoneWeight_C);
-
-                bw.Write(vertices[i].BoneID_D);
-                bw.Write(vertices[i].BoneWeight_D);
+                for (int j = 0; j < 4; j++)
+                {
+                    bw.Write(vertices[i].BoneIndices[j]);
+                    bw.Write(vertices[i].BoneWeights[j]);                   
+                }
 
                 bw.Write(vertices[i].Flag);
             }

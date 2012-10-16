@@ -283,13 +283,9 @@ namespace ACFramework.FileStruct
                 }
 
                 //atribui para os vertices o id dos joints e tb os pesos
-                int maxBonesPerVertex;
                 int vIndex = 0;
                 for (int i = 0; i < influenceNumber.Length; i++)
                 {
-                    //pra cada vertice ele procura no maximo 4 bones q o influenciam
-                    maxBonesPerVertex = 4;
-
                     //primeira coisa encontrar todos os vertices da lista q ja existe com o SID = i
                     List<int> finalVertexListIndices = new List<int>();
                     for (int vi = 0; vi < amtModel.Vertices.Count; vi++)
@@ -301,13 +297,14 @@ namespace ACFramework.FileStruct
                     //pega o primeiro vertices na lista ai de cima e atualiza os pesos e os indices
                     AMT_VERTEX firstVertex = amtModel.Vertices[finalVertexListIndices[0]];
 
-                    int numInfluence = int.Parse(influenceNumber[i]);
+                    uint numInfluence = uint.Parse(influenceNumber[i]);
+                    uint[] boneIndices = new uint[numInfluence];
+                    float[] boneWeights = new float[numInfluence];
+
 
                     #region PROCURA OS PESOS E INDICES PRO PRIMEIRO VERTICES DA LISTA
-                    while (numInfluence > 0)
+                    for (int d = 0; d < numInfluence; d++)
                     {
-                        numInfluence--;
-
                         //seleciona o indice do bone na lista <v> e procura do de-para para achar o indice no amtmodel
                         uint boneIndex = uint.Parse(boneIndexWeight[vIndex++]);
                         for (int j = 0; j < _from.Count; j++)
@@ -321,54 +318,44 @@ namespace ACFramework.FileStruct
 
                         uint weightIndex = uint.Parse(boneIndexWeight[vIndex++]);
 
-                        if (maxBonesPerVertex == 4)
+                        //seta o indice e o peso do bone no vertice atual
+                        boneIndices[d] = boneIndex;
+                        boneWeights[d] = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
+                    }
+
+                    //ele carrega o numero de influencias q tem no arquivo, pode ser mais ou menos q 4 mas eu preciso gravar 4 no arquivo
+                    //entao se for menos coloco zero se for mais somo tudo no ultimo ate completar 1 q se foda
+                    firstVertex.BoneIndices = new uint[4];
+                    firstVertex.BoneWeights = new float[4];
+
+                    for (int d = 0; d < numInfluence; d++)
+                    {
+                        if (d > 3)
+                            firstVertex.BoneWeights[3] += boneWeights[d];
+                        else
                         {
-                            firstVertex.BoneID_A = boneIndex;
-                            firstVertex.BoneWeight_A = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
-                            maxBonesPerVertex--;
-                            continue;
-                        }
-                        if (maxBonesPerVertex == 3)
-                        {
-                            firstVertex.BoneID_B = boneIndex;
-                            firstVertex.BoneWeight_B = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
-                            maxBonesPerVertex--;
-                            continue;
-                        }
-                        if (maxBonesPerVertex == 2)
-                        {
-                            firstVertex.BoneID_C = boneIndex;
-                            firstVertex.BoneWeight_C = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
-                            maxBonesPerVertex--;
-                            continue;
-                        }
-                        if (maxBonesPerVertex == 1)
-                        {
-                            firstVertex.BoneID_D = boneIndex;
-                            firstVertex.BoneWeight_D = System.Convert.ToSingle(weights[weightIndex], CultureInfo.InvariantCulture);
-                            maxBonesPerVertex--;
-                            continue;
+                            firstVertex.BoneIndices[d] = boneIndices[d];
+                            firstVertex.BoneWeights[d] = boneWeights[d];
                         }
                     }
+
+
                     #endregion
 
                     //depois de achar os pesos e indices do primeiro vertice da finalVertexListIndices entao ele so copia para os outros da lista
                     for (int vi = 1; vi < finalVertexListIndices.Count; vi++)
                     {
                         AMT_VERTEX vertex = amtModel.Vertices[finalVertexListIndices[vi]];
-                        vertex.BoneID_A = firstVertex.BoneID_A;
-                        vertex.BoneID_B = firstVertex.BoneID_B;
-                        vertex.BoneID_C = firstVertex.BoneID_C;
-                        vertex.BoneID_D = firstVertex.BoneID_D;
-
-                        vertex.BoneWeight_A = firstVertex.BoneWeight_A;
-                        vertex.BoneWeight_B = firstVertex.BoneWeight_B;
-                        vertex.BoneWeight_C = firstVertex.BoneWeight_C;
-                        vertex.BoneWeight_D = firstVertex.BoneWeight_D;
+                        vertex.BoneIndices = new uint[4];
+                        vertex.BoneWeights = new float[4];
+                        for (int d = 0; d < 4; d++)
+                        {
+                            vertex.BoneIndices[d] = firstVertex.BoneIndices[d];
+                            vertex.BoneWeights[d] = firstVertex.BoneWeights[d];
+                        }
                     }
                 }
 	        }
-            
         }
 
         private void ConvertGeometries(XElement rootElement, ref AMT_MODEL amtModel)

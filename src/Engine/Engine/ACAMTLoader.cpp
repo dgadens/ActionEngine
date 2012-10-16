@@ -49,32 +49,28 @@ HRESULT ACAMTLoader::ReadVertices( AMT_MODEL* outModel )
 {
 	// variablen init
 	UINT numVertices = outModel->Head.NumVertices;   
-	AMT_VERTEX* pVertices = nullptr;                     
 
-	// aloca memoria
-	pVertices = new AMT_VERTEX[ numVertices ];
-	if( !pVertices )
-	{
-		return E_FAIL;                                    
-	}
-
-	// le todos os vertices de  uma vez so
-	ZeroMemory( pVertices, sizeof( AMT_VERTEX ) * numVertices );
-	fread( pVertices, sizeof( AMT_VERTEX ), numVertices, mpFile );
-	
 	AMT_VERTEX* pVertex;
 	for (int i = 0; i < numVertices; i++)
 	{
 		outModel->pVertices.push_back( new AMT_VERTEX );
 		pVertex = outModel->pVertices[ i ];
 		ZeroMemory( pVertex, sizeof( AMT_VERTEX ) );
-		memcpy( pVertex, &pVertices[i], sizeof( AMT_VERTEX ) );
+
+		fread( &pVertex->Position, sizeof( FLOAT ), 3, mpFile );
+		fread( &pVertex->TexCoord1, sizeof( FLOAT ), 2, mpFile );
+		fread( &pVertex->TexCoord2, sizeof( FLOAT ), 2, mpFile );
+		fread( &pVertex->Normal, sizeof( FLOAT ), 3, mpFile );
+
+        for (int j = 0; j < 4; j++)
+        {
+			fread( &pVertex->BoneIndices[j], sizeof( UINT ), 1, mpFile );
+			fread( &pVertex->BoneWeights[j], sizeof( FLOAT ), 1, mpFile );
+        }
+
+		fread( &pVertex->Flag, sizeof( UINT ), 1, mpFile );
 	}
 
-	// libera memoria
-	SAFE_DELETE_A(pVertices);
-
-	// bye
 	return AC_OK;
 };
 

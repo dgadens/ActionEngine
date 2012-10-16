@@ -124,14 +124,14 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 		mpVSMCache[i].position = model->pVertices[i]->Position;
 		mpVSMCache[i].normal = model->pVertices[i]->Normal;
 		mpVSMCache[i].texcoord = model->pVertices[i]->TexCoord1;
-		mpVSMCache[i].blendWeights = Vector4(model->pVertices[i]->BoneWeight_A,
-											 model->pVertices[i]->BoneWeight_B,
-											 model->pVertices[i]->BoneWeight_C,
-											 model->pVertices[i]->BoneWeight_D);
-		mpVSMCache[i].blendIndices = Vector4(model->pVertices[i]->BoneID_A,
-											 model->pVertices[i]->BoneID_B,
-											 model->pVertices[i]->BoneID_C,
-											 model->pVertices[i]->BoneID_D);
+		mpVSMCache[i].blendWeights = Vector4(model->pVertices[i]->BoneWeights[0],
+											 model->pVertices[i]->BoneWeights[1],
+											 model->pVertices[i]->BoneWeights[2],
+											 model->pVertices[i]->BoneWeights[3]);
+		mpVSMCache[i].blendIndices = Vector4(model->pVertices[i]->BoneIndices[0],
+											 model->pVertices[i]->BoneIndices[1],
+											 model->pVertices[i]->BoneIndices[2],
+											 model->pVertices[i]->BoneIndices[3]);
 
 	}
 
@@ -215,8 +215,6 @@ void ACModelDefinition::UpdateBones(AMT_JOINT* joint)
 
 void ACModelDefinition::RenderModel(ACCamera* camera)
 {
-	mpGDevice->SetRasterizeState(ACRASTERIZESTATE::ACRS_SolidCullNone);
-
 	if (HasSkeleton)
 	{
 		//renderiza o model
@@ -228,20 +226,20 @@ void ACModelDefinition::RenderModel(ACCamera* camera)
 			skinTransform.M43 = 0;
 			skinTransform.M44 = 0;
 
-			int indexBoneA = mpModel->pVertices[i]->BoneID_A;
-			int indexBoneB = mpModel->pVertices[i]->BoneID_B;
-			int indexBoneC = mpModel->pVertices[i]->BoneID_C;
-			int indexBoneD = mpModel->pVertices[i]->BoneID_D;
+			int indexBoneA = mpModel->pVertices[i]->BoneIndices[0];
+			int indexBoneB = mpModel->pVertices[i]->BoneIndices[1];
+			int indexBoneC = mpModel->pVertices[i]->BoneIndices[2];
+			int indexBoneD = mpModel->pVertices[i]->BoneIndices[3];
 
 			Matrix pqp1 = mpModel->pOriginalJoints[indexBoneA]->InverseBindMatrix * mpModel->pJoints[indexBoneA]->MatrixAbsolute;
 			Matrix pqp2 = mpModel->pOriginalJoints[indexBoneB]->InverseBindMatrix * mpModel->pJoints[indexBoneB]->MatrixAbsolute;
 			Matrix pqp3 = mpModel->pOriginalJoints[indexBoneC]->InverseBindMatrix * mpModel->pJoints[indexBoneC]->MatrixAbsolute;
 			Matrix pqp4 = mpModel->pOriginalJoints[indexBoneD]->InverseBindMatrix * mpModel->pJoints[indexBoneD]->MatrixAbsolute;
 		
-			skinTransform = skinTransform + pqp1 * mpModel->pVertices[i]->BoneWeight_A;
-			skinTransform = skinTransform + pqp2 * mpModel->pVertices[i]->BoneWeight_B;
-			skinTransform = skinTransform + pqp3 * mpModel->pVertices[i]->BoneWeight_C;
-			skinTransform = skinTransform + pqp4 * mpModel->pVertices[i]->BoneWeight_D;
+			skinTransform = skinTransform + pqp1 * mpModel->pVertices[i]->BoneWeights[0];
+			skinTransform = skinTransform + pqp2 * mpModel->pVertices[i]->BoneWeights[1];
+			skinTransform = skinTransform + pqp3 * mpModel->pVertices[i]->BoneWeights[2];
+			skinTransform = skinTransform + pqp4 * mpModel->pVertices[i]->BoneWeights[3];
 		
 			Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform , &mpVSMCache[i].position);
 			Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform , &mpVSMCache[i].normal);
@@ -279,6 +277,8 @@ void ACModelDefinition::Release()
 	//remove o skin e tb as texturas e tudo mais
 	SAFE_RELEASE(mpSkin);
 	SAFE_DELETE(mpJointMark);
+
+	SAFE_DELETE(mpModel);
 
 	//remove o vb e ib da api
 	if (pVertexBuffer!=nullptr)

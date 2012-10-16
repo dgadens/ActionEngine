@@ -35,15 +35,9 @@ struct AMT_VERTEX
     Vector3 Position;      
     Vector2 TexCoord1;     
     Vector2 TexCoord2;     
-    Vector3 Normal;        
-    UINT BoneID_A;               
-    FLOAT BoneWeight_A;    
-	UINT BoneID_B;               
-    FLOAT BoneWeight_B; 
-	UINT BoneID_C;              
-    FLOAT BoneWeight_C; 
-	UINT BoneID_D;               
-    FLOAT BoneWeight_D; 
+    Vector3 Normal;
+    UINT BoneIndices[4];
+    FLOAT BoneWeights[4];
     UINT Flag; 
 };
 

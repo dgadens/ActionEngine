@@ -48,9 +48,6 @@
     <Compile Include="FileStruct\COLLADAFormat\COLLADAConverter.cs" />
     <Compile Include="FileStruct\GlobalsImport.cs" />
     <Compile Include="FileStruct\IConverter.cs" />
-    <Compile Include="FileStruct\MS3DFormat\MS3D.cs" />
-    <Compile Include="FileStruct\MS3DFormat\MS3DConverter.cs" />
-    <Compile Include="FileStruct\MS3DFormat\MS3DImporter.cs" />
     <Compile Include="Font\Character.cs" />
     <Compile Include="Font\ConvertBMFont.cs" />
     <Compile Include="Math\BoundingBox.cs" />
