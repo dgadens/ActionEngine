@@ -56,6 +56,8 @@ namespace ACFramework.FileStruct
 
             ConvertBones(rootElement, ref amtModel);
 
+            ConvertAnimations(rootElement, ref amtModel);
+
             ConvertController(rootElement, ref amtModel);
 
             ConvertHead(ref amtModel);
@@ -65,6 +67,308 @@ namespace ACFramework.FileStruct
             return amtModel;
         }
 
+        #region Convert Geometry
+        private void ConvertGeometries(XElement rootElement, ref AMT_MODEL amtModel)
+        {
+            //pega a tag principal das geometrias
+            XElement libraryGeometries = rootElement.Element(XName.Get("library_geometries", Namespace));
+            List<XElement> geometries = libraryGeometries.Elements(XName.Get("geometry", Namespace)).ToList();
+            if (geometries.Count > 0)
+            {
+                amtModel.Meshes = new List<AMT_MESH>();
+                amtModel.Faces = new List<AMT_FACE>();
+                amtModel.Materials = new List<AMT_MATERIAL>();
+                amtModel.Head = new AMT_HEAD();
+
+                foreach (XElement geometry in geometries)
+                {
+                    XElement meshElement = geometry.Element(XName.Get("mesh", Namespace));
+
+                    //resgata os triangulos, se for uma versao anterior a 1.4.1 o nome é polygons
+                    XElement triangles = meshElement.Element(XName.Get("triangles", Namespace));
+                    if (triangles == null)
+                        triangles = meshElement.Element(XName.Get("polygons", Namespace));
+
+                    //se existe uma tag triangles entao ele vai pra frente
+                    if (triangles != null)
+                    {
+                        AMT_MESH mesh = new AMT_MESH();
+                        mesh.Name = geometry.Attribute("name").Value;
+                        mesh.FaceIndices = new List<int>();
+                        amtModel.Meshes.Add(mesh);
+
+                        //converte o mesh, pega todos os vertices, indices e faces e ja armazena no model amt
+                        ConvertMesh(meshElement, triangles, ref amtModel);
+
+                        //carrega o material
+                        //pega no visual scene o nome do material
+                        XElement libraryVisualScene = rootElement.Element(XName.Get("library_visual_scenes", Namespace));
+                        XElement visualSceneElement = libraryVisualScene.Element(XName.Get("visual_scene", Namespace));
+                        List<XElement> visualSceneNodes = visualSceneElement.Elements(XName.Get("node", Namespace)).ToList();
+                        XElement geometryScene = visualSceneNodes.Find(item => { return item.Attribute("name").Value == mesh.Name; });
+                        XElement instanceGeometry = geometryScene.Element(XName.Get("instance_geometry", Namespace));
+
+                        //se existe a instancia geometry entao ele pega senao ele tem skin ai vai pelo controller
+                        XElement materialScene;
+                        if (instanceGeometry != null)
+                        {
+                            XElement bindMaterial = instanceGeometry.Element(XName.Get("bind_material", Namespace));
+                            XElement techniqueCommon = bindMaterial.Element(XName.Get("technique_common", Namespace));
+                            List<XElement> materialsScene = techniqueCommon.Elements(XName.Get("instance_material", Namespace)).ToList();
+                            materialScene = materialsScene.Find(item => { return item.Attribute("symbol").Value == triangles.Attribute("material").Value; });
+                        }
+                        else
+                        {
+                            XElement controller = geometryScene.Element(XName.Get("instance_controller", Namespace));
+                            string skeletonName = controller.Element(XName.Get("skeleton", Namespace)).Value.Substring(1);
+                            if (skeletonName != null)
+                                amtModel.Head.HasSkeleton = 1;
+                            XElement bindMaterial = controller.Element(XName.Get("bind_material", Namespace));
+                            XElement techniqueCommon = bindMaterial.Element(XName.Get("technique_common", Namespace));
+                            List<XElement> materialsScene = techniqueCommon.Elements(XName.Get("instance_material", Namespace)).ToList();
+                            materialScene = materialsScene.Find(item => { return item.Attribute("symbol").Value == triangles.Attribute("material").Value; });
+                        }
+
+                        string materialID = materialScene.Attribute("target").Value.Substring(1);
+                        if (materialID != null)
+                        {
+                            //carrega a tag de materiais
+                            XElement libraryMaterials = rootElement.Element(XName.Get("library_materials", Namespace));
+                            List<XElement> materials = libraryMaterials.Elements(XName.Get("material", Namespace)).ToList();
+
+                            //carrega a tag de imagens
+                            XElement libraryImages = rootElement.Element(XName.Get("library_images", Namespace));
+                            List<XElement> images = null;
+                            if (libraryImages != null)
+                                images = libraryImages.Elements(XName.Get("image", Namespace)).ToList();
+
+                            //carrega os atributos do primeiro effect
+                            XElement libraryEffect = rootElement.Element(XName.Get("library_effects", Namespace));
+                            List<XElement> effectElements = libraryEffect.Elements(XName.Get("effect", Namespace)).ToList();
+
+                            XElement materialElement = materials.Find(item => { return item.Attribute("id").Value == materialID; });
+
+                            if (materialElement != null)
+                            {
+                                AMT_MATERIAL material = ConvertMaterial(materialElement, effectElements, images);
+                                amtModel.Materials.Add(material);
+
+                                //seta o id do material q ta na estrutura principal
+                                mesh.MaterialID = (uint)amtModel.Materials.Count() - 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ConvertMesh(XElement meshElement, XElement triangles, ref AMT_MODEL amtModel)
+        {
+            //pega o mesh atual
+            uint meshID = (uint)amtModel.Meshes.Count - 1;
+            AMT_MESH mesh = amtModel.Meshes[amtModel.Meshes.Count - 1];
+
+            //ja armazena o numero de faces do mesh
+            mesh.NumFaces = int.Parse(triangles.Attribute("count").Value);
+
+            //pega os inputs vertex, normal, texcoord etc
+            List<XElement> inputs = triangles.Elements(XName.Get("input", Namespace)).ToList();
+            XElement vertex = inputs.Find(item => { return item.Attribute("semantic").Value == "VERTEX"; });
+            XElement normal = inputs.Find(item => { return item.Attribute("semantic").Value == "NORMAL"; });
+            XElement texcoord = inputs.Find(item => { return item.Attribute("semantic").Value == "TEXCOORD"; });
+
+            //elementos que tem na tag vertices, procurar o id = vertex.source
+            List<XElement> verticesElements = meshElement.Elements(XName.Get("vertices", Namespace)).ToList();
+            XElement verticeElement = verticesElements.Find(item => { return item.Attribute("id").Value == vertex.Attribute("source").Value.Substring(1); });
+            //agora com o vertice certo pega o position
+            List<XElement> inputsVerticesElement = verticeElement.Elements(XName.Get("input", Namespace)).ToList();
+            XElement position = inputsVerticesElement.Find(item => { return item.Attribute("semantic").Value == "POSITION"; });
+
+            //agora é so carregar os dados dos sources conforme os id dos inputs position, normal, texcoord
+            List<XElement> sources = meshElement.Elements(XName.Get("source", Namespace)).ToList();
+            XElement sourcePosition = sources.Find(item => { return item.Attribute("id").Value == position.Attribute("source").Value.Substring(1); });
+            XElement sourceNormal = sources.Find(item => { return item.Attribute("id").Value == normal.Attribute("source").Value.Substring(1); });
+            XElement sourceTexcoord = sources.Find(item => { return item.Attribute("id").Value == texcoord.Attribute("source").Value.Substring(1); });
+
+            //pega os indices e junta tudo em um unico string
+            List<XElement> ps = triangles.Elements(XName.Get("p", Namespace)).ToList();
+            string indices = null;
+            foreach (var item in ps)
+                indices += ' ' + item.Value;
+            //separa todos os indices usando os offsets 
+            string[] strIndices = indices.Replace('\n', ' ').Trim().Split(' ');
+            List<int> positionIndices = new List<int>();
+            int positionOffset = int.Parse(vertex.Attribute("offset").Value);
+            List<int> normalIndices = new List<int>();
+            int normalOffset = int.Parse(normal.Attribute("offset").Value);
+            List<int> texcoordIndices = new List<int>();
+            int texcoordOffset = int.Parse(texcoord.Attribute("offset").Value);
+
+            for (int i = 0; i < strIndices.Length; i += sources.Count)
+            {
+                positionIndices.Add(int.Parse(strIndices[i + positionOffset]));
+                normalIndices.Add(int.Parse(strIndices[i + normalOffset]));
+                texcoordIndices.Add(int.Parse(strIndices[i + texcoordOffset]));
+            }
+            //vertices reais
+            List<Vector3> positions = GetPositions(sourcePosition);
+            List<Vector3> normals = GetNormals(sourceNormal);
+            List<Vector2> texcoords = GetTexCoords(sourceTexcoord);
+
+            //agora é so pegar os indices e vincular com os arrays pra criar os vertices q vao para o amt
+            for (int i = 0; i < positionIndices.Count; i++)
+            {
+                AMT_VERTEX v = new AMT_VERTEX();
+                v.SID = positionIndices[i]; //utilizado para encontrar esses vertices depois quando for atualizar o peso dos bones
+                v.Position = positions[positionIndices[i]];
+                v.Normal = normals[normalIndices[i]];
+                v.TexCoord1 = texcoords[texcoordIndices[i]];
+                v.TexCoord1.Y = -v.TexCoord1.Y; //Inverto o Y pq o exportador do max usa as coordenadas do opengl
+
+                amtModel.Vertices.Add(v);
+            }
+
+            //carrega as faces
+            for (int i = 0; i < amtModel.Vertices.Count; i += 3)
+            {
+                AMT_FACE f = new AMT_FACE();
+                f.MeshID = meshID;
+                f.Indices = new List<int>();
+                f.Indices.Add(i);
+                f.Indices.Add(i + 1);
+                f.Indices.Add(i + 2);
+                f.Normal = Tools.GetNormal(amtModel.Vertices[i].Position, amtModel.Vertices[i + 1].Position, amtModel.Vertices[i + 2].Position);
+
+                amtModel.Faces.Add(f);
+
+                mesh.FaceIndices.Add(amtModel.Faces.Count - 1);
+            }
+
+            //finalmente seta o mesh atual
+            amtModel.Meshes[amtModel.Meshes.Count - 1] = mesh;
+        }
+
+        private List<Vector3> GetPositions(XElement positionElement)
+        {
+            List<Vector3> positions = new List<Vector3>();
+
+            XElement technique_common = positionElement.Element(XName.Get("technique_common", Namespace));
+            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
+            int vector3Count = int.Parse(accessor.Attribute("count").Value);
+            int stride = int.Parse(accessor.Attribute("stride").Value);
+            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
+            int X = 0, Y = 1, Z = 2; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
+            for (int i = 0; i < stride; i++)
+            {
+                if (param[i].Attribute("name").Value == "X")
+                    X = i;
+                else if (param[i].Attribute("name").Value == "Y")
+                    Y = i;
+                else
+                    Z = i;
+            }
+
+            XElement float_array = positionElement.Element(XName.Get("float_array", Namespace));
+            string strPositions = float_array.Value;
+            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
+            string[] values = strPositions.Replace('\n', ' ').Trim().Split(' ');
+
+            //se for igual entao o split fez certo a budega
+            if (values.Length == count)
+            {
+                //adiciona os valores na ordem certa XYZ
+                for (int i = 0; i < values.Length; i += stride)
+                {
+                    positions.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));
+                }
+            }
+
+            return positions;
+        }
+
+        private List<Vector3> GetNormals(XElement normalElement)
+        {
+            List<Vector3> normals = new List<Vector3>();
+
+            XElement technique_common = normalElement.Element(XName.Get("technique_common", Namespace));
+            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
+            int vector3Count = int.Parse(accessor.Attribute("count").Value);
+            int stride = int.Parse(accessor.Attribute("stride").Value);
+            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
+            int X = 0, Y = 1, Z = 2; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
+            for (int i = 0; i < stride; i++)
+            {
+                if (param[i].Attribute("name").Value == "X")
+                    X = i;
+                else if (param[i].Attribute("name").Value == "Y")
+                    Y = i;
+                else
+                    Z = i;
+            }
+
+
+            XElement float_array = normalElement.Element(XName.Get("float_array", Namespace));
+            string strPositions = float_array.Value;
+            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
+            string[] values = strPositions.Replace('\n', ' ').Trim().Split(' ');
+
+            //se for igual entao o split fez certo a budega
+            if (values.Length == count)
+            {
+                //adiciona os valores na ordem certa XYZ
+                for (int i = 0; i < values.Length; i += stride)
+                {
+                    normals.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
+                                            System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
+                                            System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));
+                }
+            }
+
+            return normals;
+        }
+
+        private List<Vector2> GetTexCoords(XElement texcoordElement)
+        {
+            List<Vector2> texcoords = new List<Vector2>();
+
+            XElement technique_common = texcoordElement.Element(XName.Get("technique_common", Namespace));
+            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
+            int vector3Count = int.Parse(accessor.Attribute("count").Value);
+            int stride = int.Parse(accessor.Attribute("stride").Value);
+            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
+            int S = 0, T = 1; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
+            for (int i = 0; i < stride; i++)
+            {
+                if (param[i].Attribute("name").Value == "S")
+                    S = i;
+                else if (param[i].Attribute("name").Value == "T")
+                    T = i;
+            }
+
+
+            XElement float_array = texcoordElement.Element(XName.Get("float_array", Namespace));
+            string strPositions = float_array.Value;
+            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
+            string[] values = strPositions.Replace('\n', ' ').Trim().Split(' ');
+
+            //se for igual entao o split fez certo a budega
+            if (values.Length == count)
+            {
+                //adiciona os valores na ordem certa XYZ
+                for (int i = 0; i < values.Length; i += stride)
+                {
+                    texcoords.Add(new Vector2(System.Convert.ToSingle(values[i + S], CultureInfo.InvariantCulture),
+                                              System.Convert.ToSingle(values[i + T], CultureInfo.InvariantCulture)));
+                }
+            }
+
+            return texcoords;
+        }
+        #endregion
+
+        #region Convert Bones
         private void ConvertBones(XElement rootElement, ref AMT_MODEL amtModel)
         {
             //primeiro eu encontro o library_visual_scenes
@@ -82,12 +386,15 @@ namespace ACFramework.FileStruct
                 Matrix matrix = Matrix.Identity;
 
                 string sid = rootNode.Attribute("sid").Value;
+                string boneId = rootNode.Attribute("id").Value;
 
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
+                string matrixSID = matrixElement.Attribute("sid").Value; //uso nas animacoes para achar o bone id/sid
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
                 
                 AMT_JOINT newBone = new AMT_JOINT();
                 newBone.SID = sid;
+                newBone.TARGET = boneId + "/" + matrixSID;
                 newBone.ID = 0;
                 newBone.ParentID = -1; //nao tem pai
                 newBone.Name = "Root";
@@ -107,7 +414,7 @@ namespace ACFramework.FileStruct
 
                 amtModel.Joints.Add(newBone);
 
-                FillBoneNodes(ref newBone, rootNode, ref amtModel);
+                FillBoneNodes(ref newBone, rootNode, matrixSID, ref amtModel);
             }
         }
 
@@ -138,7 +445,7 @@ namespace ACFramework.FileStruct
             return rootNode;
         }
 
-        private void FillBoneNodes(ref AMT_JOINT parentBone, XElement boneNode, ref AMT_MODEL amtModel)
+        private void FillBoneNodes(ref AMT_JOINT parentBone, XElement boneNode, string matrixSID, ref AMT_MODEL amtModel)
         {
             //pego todos os nodes
             List<XElement> nodes = boneNode.Elements(XName.Get("node", Namespace)).ToList();
@@ -152,6 +459,7 @@ namespace ACFramework.FileStruct
 
                     //pega o nome e a matrix do bone
                     string boneName = node.Attribute("name").Value;
+                    string boneId = node.Attribute("id").Value;
                     string sid = node.Attribute("sid").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
@@ -159,6 +467,7 @@ namespace ACFramework.FileStruct
                     // Create this node, use the current number of bones as number.
                     AMT_JOINT newBone = new AMT_JOINT();
                     newBone.SID = sid;
+                    newBone.TARGET = boneId + "/" + matrixSID;
                     newBone.ID = (uint)amtModel.Joints.Count();
                     newBone.ParentID = (int)parentBone.ID; 
                     newBone.Name = boneName;
@@ -186,11 +495,95 @@ namespace ACFramework.FileStruct
                     amtModel.Joints.Add(newBone);
                     
                     // vai para os filhos
-                    FillBoneNodes(ref newBone, node, ref amtModel);
+                    FillBoneNodes(ref newBone, node, matrixSID, ref amtModel);
                 }
             }
         }
+        #endregion
 
+        #region Convert Animations
+        private void ConvertAnimations(XElement rootElement, ref AMT_MODEL amtModel)
+        {
+            XElement libraryAnimations = rootElement.Element(XName.Get("library_animations", Namespace));
+            List<XElement> animations = libraryAnimations.Elements(XName.Get("animation", Namespace)).ToList();
+
+            foreach (XElement animation in animations)
+            {
+                //pego os channels primeiro e percoro
+                List<XElement> channels = animation.Elements(XName.Get("channel", Namespace)).ToList();
+                foreach (XElement channel in channels)
+                {
+                    //pego o source do channel para achar o sampler e o terget
+                    string source = channel.Attribute("source").Value.Substring(1);
+                    string target = channel.Attribute("target").Value;
+
+                    List<XElement> samplers = animation.Elements(XName.Get("sampler", Namespace)).ToList();
+
+                    XElement samplerElement = samplers.Find(item => 
+                    { 
+                        return item.Attribute("id").Value == source; 
+                    });
+
+                    //pego o nome do input source e tb do output source
+                    string inputSourceName = samplerElement.Elements(XName.Get("input", Namespace))
+                        .ToList()
+                        .Find(item =>
+                        {
+                            return item.Attribute("semantic").Value == "INPUT";
+                        }).Attribute("source").Value.Substring(1);
+
+                    string outputSourceName = samplerElement.Elements(XName.Get("input", Namespace))
+                        .ToList()
+                        .Find(item =>
+                        {
+                            return item.Attribute("semantic").Value == "OUTPUT";
+                        }).Attribute("source").Value.Substring(1);
+
+                    //pego os elementos inputsource e outputsource
+                    List<XElement> sourceElements = animation.Elements(XName.Get("source", Namespace)).ToList();
+
+                    XElement inputSourceElement = sourceElements.Find(item =>
+                    {
+                        return item.Attribute("id").Value == inputSourceName;
+                    });
+
+                    XElement outputSourceElement = sourceElements.Find(item =>
+                    {
+                        return item.Attribute("id").Value == outputSourceName;
+                    });
+
+                    //agora vo atras do float_array do sourceinput e sourceoutput
+                    string kfTimeValues = inputSourceElement.Element(XName.Get("float_array", Namespace)).Value;
+                    string[] kfTimes = kfTimeValues.Replace('\n', ' ').Trim().Split(' ');
+
+                    int numberOfMatrixFloats = kfTimes.Length * 16; 
+                    string kfTransformValues = outputSourceElement.Element(XName.Get("float_array", Namespace)).Value.Replace('\n', ' ').Trim();
+                    Matrix[] keyFramesMatrizes = new Matrix[numberOfMatrixFloats / 16];
+                    for (int i = 0, j = 0; i < numberOfMatrixFloats; i += 16, j++)
+                        keyFramesMatrizes[j] = Tools.ConvertStringToMatrix(kfTransformValues, i);
+
+                    //agora q tenho a lista de tempos e matrizes eu procuro qual o bone do momento e crio um kf
+                    foreach (var joint in amtModel.Joints)
+                    {
+                        if (joint.TARGET == target)
+                        {
+                            joint.NumKF = (uint)kfTimes.Length;
+                            for (int i = 0; i < joint.NumKF; i++)
+                            {
+                                joint.KFData.Add(new AMT_KF()
+                                {
+                                    Time = System.Convert.ToSingle(kfTimes[i], CultureInfo.InvariantCulture),
+                                    BindMatrix = keyFramesMatrizes[i]
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ConvertController
         private void ConvertController(XElement rootElement, ref AMT_MODEL amtModel)
         {
             XElement libraryController = rootElement.Element(XName.Get("library_controllers", Namespace));
@@ -357,198 +750,9 @@ namespace ACFramework.FileStruct
                 }
 	        }
         }
+        #endregion
 
-        private void ConvertGeometries(XElement rootElement, ref AMT_MODEL amtModel)
-        {
-            //pega a tag principal das geometrias
-            XElement libraryGeometries = rootElement.Element(XName.Get("library_geometries", Namespace));
-            List<XElement> geometries = libraryGeometries.Elements(XName.Get("geometry", Namespace)).ToList();
-            if (geometries.Count > 0)
-            {
-                amtModel.Meshes = new List<AMT_MESH>();
-                amtModel.Faces = new List<AMT_FACE>();
-                amtModel.Materials = new List<AMT_MATERIAL>();
-                amtModel.Head = new AMT_HEAD();
-
-                foreach (XElement geometry in geometries)
-                {
-                    XElement meshElement = geometry.Element(XName.Get("mesh", Namespace));
-
-                    //resgata os triangulos, se for uma versao anterior a 1.4.1 o nome é polygons
-                    XElement triangles = meshElement.Element(XName.Get("triangles", Namespace));
-                    if (triangles == null)
-                        triangles = meshElement.Element(XName.Get("polygons", Namespace));
-
-                    //se existe uma tag triangles entao ele vai pra frente
-                    if (triangles != null)
-                    {
-                        AMT_MESH mesh = new AMT_MESH();
-                        mesh.Name = geometry.Attribute("name").Value;
-                        mesh.FaceIndices = new List<int>();
-                        amtModel.Meshes.Add(mesh);
-
-                        //converte o mesh, pega todos os vertices, indices e faces e ja armazena no model amt
-                        ConvertMesh(meshElement, triangles, ref amtModel);
-
-                        //carrega o material
-                        //pega no visual scene o nome do material
-                        XElement libraryVisualScene = rootElement.Element(XName.Get("library_visual_scenes", Namespace));
-                        XElement visualSceneElement = libraryVisualScene.Element(XName.Get("visual_scene", Namespace));
-                        List<XElement> visualSceneNodes = visualSceneElement.Elements(XName.Get("node", Namespace)).ToList();
-                        XElement geometryScene = visualSceneNodes.Find(item => { return item.Attribute("name").Value == mesh.Name; });
-                        XElement instanceGeometry = geometryScene.Element(XName.Get("instance_geometry", Namespace));
-
-                        //se existe a instancia geometry entao ele pega senao ele tem skin ai vai pelo controller
-                        XElement materialScene;
-                        if (instanceGeometry != null)
-                        {
-                            XElement bindMaterial = instanceGeometry.Element(XName.Get("bind_material", Namespace));
-                            XElement techniqueCommon = bindMaterial.Element(XName.Get("technique_common", Namespace));
-                            List<XElement> materialsScene = techniqueCommon.Elements(XName.Get("instance_material", Namespace)).ToList();
-                            materialScene = materialsScene.Find(item => { return item.Attribute("symbol").Value == triangles.Attribute("material").Value; });
-                        }
-                        else
-                        {
-                            XElement controller = geometryScene.Element(XName.Get("instance_controller", Namespace));
-                            string skeletonName = controller.Element(XName.Get("skeleton", Namespace)).Value.Substring(1);
-                            if (skeletonName != null)
-                                amtModel.Head.HasSkeleton = 1;
-                            XElement bindMaterial = controller.Element(XName.Get("bind_material", Namespace));
-                            XElement techniqueCommon = bindMaterial.Element(XName.Get("technique_common", Namespace));
-                            List<XElement> materialsScene = techniqueCommon.Elements(XName.Get("instance_material", Namespace)).ToList();
-                            materialScene = materialsScene.Find(item => { return item.Attribute("symbol").Value == triangles.Attribute("material").Value; });
-                        }
-
-                        string materialID = materialScene.Attribute("target").Value.Substring(1);
-                        if (materialID != null)
-                        {
-                            //carrega a tag de materiais
-                            XElement libraryMaterials = rootElement.Element(XName.Get("library_materials", Namespace));
-                            List<XElement> materials = libraryMaterials.Elements(XName.Get("material", Namespace)).ToList();
-
-                            //carrega a tag de imagens
-                            XElement libraryImages = rootElement.Element(XName.Get("library_images", Namespace));
-                            List<XElement> images = null;
-                            if (libraryImages!=null)
-                                images = libraryImages.Elements(XName.Get("image", Namespace)).ToList();
-
-                            //carrega os atributos do primeiro effect
-                            XElement libraryEffect = rootElement.Element(XName.Get("library_effects", Namespace));
-                            List<XElement> effectElements = libraryEffect.Elements(XName.Get("effect", Namespace)).ToList();
-
-                            XElement materialElement = materials.Find(item => { return item.Attribute("id").Value == materialID; });
-
-                            if (materialElement != null)
-                            {
-                                AMT_MATERIAL material = ConvertMaterial(materialElement, effectElements, images);
-                                amtModel.Materials.Add(material);
-
-                                //seta o id do material q ta na estrutura principal
-                                mesh.MaterialID = (uint)amtModel.Materials.Count() - 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ConvertHead(ref AMT_MODEL amtModel)
-        {
-            amtModel.Head.Version = 1;
-            amtModel.Head.NumFaces = (uint)amtModel.Faces.Count;
-            amtModel.Head.NumIndices = (uint)amtModel.Faces.Count * 3;
-            amtModel.Head.NumMeshes = (uint)amtModel.Meshes.Count;
-            amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
-            amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
-            amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
-        }
-
-        private void ConvertMesh(XElement meshElement, XElement triangles, ref AMT_MODEL amtModel)
-        {
-            //pega o mesh atual
-            uint meshID = (uint)amtModel.Meshes.Count - 1;
-            AMT_MESH mesh = amtModel.Meshes[amtModel.Meshes.Count - 1];
-
-            //ja armazena o numero de faces do mesh
-            mesh.NumFaces = int.Parse(triangles.Attribute("count").Value);
-
-            //pega os inputs vertex, normal, texcoord etc
-            List<XElement> inputs = triangles.Elements(XName.Get("input", Namespace)).ToList();
-            XElement vertex = inputs.Find(item => { return item.Attribute("semantic").Value == "VERTEX"; });
-            XElement normal = inputs.Find(item => { return item.Attribute("semantic").Value == "NORMAL"; });
-            XElement texcoord = inputs.Find(item => { return item.Attribute("semantic").Value == "TEXCOORD"; });
-
-            //elementos que tem na tag vertices, procurar o id = vertex.source
-            List<XElement> verticesElements = meshElement.Elements(XName.Get("vertices", Namespace)).ToList();
-            XElement verticeElement = verticesElements.Find(item=> { return item.Attribute("id").Value == vertex.Attribute("source").Value.Substring(1); });
-            //agora com o vertice certo pega o position
-            List<XElement> inputsVerticesElement = verticeElement.Elements(XName.Get("input", Namespace)).ToList();
-            XElement position = inputsVerticesElement.Find(item => { return item.Attribute("semantic").Value == "POSITION"; });
-
-            //agora é so carregar os dados dos sources conforme os id dos inputs position, normal, texcoord
-            List<XElement> sources = meshElement.Elements(XName.Get("source", Namespace)).ToList();
-            XElement sourcePosition = sources.Find(item => { return item.Attribute("id").Value == position.Attribute("source").Value.Substring(1); });
-            XElement sourceNormal = sources.Find(item => { return item.Attribute("id").Value == normal.Attribute("source").Value.Substring(1); });
-            XElement sourceTexcoord = sources.Find(item => { return item.Attribute("id").Value == texcoord.Attribute("source").Value.Substring(1); });
-
-            //pega os indices e junta tudo em um unico string
-            List<XElement> ps = triangles.Elements(XName.Get("p", Namespace)).ToList();
-            string indices = null;
-            foreach (var item in ps)
-                indices += ' ' + item.Value;
-            //separa todos os indices usando os offsets 
-            string[] strIndices = indices.Replace('\n',' ').Trim().Split(' ');
-            List<int> positionIndices = new List<int>(); 
-            int positionOffset = int.Parse(vertex.Attribute("offset").Value);
-            List<int> normalIndices = new List<int>();
-            int normalOffset = int.Parse(normal.Attribute("offset").Value);
-            List<int> texcoordIndices = new List<int>();
-            int texcoordOffset = int.Parse(texcoord.Attribute("offset").Value);
-
-            for (int i = 0; i < strIndices.Length; i += sources.Count)
-            {
-                positionIndices.Add(int.Parse(strIndices[i + positionOffset]));
-                normalIndices.Add(int.Parse(strIndices[i + normalOffset]));
-                texcoordIndices.Add(int.Parse(strIndices[i + texcoordOffset]));
-            }
-            //vertices reais
-            List<Vector3> positions = GetPositions(sourcePosition);
-            List<Vector3> normals = GetNormals(sourceNormal);
-            List<Vector2> texcoords = GetTexCoords(sourceTexcoord);
-
-            //agora é so pegar os indices e vincular com os arrays pra criar os vertices q vao para o amt
-            for (int i = 0; i < positionIndices.Count; i++)
-            {
-                AMT_VERTEX v = new AMT_VERTEX();
-                v.SID = positionIndices[i]; //utilizado para encontrar esses vertices depois quando for atualizar o peso dos bones
-                v.Position = positions[positionIndices[i]];
-                v.Normal = normals[normalIndices[i]];
-                v.TexCoord1 = texcoords[texcoordIndices[i]];
-                v.TexCoord1.Y = -v.TexCoord1.Y; //Inverto o Y pq o exportador do max usa as coordenadas do opengl
-
-                amtModel.Vertices.Add(v);
-            }
-
-            //carrega as faces
-            for (int i = 0; i < amtModel.Vertices.Count; i+=3)
-            {
-                AMT_FACE f = new AMT_FACE();
-                f.MeshID = meshID;
-                f.Indices = new List<int>();
-                f.Indices.Add(i);
-                f.Indices.Add(i+1);
-                f.Indices.Add(i+2);
-                f.Normal = Tools.GetNormal(amtModel.Vertices[i].Position, amtModel.Vertices[i + 1].Position, amtModel.Vertices[i + 2].Position);
-
-                amtModel.Faces.Add(f);
-
-                mesh.FaceIndices.Add(amtModel.Faces.Count - 1);
-            }
-
-            //finalmente seta o mesh atual
-            amtModel.Meshes[amtModel.Meshes.Count - 1] = mesh;
-        }
-
+        #region Convert Material
         private AMT_MATERIAL ConvertMaterial(XElement materialElement, List<XElement> effectElements, List<XElement> images)
         {
             AMT_MATERIAL material = new AMT_MATERIAL();
@@ -688,7 +892,22 @@ namespace ACFramework.FileStruct
 
             return material;
         }
+        #endregion
 
+        #region Convert Head
+        private void ConvertHead(ref AMT_MODEL amtModel)
+        {
+            amtModel.Head.Version = 1;
+            amtModel.Head.NumFaces = (uint)amtModel.Faces.Count;
+            amtModel.Head.NumIndices = (uint)amtModel.Faces.Count * 3;
+            amtModel.Head.NumMeshes = (uint)amtModel.Meshes.Count;
+            amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
+            amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
+            amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
+        }
+        #endregion
+
+        #region Optimize
         private void Optimize(ref AMT_MODEL amtModel)
         {
             List<AMT_VERTEX> vertices = new List<AMT_VERTEX>();
@@ -764,127 +983,6 @@ namespace ACFramework.FileStruct
 
             amtModel.Head.NumVertices = (uint)currentVertices;
         }
-
-        #region Get Geometry Data
-        private List<Vector3> GetPositions(XElement positionElement)
-        {
-            List<Vector3> positions = new List<Vector3>();
-
-            XElement technique_common = positionElement.Element(XName.Get("technique_common", Namespace));
-            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
-            int vector3Count = int.Parse(accessor.Attribute("count").Value);
-            int stride = int.Parse(accessor.Attribute("stride").Value);
-            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
-            int X = 0,Y = 1,Z = 2; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
-            for (int i = 0; i < stride; i++)
-            {
-                if (param[i].Attribute("name").Value == "X")
-                    X = i;
-                else if (param[i].Attribute("name").Value == "Y")
-                    Y = i;
-                else
-                    Z = i;
-            }
-
-            XElement float_array = positionElement.Element(XName.Get("float_array", Namespace));
-            string strPositions = float_array.Value;
-            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
-            string[] values = strPositions.Replace('\n',' ').Trim().Split(' ');
-
-            //se for igual entao o split fez certo a budega
-            if (values.Length == count)
-            {
-                //adiciona os valores na ordem certa XYZ
-                for (int i = 0; i < values.Length; i+=stride)
-			    {
-                    positions.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
-                                              System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
-                                              System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));			 
-			    }
-            }
-
-            return positions;
-        }
-
-        private List<Vector3> GetNormals(XElement normalElement)
-        {
-            List<Vector3> normals = new List<Vector3>();
-
-            XElement technique_common = normalElement.Element(XName.Get("technique_common", Namespace));
-            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
-            int vector3Count = int.Parse(accessor.Attribute("count").Value);
-            int stride = int.Parse(accessor.Attribute("stride").Value);
-            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
-            int X = 0,Y = 1,Z = 2; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
-            for (int i = 0; i < stride; i++)
-            {
-                if (param[i].Attribute("name").Value == "X")
-                    X = i;
-                else if (param[i].Attribute("name").Value == "Y")
-                    Y = i;
-                else
-                    Z = i;
-            }
-                
-
-            XElement float_array = normalElement.Element(XName.Get("float_array", Namespace));
-            string strPositions = float_array.Value;
-            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
-            string[] values = strPositions.Replace('\n',' ').Trim().Split(' ');
-
-            //se for igual entao o split fez certo a budega
-            if (values.Length == count)
-            {
-                //adiciona os valores na ordem certa XYZ
-                for (int i = 0; i < values.Length; i+=stride)
-			    {
-                    normals.Add(new Vector3(System.Convert.ToSingle(values[i + X], CultureInfo.InvariantCulture),
-                                            System.Convert.ToSingle(values[i + Y], CultureInfo.InvariantCulture),
-                                            System.Convert.ToSingle(values[i + Z], CultureInfo.InvariantCulture)));			 
-			    }
-            }
-
-            return normals;
-        }
-
-        private List<Vector2> GetTexCoords(XElement texcoordElement)
-        {
-            List<Vector2> texcoords = new List<Vector2>();
-
-            XElement technique_common = texcoordElement.Element(XName.Get("technique_common", Namespace));
-            XElement accessor = technique_common.Element(XName.Get("accessor", Namespace));
-            int vector3Count = int.Parse(accessor.Attribute("count").Value);
-            int stride = int.Parse(accessor.Attribute("stride").Value);
-            List<XElement> param = accessor.Elements(XName.Get("param", Namespace)).ToList();
-            int S = 0,T = 1; //uso para pegar qual a ordem de armazenamento pode estar YZX por exemplo
-            for (int i = 0; i < stride; i++)
-            {
-                if (param[i].Attribute("name").Value == "S")
-                    S = i;
-                else if (param[i].Attribute("name").Value == "T")
-                    T = i;
-            }
-                
-
-            XElement float_array = texcoordElement.Element(XName.Get("float_array", Namespace));
-            string strPositions = float_array.Value;
-            int count = int.Parse(float_array.Attribute("count").Value); //pega o contado de valores pra testar depois q fizer o split
-            string[] values = strPositions.Replace('\n',' ').Trim().Split(' ');
-
-            //se for igual entao o split fez certo a budega
-            if (values.Length == count)
-            {
-                //adiciona os valores na ordem certa XYZ
-                for (int i = 0; i < values.Length; i += stride)
-			    {
-                    texcoords.Add(new Vector2(System.Convert.ToSingle(values[i + S], CultureInfo.InvariantCulture),
-                                              System.Convert.ToSingle(values[i + T], CultureInfo.InvariantCulture)));			 
-			    }
-            }
-
-            return texcoords;
-        }
         #endregion
-
     }
 }

@@ -187,7 +187,7 @@ namespace ACFramework.FileStructs
             foreach (var item in kfData)
             {
                 bw.Write(item.Time);
-                WriteMatrix(bw, item.bindMatrix);
+                WriteMatrix(bw, item.BindMatrix);
             }
         }
 

@@ -159,11 +159,14 @@ namespace ACFramework
 
                     v.InverseBindMatrix = Matrix.Invert(scale) * v.InverseBindMatrix;
 
-                    for (int j = 0; j < v.KFData.Count; j++)
+                    if (v.Name == "Root")
                     {
-                        AMT_KF p = v.KFData[j];
-                        p.bindMatrix *= scale;
-                        v.KFData[j] = p;
+                        for (int j = 0; j < v.KFData.Count; j++)
+                        {
+                            AMT_KF p = v.KFData[j];
+                            p.BindMatrix *= scale;
+                            v.KFData[j] = p;
+                        }
                     }
 
                     model.Joints[i] = v;
@@ -211,7 +214,7 @@ namespace ACFramework
                         for (int j = 0; j < v.KFData.Count; j++)
                         {
                             AMT_KF p = v.KFData[j];
-                            p.bindMatrix *= translation;
+                            p.BindMatrix *= translation;
                             v.KFData[j] = p;
                         }
                     }
@@ -264,7 +267,7 @@ namespace ACFramework
                         for (int j = 0; j < v.KFData.Count; j++)
                         {
                             AMT_KF p = v.KFData[j];
-                            p.bindMatrix *= rotation;
+                            p.BindMatrix *= rotation;
                             v.KFData[j] = p;
                         }
                     }

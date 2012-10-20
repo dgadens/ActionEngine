@@ -129,10 +129,10 @@ namespace ACFramework.FileStructs
         public uint Flag;                             // Flags
     }
 
-    public struct AMT_KF
+    public class AMT_KF
     {
         public float Time;                               // Time
-        public Matrix bindMatrix;                        // Matrix
+        public Matrix BindMatrix;                        // Matrix
     }
 
     public class AMT_JOINT
@@ -152,6 +152,8 @@ namespace ACFramework.FileStructs
 
         //nao é exportado, usado para achar o indice do bone pelo controller do skin
         public string SID;
+        //nao é exportado, usando para encontrar as animacoes id do bone / sid da matrix
+        public string TARGET;
     }
 
     public struct AMT_ANIMATION
