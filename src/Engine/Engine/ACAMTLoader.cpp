@@ -164,7 +164,7 @@ HRESULT ACAMTLoader::ReadJoints( AMT_MODEL* outModel )
 		{
 			AMT_KF kf;;
 			fread(&kf.Time, sizeof ( FLOAT ), 1, mpFile);
-			fread(&kf.bindMatrix, sizeof ( FLOAT ), 16, mpFile);
+			fread(&kf.BindMatrix, sizeof ( FLOAT ), 16, mpFile);
 			pJoint->KFData.push_back(kf);
 		}
 

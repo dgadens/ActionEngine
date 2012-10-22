@@ -21,6 +21,8 @@ ACModelDefinition::ACModelDefinition(ACRenderDevice* gDevice, ACContentManager* 
 	mpIndices = nullptr;
 
 	mpJointMark = nullptr;
+
+	mpAnimationController = nullptr;
 };
 
 ACModelDefinition::~ACModelDefinition()
@@ -54,6 +56,7 @@ void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 		mpJointMark = new ACMark(mpGDevice, mpCManager); 
 		VFormat = VertexFormat::VF_VertexSkinnedMesh;
 		PrepareVSM(mpModel);
+		mpAnimationController = new ACAnimationController(mpModel);
 	}
 	else
 	{
@@ -190,27 +193,10 @@ const ACSkin const * ACModelDefinition::GetSkin()
 	return mpSkin;
 };
 
-void ACModelDefinition::UpdateBones(Matrix& world)
+void ACModelDefinition::Update(FLOAT elapsedTime, Matrix& world)
 {
-	//pega o joint root e passa por todos os  joints
-	AMT_JOINT* rootJoint = mpModel->pJoints[0];
-	rootJoint->BindMatrix = mpModel->pOriginalJoints[0]->BindMatrix * world;
-	rootJoint->MatrixAbsolute = rootJoint->BindMatrix;
-
-	for (int i = 0; i < rootJoint->NumChildren; i++)
-		UpdateBones(mpModel->pJoints[rootJoint->JointChildren[i]]);
-};
-
-void ACModelDefinition::UpdateBones(AMT_JOINT* joint)
-{
-	if (joint->ParentID != -1)
-		joint->MatrixAbsolute = joint->BindMatrix * mpModel->pJoints[joint->ParentID]->MatrixAbsolute;
-
-	if (joint->NumChildren <= 0)
-		return;
-
-	for (int i = 0; i < joint->NumChildren; i++)
-		UpdateBones(mpModel->pJoints[joint->JointChildren[i]]);
+	mpAnimationController->Run();
+	mpAnimationController->Update(elapsedTime, world);
 };
 
 void ACModelDefinition::RenderModel(ACCamera* camera)
@@ -277,7 +263,7 @@ void ACModelDefinition::Release()
 	//remove o skin e tb as texturas e tudo mais
 	SAFE_RELEASE(mpSkin);
 	SAFE_DELETE(mpJointMark);
-
+	SAFE_DELETE(mpAnimationController);
 	SAFE_DELETE(mpModel);
 
 	//remove o vb e ib da api

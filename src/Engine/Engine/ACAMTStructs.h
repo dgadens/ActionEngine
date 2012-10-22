@@ -82,7 +82,7 @@ struct AMT_MESH
 struct AMT_KF
 {
     FLOAT Time;                             // Time
-    Matrix bindMatrix;                      // Position
+    Matrix BindMatrix;                      // Position
 };
 
 struct AMT_JOINT
@@ -111,13 +111,14 @@ struct AMT_ANIMATION
 
 struct AMT_MODEL
 {
-	AMT_HEAD				   Head;                 // Header
-	std::vector<AMT_VERTEX*>   pVertices;            // Vertices
-	std::vector<AMT_FACE*>	   pFaces;               // Faces
-	std::vector<AMT_MESH*>	   pMeshes;              // Meshs
-	std::vector<AMT_MATERIAL*> pMaterials;           // Materials
-	std::vector<AMT_JOINT*>    pJoints;				 // Bones	
-	std::vector<AMT_JOINT*>    pOriginalJoints;		 // Original bones
+	AMT_HEAD				    Head;                 // Header
+	std::vector<AMT_VERTEX*>    pVertices;            // Vertices
+	std::vector<AMT_FACE*>	    pFaces;               // Faces
+	std::vector<AMT_MESH*>	    pMeshes;              // Meshs
+	std::vector<AMT_MATERIAL*>  pMaterials;           // Materials
+	std::vector<AMT_JOINT*>     pJoints;				 // Bones	
+	std::vector<AMT_JOINT*>     pOriginalJoints;		 // Original bones
+	std::vector<AMT_ANIMATION*> pAnimations;		 // Animations 
 };
 
 // -----------------------------------------------------------------

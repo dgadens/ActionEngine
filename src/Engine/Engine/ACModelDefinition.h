@@ -18,6 +18,7 @@
 #include "ACSkin.h"
 #include "ACCamera.h"
 #include "ACMark.h"
+#include "ACAnimationController.h"
 
 class ACContentManager;
 class ACRenderDevice;
@@ -30,6 +31,7 @@ private:
 	ACRenderDevice* mpGDevice;
 	ACContentManager* mpCManager;
 
+	ACAnimationController* mpAnimationController;
 	AMT_MODEL* mpModel;
 
 	//Renderizar o joints
@@ -78,7 +80,7 @@ public:
 
 	void Prepare(AMT_MODEL* pointer);
 
-	void UpdateBones(Matrix& world);
+	void Update(FLOAT elapsedTime, Matrix& world);
 	void RenderModel(ACCamera* camera);
 	void RenderBones(ACCamera* camera);
 

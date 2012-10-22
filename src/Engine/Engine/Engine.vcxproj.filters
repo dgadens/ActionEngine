@@ -253,6 +253,9 @@
     <ClInclude Include="ACMark.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="ACAnimationController.h">
+      <Filter>Header Files\ContentManager\ACModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ACRenderer.cpp">
@@ -329,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="ACMark.cpp">
       <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ACAnimationController.cpp">
+      <Filter>Source Files\ContentManager\ACModel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

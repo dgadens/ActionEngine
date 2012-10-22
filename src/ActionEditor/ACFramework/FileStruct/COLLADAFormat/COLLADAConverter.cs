@@ -39,9 +39,9 @@ namespace ACFramework.FileStruct
             #endregion
 
             AMT_MODEL amtModel = ConvertDAEtoAMT(colladaNode);
-            Tools.UniformScale(ref amtModel);
-            Tools.SetYUp(ref amtModel, upVector);
-            Tools.CenterPivot(ref amtModel);
+          //  Tools.UniformScale(ref amtModel);
+          //  Tools.SetYUp(ref amtModel, upVector);
+          //  Tools.CenterPivot(ref amtModel);
 
             return amtModel;
         }
@@ -389,7 +389,10 @@ namespace ACFramework.FileStruct
                 string boneId = rootNode.Attribute("id").Value;
 
                 XElement matrixElement = rootNode.Element(XName.Get("matrix", Namespace));
-                string matrixSID = matrixElement.Attribute("sid").Value; //uso nas animacoes para achar o bone id/sid
+                string matrixSID = null;
+                if (matrixElement.Attribute("sid") != null)
+                    matrixSID = matrixElement.Attribute("sid").Value; //uso nas animacoes para achar o bone id/sid
+
                 matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
                 
                 AMT_JOINT newBone = new AMT_JOINT();
@@ -405,7 +408,8 @@ namespace ACFramework.FileStruct
                 newBone.NumKF = 0;
                 newBone.KFData = new List<AMT_KF>();
 
-                newBone.IsAnimated = 0;
+                //se nao tem sid entao ele nao é animado
+                newBone.IsAnimated = (uint)(string.IsNullOrEmpty(matrixSID)? 0 : 1);
                 newBone.Flag = 0;
 
                 newBone.BindMatrix = matrix;
@@ -414,7 +418,7 @@ namespace ACFramework.FileStruct
 
                 amtModel.Joints.Add(newBone);
 
-                FillBoneNodes(ref newBone, rootNode, matrixSID, ref amtModel);
+                FillBoneNodes(ref newBone, rootNode, ref amtModel);
             }
         }
 
@@ -445,7 +449,7 @@ namespace ACFramework.FileStruct
             return rootNode;
         }
 
-        private void FillBoneNodes(ref AMT_JOINT parentBone, XElement boneNode, string matrixSID, ref AMT_MODEL amtModel)
+        private void FillBoneNodes(ref AMT_JOINT parentBone, XElement boneNode, ref AMT_MODEL amtModel)
         {
             //pego todos os nodes
             List<XElement> nodes = boneNode.Elements(XName.Get("node", Namespace)).ToList();
@@ -462,6 +466,10 @@ namespace ACFramework.FileStruct
                     string boneId = node.Attribute("id").Value;
                     string sid = node.Attribute("sid").Value;
                     XElement matrixElement = node.Element(XName.Get("matrix", Namespace));
+                    string matrixSID = null;
+                    if (matrixElement.Attribute("sid") != null)
+                        matrixSID = matrixElement.Attribute("sid").Value; //uso nas animacoes para achar o bone id/sid
+
                     matrix = Tools.ConvertStringToMatrix(matrixElement.Value, 0);
 
                     // Create this node, use the current number of bones as number.
@@ -478,7 +486,7 @@ namespace ACFramework.FileStruct
                     newBone.NumKF = 0;
                     newBone.KFData = new List<AMT_KF>();
 
-                    newBone.IsAnimated = 0;
+                    newBone.IsAnimated = (uint)(string.IsNullOrEmpty(matrixSID) ? 0 : 1);
                     newBone.Flag = 0;
 
                     //atualiza o bone pai
@@ -495,7 +503,7 @@ namespace ACFramework.FileStruct
                     amtModel.Joints.Add(newBone);
                     
                     // vai para os filhos
-                    FillBoneNodes(ref newBone, node, matrixSID, ref amtModel);
+                    FillBoneNodes(ref newBone, node, ref amtModel);
                 }
             }
         }
@@ -553,12 +561,14 @@ namespace ACFramework.FileStruct
                     });
 
                     //agora vo atras do float_array do sourceinput e sourceoutput
-                    string kfTimeValues = inputSourceElement.Element(XName.Get("float_array", Namespace)).Value;
+                    XElement faInput = inputSourceElement.Element(XName.Get("float_array", Namespace));
+                    amtModel.Head.NumFrames = System.Convert.ToUInt32(faInput.Attribute("count").Value);
+                    string kfTimeValues = faInput.Value;
                     string[] kfTimes = kfTimeValues.Replace('\n', ' ').Trim().Split(' ');
 
-                    int numberOfMatrixFloats = kfTimes.Length * 16; 
+                    uint numberOfMatrixFloats = amtModel.Head.NumFrames * 16; 
                     string kfTransformValues = outputSourceElement.Element(XName.Get("float_array", Namespace)).Value.Replace('\n', ' ').Trim();
-                    Matrix[] keyFramesMatrizes = new Matrix[numberOfMatrixFloats / 16];
+                    Matrix[] keyFramesMatrizes = new Matrix[amtModel.Head.NumFrames];
                     for (int i = 0, j = 0; i < numberOfMatrixFloats; i += 16, j++)
                         keyFramesMatrizes[j] = Tools.ConvertStringToMatrix(kfTransformValues, i);
 
@@ -618,7 +628,7 @@ namespace ACFramework.FileStruct
                 XElement weightInputElement = inputElements.Find(item => { return item.Attribute("semantic").Value == "WEIGHT"; });
                 string weightSourceName = weightInputElement.Attribute("source").Value.Substring(1);
 
-                //pega o bindmatrix
+                //pega o bindmatrix (utilizado para rotacionar o bone)
                 string bindShapeMatrix = skin.Element(XName.Get("bind_shape_matrix", Namespace)).Value;
                 Matrix bindMatrix = Tools.ConvertStringToMatrix(bindShapeMatrix, 0);
                 foreach (var item in amtModel.Joints)
@@ -904,6 +914,7 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
             amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
             amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
+            //amtModel.Head.NumAnimations = (uint)amtModel.Animations.Count;
         }
         #endregion
 

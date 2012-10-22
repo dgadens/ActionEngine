@@ -172,6 +172,6 @@ namespace ACFramework.FileStructs
         public List<AMT_MESH> Meshes;                // Meshs
         public List<AMT_MATERIAL> Materials;            // Materials
         public List<AMT_JOINT> Joints;               // Joints
-        public List<AMT_ANIMATION> Animation;            // Animations
+        public List<AMT_ANIMATION> Animations;            // Animations
     } 
 }

@@ -135,11 +135,11 @@ void ACModel::Update(FLOAT elapsedTime)
 	/*		OrientedBoundingBox::TransformOBB(&pModelDefinition->OBBOriginal, &World, &OBB);
 			BoundingBox::CreateFromPoints(OrientedBoundingBox::CORNER_COUNT, OBB.pEdges, &BB);*/
 
-			if (pModelDefinition->HasSkeleton)
-				pModelDefinition->UpdateBones(World);
-
 			mChangeTransformation = FALSE;
 		}
+
+		if (pModelDefinition->HasSkeleton)
+			pModelDefinition->Update(elapsedTime, World);
 	}
 };
 
