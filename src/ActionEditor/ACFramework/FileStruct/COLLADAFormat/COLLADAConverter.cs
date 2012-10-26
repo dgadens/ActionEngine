@@ -14,7 +14,7 @@ namespace ACFramework.FileStruct
 
         Import _import;
 
-        public Nullable<AMT_MODEL> Convert(string path, Import import)
+        public AMT_MODEL? Convert(string path, Import import)
         {
             _import = import;
 
@@ -39,9 +39,9 @@ namespace ACFramework.FileStruct
             #endregion
 
             AMT_MODEL amtModel = ConvertDAEtoAMT(colladaNode);
-          //  Tools.UniformScale(ref amtModel);
-          //  Tools.SetYUp(ref amtModel, upVector);
-          //  Tools.CenterPivot(ref amtModel);
+            Tools.UniformScale(ref amtModel);
+            Tools.SetYUp(ref amtModel, upVector);
+            Tools.CenterPivot(ref amtModel);
 
             return amtModel;
         }
@@ -914,7 +914,7 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
             amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
             amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
-            //amtModel.Head.NumAnimations = (uint)amtModel.Animations.Count;
+            amtModel.Head.NumAnimations = (uint)amtModel.Animations.Count;
         }
         #endregion
 

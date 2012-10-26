@@ -23,6 +23,7 @@ namespace ACFramework.FileStructs
                 WriteMeshes(bw, model);
                 WriteMaterials(bw, model);
                 WriteJoints(bw, model);
+                WriteAnimations(bw, model);
 
                 bw.Close();
             }
@@ -179,6 +180,23 @@ namespace ACFramework.FileStructs
                 WriteMatrix(bw, joints[i].BindMatrix);
                 WriteMatrix(bw, joints[i].MatrixAbsolute);
                 WriteMatrix(bw, joints[i].InverseBindMatrix);
+            }
+        }
+
+        private void WriteAnimations(BinaryWriter bw, AMT_MODEL model)
+        {
+            List<AMT_ANIMATION> animations = model.Animations;
+
+            for (int i = 0; i < animations.Count; i++)
+            {
+                char[] name = Tools.GetCharArray(animations[i].Name, 64);
+                bw.Write(name);
+
+                _import.ProgressText = "Exporting Bones: animation: " + animations[i].Name;
+
+                bw.Write(animations[i].StartFrame);
+                bw.Write(animations[i].EndFrame);
+                bw.Write(animations[i].Active);
             }
         }
 

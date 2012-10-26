@@ -8,6 +8,6 @@ namespace ACFramework.FileStruct
 {
     public interface IConverter
     {
-        Nullable<AMT_MODEL> Convert(string path, Import import);
+        AMT_MODEL? Convert(string path, Import import);
     }
 }

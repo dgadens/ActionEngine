@@ -15,17 +15,27 @@ namespace ACEditor
 {
     public partial class frmImport : Form
     {
+        DataTable animationsData;
+
         public frmImport()
         {
             InitializeComponent();
+
+            animationsData = new DataTable();
+            animationsData.Columns.Add("Name", typeof(string));
+            animationsData.Columns.Add("Start", typeof(uint));
+            animationsData.Columns.Add("End", typeof(uint));
         }
 
         private void btnFindFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog of = new OpenFileDialog();
-            of.Filter = "Model Files(*.DAE;*.MS3D)|*.DAE;*.MS3D|All files (*.*)|*.*";
+            of.Filter = "Model Files(*.DAE)|*.DAE|All files (*.*)|*.*";
             if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
                 txtFilePath.Text = of.FileName;
+                animationsData.Clear();
+            }
         }
 
         private void btnFindFolder_Click(object sender, EventArgs e)
@@ -40,8 +50,8 @@ namespace ACEditor
             Import _import = new Import();
             _import.PropertyChanged += new PropertyChangedEventHandler(_import_PropertyChanged);
 
-            //try
-            //{
+            try
+            {
                 AMT_MODEL? model = null;
                 IConverter converter = null;
 
@@ -55,6 +65,9 @@ namespace ACEditor
                         break;
                 }
 
+                //adiciona as animacoes q estao na interface
+                AddAnimations(ref model);
+
                 //se fez a conversao entao ele grava o arquivo amt
                 if (model.HasValue)
                 {
@@ -65,11 +78,30 @@ namespace ACEditor
 
                     MessageBox.Show("Arquivo gerado com sucesso.");
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        void AddAnimations(ref AMT_MODEL? model)
+        {
+            List<AMT_ANIMATION> animations = new List<AMT_ANIMATION>();
+            for (int i = 0; i < animationsData.Rows.Count; i++)
+			{
+                var animation = new AMT_ANIMATION()
+                { 
+			        StartFrame = (uint)animationsData.Rows[i]["Start"],
+                    EndFrame = (uint)animationsData.Rows[i]["End"],
+                    Name = animationsData.Rows[i]["Name"].ToString()
+                };
+                animations.Add(animation);
+			}
+
+            AMT_MODEL im = model.Value;
+            im.Animations = animations;
+            model = im;
         }
 
         void _import_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -81,6 +113,17 @@ namespace ACEditor
         private void frmImport_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnAddAnimation_Click(object sender, EventArgs e)
+        {
+            DataRow row = animationsData.NewRow();
+            row["Name"] = txtAnimationName.Text;
+            row["Start"] = uint.Parse(txtInitFrame.Text);
+            row["End"] = uint.Parse(txtFinalFrame.Text);
+            animationsData.Rows.Add(row);
+
+            dgvAnimations.DataSource = animationsData;
         }
     }
 }

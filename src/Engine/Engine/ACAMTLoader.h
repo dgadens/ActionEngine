@@ -28,5 +28,6 @@ protected:
    static HRESULT   ReadMesh( AMT_MODEL* outModel );                    
    static HRESULT   ReadMaterials( AMT_MODEL* outModel );               
    static HRESULT   ReadJoints( AMT_MODEL* outModel );   
+   static HRESULT   ReadAnimations( AMT_MODEL* outModel );   
 };
 #endif
