@@ -90,6 +90,13 @@ void Game::Update()
 {
 	if (Globals::IsRunning)
 	{
+		ACKeyboardState ks = GGameInput::GetKBState();
+		ACKeyboardState pks = GGameInput::GetPreviousKBState();
+		if (ks.IsPressed(ACKEYS::ACKEY_A))
+			mpPowerCube->SetAnimation("Anim 1");
+		if (ks.IsPressed(ACKEYS::ACKEY_B))
+			mpPowerCube->SetAnimation("Anim 2");
+
 		//fixo na ordem
 		ACTimeControl::Update();
 		GGameInput::Update();

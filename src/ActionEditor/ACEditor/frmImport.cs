@@ -85,7 +85,7 @@ namespace ACEditor
             }
         }
 
-        void AddAnimations(ref AMT_MODEL? model)
+        void AddAnimations(ref AMT_MODEL? amtModel)
         {
             List<AMT_ANIMATION> animations = new List<AMT_ANIMATION>();
             for (int i = 0; i < animationsData.Rows.Count; i++)
@@ -99,9 +99,10 @@ namespace ACEditor
                 animations.Add(animation);
 			}
 
-            AMT_MODEL im = model.Value;
+            AMT_MODEL im = amtModel.Value;
             im.Animations = animations;
-            model = im;
+            im.Head.NumAnimations = (uint)animations.Count;
+            amtModel = im;
         }
 
         void _import_PropertyChanged(object sender, PropertyChangedEventArgs e)

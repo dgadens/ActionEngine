@@ -71,6 +71,9 @@ public:
 	void SetRenderNormals(BOOL value);
 	void SetRenderBones(BOOL value);
 
+	//Animations
+	void ActiveAnimation(const std::string& name);
+
 	//update
 	void Update(FLOAT elapsedTime);
 	void Render(ACCamera* camera);

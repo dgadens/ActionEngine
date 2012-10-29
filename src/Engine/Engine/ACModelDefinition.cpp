@@ -193,9 +193,13 @@ const ACSkin const * ACModelDefinition::GetSkin()
 	return mpSkin;
 };
 
+void ACModelDefinition::ActiveAnimation(const std::string& name)
+{
+	mpAnimationController->SetAnimation(name);
+};
+
 void ACModelDefinition::Update(FLOAT elapsedTime, Matrix& world)
 {
-	mpAnimationController->Run();
 	mpAnimationController->Update(elapsedTime, world);
 };
 

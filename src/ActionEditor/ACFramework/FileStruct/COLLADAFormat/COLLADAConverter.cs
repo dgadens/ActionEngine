@@ -914,7 +914,6 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
             amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
             amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
-            amtModel.Head.NumAnimations = (uint)amtModel.Animations.Count;
         }
         #endregion
 

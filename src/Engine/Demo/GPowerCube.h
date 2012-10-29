@@ -46,6 +46,7 @@ public:
 
 	void Draw(ACCamera* camera);
 
+	void SetAnimation(const std::string& name);
 
 	//special effects
 	void Explode();

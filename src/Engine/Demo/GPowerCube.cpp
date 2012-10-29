@@ -67,6 +67,11 @@ ACModel* GPowerCube::GetModel()
 	return mpModels[0];
 };
 
+void GPowerCube::SetAnimation(const std::string& name)
+{
+	mpModels[0]->ActiveAnimation(name);
+};
+
 void GPowerCube::Update(float elapsedTime)
 {
 	//if (!foi)

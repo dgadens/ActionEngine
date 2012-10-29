@@ -110,6 +110,15 @@ void ACModel::Load(const std::string& name)
 
 #pragma endregion
 
+#pragma region Animations
+
+void ACModel::ActiveAnimation(const std::string& name)
+{
+	pModelDefinition->ActiveAnimation(name);
+};
+
+#pragma endregion
+
 #pragma region UPDATE
 
 void ACModel::Update(FLOAT elapsedTime)

@@ -80,6 +80,8 @@ public:
 
 	void Prepare(AMT_MODEL* pointer);
 
+	void ActiveAnimation(const std::string& name);
+
 	void Update(FLOAT elapsedTime, Matrix& world);
 	void RenderModel(ACCamera* camera);
 	void RenderBones(ACCamera* camera);
