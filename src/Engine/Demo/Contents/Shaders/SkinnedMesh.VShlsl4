@@ -17,15 +17,14 @@ cbuffer cbPerFrame : register(b0)
     float  xTime                        : packoffset(c4.y);
 };
 
-cbuffer cbPerModel : register(b1) 
+cbuffer cbSkinMatrizes : register(b1) 
 {
-    float4x4 xWorld                     : packoffset(c0); 
-    float4x4 xBones[MAX_BONE_MATRICES]  : packoffset(c4); 
+    float4x4 xBones[MAX_BONE_MATRICES]  : packoffset(c0); 
 };
 
 cbuffer cbPerPass  : register(b2) 
 {
-    float4x4 xViewProjection      : packoffset(c0);
+    float4x4 xViewProjection      	: packoffset(c0);
 };
 
 struct VS_INPUT
@@ -33,8 +32,8 @@ struct VS_INPUT
     float4 Position     : POSITION;
     float3 Normal       : NORMAL;
     float2 TexCoord     : TEXCOORD0;
-    float3 BlendWeights : BLENDWEIGHTS;
-    float3 BlendIndices : BLENDINDICES;
+    float4 BlendWeights : BLENDWEIGHTS;
+    float4 BlendIndices : BLENDINDICES;
 };
 
 struct PS_INPUT
@@ -50,20 +49,19 @@ PS_INPUT main( VS_INPUT input )
 {
     PS_INPUT output = (PS_INPUT)0;
 
-    // Blend between the weighted bone matrices.
+    // faz o vertexblend, a matriz world ja vem no skin entao nao preciso dela
     float4x4 skinTransform = 0;
 
     skinTransform += xBones[input.BlendIndices.x] * input.BlendWeights.x;
     skinTransform += xBones[input.BlendIndices.y] * input.BlendWeights.y;
     skinTransform += xBones[input.BlendIndices.z] * input.BlendWeights.z;
     skinTransform += xBones[input.BlendIndices.w] * input.BlendWeights.w;
-    output.Position = mul( input.Position, skinTransform );
 
-    float4x4 worldViewProjection = mul ( xWorld, xViewProjection );
-    output.Position = mul( output.Position, worldViewProjection );
+    float4x4 worldViewProjection = mul ( skinTransform, xViewProjection );
+    output.Position = mul( input.Position, worldViewProjection );
 
     output.PosWorld = mul(input.Position, skinTransform);
-    output.Normal = mul(input.Normal, xWorld * skinTransform);
+    output.Normal = mul(input.Normal, skinTransform);
     output.TexCoord = input.TexCoord;
 
     return output;

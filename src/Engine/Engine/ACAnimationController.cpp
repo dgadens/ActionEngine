@@ -8,6 +8,7 @@ ACAnimationController::ACAnimationController()
 	mCurrentTime = 0;
 	mAnimationClipTotalTime = 0;
 	mIsRunning = FALSE;
+	mpSkinMatrizes = nullptr;
 };
 
 ACAnimationController::ACAnimationController(AMT_MODEL* amtModel)
@@ -20,6 +21,8 @@ ACAnimationController::ACAnimationController(AMT_MODEL* amtModel)
 	mCurrentTime = 0;
 	mpRootAnimatedBone = nullptr;
 	mpCurrentAnimation = nullptr;
+
+	mpSkinMatrizes = new Matrix[amtModel->Head.NumJoints];
 
 	//primeiro pego o primeiro joint animado
 	for (int b = 0; b < mpModel->Head.NumJoints; b++)
@@ -37,6 +40,7 @@ ACAnimationController::ACAnimationController(AMT_MODEL* amtModel)
 
 ACAnimationController::~ACAnimationController()
 {
+	SAFE_DELETE_A(mpSkinMatrizes);
 };
 
 void ACAnimationController::SetAnimation(const std::string& name)
@@ -80,6 +84,7 @@ void ACAnimationController::Update(float elapsedTime, const Matrix& world)
 {
 	if (mIsRunning && mpModel != nullptr)
 	{
+		//update na animacao
 		if (mpRootAnimatedBone != nullptr)
 		{
 			mCurrentTime += elapsedTime;
@@ -121,6 +126,7 @@ void ACAnimationController::Update(float elapsedTime, const Matrix& world)
 			}
 
 			UpdateBones(world);
+			UpdateSkinMatrizes();
 		}
 	}
 };
@@ -169,4 +175,15 @@ void ACAnimationController::UpdateBones(AMT_JOINT* joint)
 
 	for (int i = 0; i < joint->NumChildren; i++)
 		UpdateBones(mpModel->pJoints[joint->JointChildren[i]]);
+};
+
+void ACAnimationController::UpdateSkinMatrizes()
+{
+	for (int i = 0; i < mpModel->Head.NumJoints; i++)
+		mpSkinMatrizes[i] = mpModel->pOriginalJoints[i]->InverseBindMatrix * mpModel->pJoints[i]->MatrixAbsolute;
+};
+
+Matrix* ACAnimationController::GetSkinMatrizes()
+{
+	return mpSkinMatrizes;
 };

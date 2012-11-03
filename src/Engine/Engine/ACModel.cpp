@@ -99,11 +99,11 @@ void ACModel::Load(const std::string& name)
 {
 	pModelDefinition = mpCManager->LoadModel(name);
 
-	//carrega os shaders padrao para modelos carregados de arquivo
-	if (pModelDefinition->HasSkeleton)
+	//carrega os shaders padrao para modelos carregados de arquivo, se for skin na gpu entao é outro vs
+	if (pModelDefinition->HasSkeleton && ACConfigurations::Instance()->GetIsGPUSkinning())
 		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexSkinnedMesh);
 	else
-		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
+		mpVS = mpCManager->LoadVertexShader("LightingTextured.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
 
 	mpPS = mpCManager->LoadPixelShader("LightingTextured.PShlsl4");
 };
@@ -167,8 +167,16 @@ void ACModel::Render(ACCamera* camera)
 		//se tiver esqueleto entao a matriz world tem q ser a identidade
 		if (pModelDefinition->HasSkeleton)
 		{
-			Matrix identity;
-			mpGDevice->SetWorldMatrix(identity);
+			//se for na gpu skin entao ele passa a lista de matrizes
+			//senao ele passa a matriz identidade para world
+			if (ACConfigurations::Instance()->GetIsGPUSkinning())
+				mpGDevice->SetSkinMatrizes(pModelDefinition->GetNumberOfBones(),
+										   pModelDefinition->GetSkinMatrizes());
+			else
+			{
+				Matrix identity;
+				mpGDevice->SetWorldMatrix(identity);
+			}
 		}
 		else
 			mpGDevice->SetWorldMatrix(World);

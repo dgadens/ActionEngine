@@ -39,6 +39,7 @@ private:
 	UINT MAX_VERTICES_IN_BUFFER;
 	UINT MAX_INDICES_IN_BUFFER;
 
+	BOOL USE_GPU_SKINNING;
 
 public:
 
@@ -60,6 +61,8 @@ public:
 
 	const UINT GetMaxVerticesInBuffer();
 	const UINT GetMaxIndicesInBuffer();
+
+	const BOOL GetIsGPUSkinning();
 };
 
 #endif

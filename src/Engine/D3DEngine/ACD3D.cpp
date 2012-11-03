@@ -287,6 +287,21 @@ HRESULT ACD3D::CreateConstantBuffers()
 		return hr;
 	}
 
+	// Crio o constant buffer para o VS_CB_SKINMATRIZES
+	ZeroMemory( &cbDescVS, sizeof (D3D11_BUFFER_DESC));
+    cbDescVS.ByteWidth = sizeof( VS_CB_SKINMATRIZES );
+    cbDescVS.Usage = D3D11_USAGE_DYNAMIC;
+    cbDescVS.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbDescVS.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbDescVS.MiscFlags = 0;
+	hr = ACD3DGlobals::G_pD3dDevice->CreateBuffer(&cbDescVS, NULL, &mpVSCBSKinMatrizes );
+	if(FAILED(hr))
+	{
+		MessageBoxA(nullptr, "[ERROR] Create VS_CB_SKINMATRIZES. CreateConstantBuffers()", "Error", MB_OK | MB_ICONERROR);
+		return hr;
+	}
+	
+
 	// Cria o constant buffer para o VS_CB_PERPASS
 	ZeroMemory( &cbDescVS, sizeof (D3D11_BUFFER_DESC));
     cbDescVS.ByteWidth = sizeof( VS_CB_PERPASS );
@@ -561,6 +576,7 @@ void ACD3D::Release()
 
 	SAFE_RELEASE(mpVSCBPerFrame);
 	SAFE_RELEASE(mpVSCBPerModel);
+	SAFE_RELEASE(mpVSCBSKinMatrizes);
 	SAFE_RELEASE(mpVSCBPerPass);
 	SAFE_RELEASE(mpPSCBMaterial);
 	SAFE_RELEASE(mpVManager);
@@ -1299,6 +1315,25 @@ void ACD3D::SetWorldMatrix(const Matrix& value)
 		ACD3DGlobals::G_pContext->Unmap(mpVSCBPerModel, 0);
 		ACD3DGlobals::G_pContext->VSSetConstantBuffers(1, 1, &mpVSCBPerModel);
 	}
+};
+
+void ACD3D::SetSkinMatrizes(UINT numOfMatrizes, Matrix* value)
+{
+	mpVManager->ForcedFlushAll();
+
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	if (FAILED(ACD3DGlobals::G_pContext->Map(mpVSCBSKinMatrizes, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+	{
+		MessageBoxA(nullptr, "Erro ao atualizar cb skinmatrizes.", "Erro", MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	VS_CB_SKINMATRIZES* pCBSkinMatrizesData = (VS_CB_SKINMATRIZES*)mappedResource.pData;
+	for (int i = 0; i < numOfMatrizes; i++)
+		TransposeMatrixToColumnMajor(value[i], pCBSkinMatrizesData->BonesMatrix[i]);
+
+	ACD3DGlobals::G_pContext->Unmap(mpVSCBSKinMatrizes, 0);
+	ACD3DGlobals::G_pContext->VSSetConstantBuffers(1, 1, &mpVSCBSKinMatrizes);
 };
 
 void ACD3D::SetViewProjectionMatrix(const Matrix& value)

@@ -236,6 +236,7 @@ public:
 
 	//shaders constants
 	virtual void SetWorldMatrix(const Matrix& value) = 0;
+	virtual void SetSkinMatrizes(UINT numOfMatrizes, Matrix* value) = 0;
 	virtual void SetViewProjectionMatrix(const Matrix& value) = 0;
 	virtual void SetCameraPosition(const Vector3& value) = 0;
 	virtual void SetTime(float time) = 0;

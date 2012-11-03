@@ -56,6 +56,10 @@ private:
 	void PrepareVPNT(AMT_MODEL* model);
 	//prepara os dados para o skinnedmesh
 	void PrepareVSM(AMT_MODEL* model);
+	//prepara o skin q veio do arquivo
+	void PrepareSkin(AMT_MODEL* model);
+	//prepara os indices
+	void PrepareIndices(AMT_MODEL* model);
 	//atualiza as matrizes recurcivamente
 	void UpdateBones(AMT_JOINT* joint);
 
@@ -85,6 +89,10 @@ public:
 	void Update(FLOAT elapsedTime, Matrix& world);
 	void RenderModel(ACCamera* camera);
 	void RenderBones(ACCamera* camera);
+
+	Matrix* GetSkinMatrizes();
+
+	UINT GetNumberOfBones();
 
 	void Release();
 

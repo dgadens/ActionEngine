@@ -26,6 +26,12 @@ struct VS_CB_PERMODEL
 	Matrix xWorld;
 };
 
+#define MAX_BONE_MATRICES 255
+struct VS_CB_SKINMATRIZES
+{
+	Matrix BonesMatrix[MAX_BONE_MATRICES];
+};
+
 struct VS_CB_PERPASS
 {
 	Matrix xViewProjection;

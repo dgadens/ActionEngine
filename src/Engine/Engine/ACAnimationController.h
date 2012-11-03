@@ -18,6 +18,9 @@ class ACAnimationController
 private:
 	AMT_MODEL* mpModel;
 
+	//armazena as matrizes finais 
+	Matrix* mpSkinMatrizes;
+
 	//armazena o primeiro bone com animacao (é necessario pq pode haver bones sem animacao, mas depois todos sao animados)
 	AMT_JOINT* mpRootAnimatedBone;
 	//armazena a animacao corrente
@@ -38,6 +41,8 @@ private:
 
 	void UpdateBones(const Matrix& world);
 	void UpdateBones(AMT_JOINT* joint);
+	//update na posicao final de cada matriz (inversa * abs)
+	void UpdateSkinMatrizes();
 
 public:
 	ACAnimationController();
@@ -49,6 +54,7 @@ public:
 	void Pause();
 	void Update(float elapsedTime, const Matrix& world);
 
+	Matrix* GetSkinMatrizes();
 
 };
 

@@ -50,11 +50,13 @@ private:
 	//constant buffer usando para todos os shaders
 	ID3D11Buffer*								mpVSCBPerFrame;
 	ID3D11Buffer*								mpVSCBPerModel;
+	ID3D11Buffer*								mpVSCBSKinMatrizes;
 	ID3D11Buffer*								mpVSCBPerPass;
 	ID3D11Buffer*								mpPSCBMaterial;
 
 	VS_CB_PERFRAME                              mVSCBPerFrameData;
 	VS_CB_PERMODEL                              mVSCBPerModelData;
+	VS_CB_SKINMATRIZES                          mVSCBSkinMatrizesData;
     VS_CB_PERPASS                               mVSCBPerPassData;   
 	PS_CB_MATERIAL                              mPSCBMaterialData;
 
@@ -184,6 +186,7 @@ public:
 
 	//shaders constants
 	void SetWorldMatrix(const Matrix& value);
+	void SetSkinMatrizes(UINT numOfMatrizes, Matrix* value);
 	void SetViewProjectionMatrix(const Matrix& value);
 	void SetCameraPosition(const Vector3& value);
 	void SetTime(float time);

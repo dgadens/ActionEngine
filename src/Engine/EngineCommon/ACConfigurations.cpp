@@ -18,6 +18,7 @@ ACConfigurations::ACConfigurations()
 	GlobalID = 0;
 	ENABLE_LOG = false;
 	EDITOR_MODE = false;
+	USE_GPU_SKINNING = false;
 };
 
 ACConfigurations::~ACConfigurations()
@@ -40,6 +41,8 @@ void ACConfigurations::Initialize()
             sin >> MAX_VERTICES_IN_BUFFER;
         if (line.find("MaxIndicesInBuffer") != -1)
             sin >> MAX_INDICES_IN_BUFFER;
+		if (line.find("UseGPUSkinning") != -1)
+			sin >> USE_GPU_SKINNING;
     }
 
 	fin.close();
@@ -144,4 +147,9 @@ const UINT ACConfigurations::GetMaxVerticesInBuffer()
 const UINT ACConfigurations::GetMaxIndicesInBuffer()
 {
 	return MAX_INDICES_IN_BUFFER;
+};
+
+const BOOL ACConfigurations::GetIsGPUSkinning()
+{
+	return USE_GPU_SKINNING;
 };
