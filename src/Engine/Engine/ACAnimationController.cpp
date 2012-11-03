@@ -3,8 +3,10 @@
 ACAnimationController::ACAnimationController()
 {
 	mpModel = nullptr;
-	mCurrentKFIndex = 0;
+	mCurrentInitKFIndex = 0;
+	mCurrentEndKFIndex = 0;
 	mCurrentTime = 0;
+	mAnimationClipTotalTime = 0;
 	mIsRunning = FALSE;
 };
 
@@ -12,7 +14,9 @@ ACAnimationController::ACAnimationController(AMT_MODEL* amtModel)
 {
 	mIsRunning = TRUE;
 	mpModel = amtModel;
-	mCurrentKFIndex = 0;
+	mCurrentInitKFIndex = 0;
+	mCurrentEndKFIndex = 0;
+	mAnimationClipTotalTime = 0;
 	mCurrentTime = 0;
 	mpRootAnimatedBone = nullptr;
 	mpCurrentAnimation = nullptr;
@@ -53,8 +57,8 @@ void ACAnimationController::SetAnimation(const std::string& name)
 
 				mStartTime = mpRootAnimatedBone->KFData[mpCurrentAnimation->StartFrame].Time;
 				//intervalo entre os frames
-				mKFTotalTime = mpRootAnimatedBone->KFData[mpCurrentAnimation->EndFrame].Time -
-						       mStartTime;
+				mAnimationClipTotalTime = mpRootAnimatedBone->KFData[mpCurrentAnimation->EndFrame].Time -
+										  mStartTime;
 
 				break;
 			}
@@ -78,31 +82,45 @@ void ACAnimationController::Update(float elapsedTime, const Matrix& world)
 	{
 		if (mpRootAnimatedBone != nullptr)
 		{
-			for (int i = mCurrentKFIndex; i < mpModel->Head.NumFrames - 1; i++)
+			mCurrentTime += elapsedTime;
+			//se for maior entao ele pega o ultimo frame e interpola com o primeiro
+			if (mCurrentTime > mAnimationClipTotalTime)
 			{
-				if (mpRootAnimatedBone->NumKF > i)
+				mCurrentTime = mCurrentTime - mAnimationClipTotalTime;
+				mLerpAmount = 0.5f;
+				mCurrentInitKFIndex = mpCurrentAnimation->StartFrame;
+				mCurrentEndKFIndex = mpCurrentAnimation->EndFrame;
+			}
+			else
+			{
+				//iniciando do kfcorrente percorro atras de um kf q seja menor q to currenttime
+				for (int i = mCurrentInitKFIndex; i < mpCurrentAnimation->EndFrame - 1; i++)
 				{
-					float ctime = mpRootAnimatedBone->KFData[i].Time - mStartTime;
-					float ntime = mpRootAnimatedBone->KFData[i+1].Time - mStartTime;
-					if (ctime <= mCurrentTime &&
-						ntime >= mCurrentTime)
+					if (mpRootAnimatedBone->NumKF > i)
 					{
-						//calculo o fator de interpolacao entre os tempos do frame atual e o proximo
-						float frameTotalTime = ntime - ctime;
-						mLerpAmount = mCurrentTime / frameTotalTime;
-						mCurrentKFIndex = i;
-						break;
+						float ctime = mpRootAnimatedBone->KFData[i].Time - mStartTime;
+						if (ctime <= mCurrentTime)
+						{
+							//ja q aqui eu sei q o current time é maior q o ctime entao vo atras do um kf q seja maior q o current time
+							for (int j = i + 1; j < mpCurrentAnimation->EndFrame; j++)
+							{
+								float ntime = mpRootAnimatedBone->KFData[j].Time - mStartTime;
+								if (ntime >= mCurrentTime)
+								{
+									//calculo o fator de interpolacao entre os tempos do frame atual e o proximo
+									float frameTotalTime = ntime - ctime;
+									mLerpAmount = (mCurrentTime - ctime) / frameTotalTime;
+									mCurrentInitKFIndex = i;
+									mCurrentEndKFIndex = j;
+									break;
+								}
+							}
+						}
 					}
 				}
 			}
 
 			UpdateBones(world);
-			mCurrentTime += elapsedTime;
-			if (mCurrentTime > mKFTotalTime)
-			{
-				mCurrentTime = mCurrentTime - mKFTotalTime;
-				mCurrentKFIndex = mpCurrentAnimation->StartFrame;
-			}
 		}
 	}
 };
@@ -113,8 +131,8 @@ void ACAnimationController::UpdateBones(const Matrix& world)
 	AMT_JOINT* rootJoint = mpModel->pJoints[0];
 	if (rootJoint->IsAnimated)
 	{
-		Matrix::Lerp(&rootJoint->KFData[mCurrentKFIndex].BindMatrix, 
-					 &rootJoint->KFData[mCurrentKFIndex + 1].BindMatrix,
+		Matrix::Lerp(&rootJoint->KFData[mCurrentInitKFIndex].BindMatrix, 
+					 &rootJoint->KFData[mCurrentEndKFIndex].BindMatrix,
 					 mLerpAmount,
 					 &rootJoint->BindMatrix);
 
@@ -135,8 +153,8 @@ void ACAnimationController::UpdateBones(AMT_JOINT* joint)
 	{
 		if (joint->IsAnimated)
 		{
-			Matrix::Lerp(&joint->KFData[mCurrentKFIndex].BindMatrix, 
-					     &joint->KFData[mCurrentKFIndex + 1].BindMatrix,
+			Matrix::Lerp(&joint->KFData[mCurrentInitKFIndex].BindMatrix, 
+					     &joint->KFData[mCurrentEndKFIndex].BindMatrix,
 					     mLerpAmount,
 					     &joint->BindMatrix);
 
@@ -151,9 +169,4 @@ void ACAnimationController::UpdateBones(AMT_JOINT* joint)
 
 	for (int i = 0; i < joint->NumChildren; i++)
 		UpdateBones(mpModel->pJoints[joint->JointChildren[i]]);
-};
-
-void ACAnimationController::ComputeKFLerp(int currentKF, Matrix& outMatrix)
-{
-
 };

@@ -4,20 +4,23 @@
 // Date: 21/05/2012
 //******************************
 
+#define MAX_BONE_MATRICES 255
+
 cbuffer cbPerFrame : register(b0) 
 {
     float3 xCameraPosition             	: packoffset(c0);
-    float3 xLightPosition                 : packoffset(c1);
-    float3 xLightDirection                : packoffset(c2);
+    float3 xLightPosition               : packoffset(c1);
+    float3 xLightDirection              : packoffset(c2);
     float3 xLightColor		        : packoffset(c3);
     float  xLightRange		        : packoffset(c3.w);
-    float  xLightFalloff		        : packoffset(c4.x);	    
-    float  xTime                             : packoffset(c4.y);
+    float  xLightFalloff		: packoffset(c4.x);	    
+    float  xTime                        : packoffset(c4.y);
 };
 
 cbuffer cbPerModel : register(b1) 
 {
     float4x4 xWorld                     : packoffset(c0); 
+    float4x4 xBones[MAX_BONE_MATRICES]  : packoffset(c4); 
 };
 
 cbuffer cbPerPass  : register(b2) 
@@ -47,11 +50,20 @@ PS_INPUT main( VS_INPUT input )
 {
     PS_INPUT output = (PS_INPUT)0;
 
-    float4x4 worldViewProjection = mul ( xWorld, xViewProjection );
-    output.Position = mul( input.Position, worldViewProjection );
+    // Blend between the weighted bone matrices.
+    float4x4 skinTransform = 0;
 
-    output.PosWorld = mul( input.Position, xWorld );
-    output.Normal = mul(input.Normal, xWorld);
+    skinTransform += xBones[input.BlendIndices.x] * input.BlendWeights.x;
+    skinTransform += xBones[input.BlendIndices.y] * input.BlendWeights.y;
+    skinTransform += xBones[input.BlendIndices.z] * input.BlendWeights.z;
+    skinTransform += xBones[input.BlendIndices.w] * input.BlendWeights.w;
+    output.Position = mul( input.Position, skinTransform );
+
+    float4x4 worldViewProjection = mul ( xWorld, xViewProjection );
+    output.Position = mul( output.Position, worldViewProjection );
+
+    output.PosWorld = mul(input.Position, skinTransform);
+    output.Normal = mul(input.Normal, xWorld * skinTransform);
     output.TexCoord = input.TexCoord;
 
     return output;

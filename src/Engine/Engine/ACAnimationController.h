@@ -22,12 +22,13 @@ private:
 	AMT_JOINT* mpRootAnimatedBone;
 	//armazena a animacao corrente
 	AMT_ANIMATION* mpCurrentAnimation;
-	//KF corrent
-	UINT mCurrentKFIndex;
+	//KF corrent (pego o indice do kf inicial e o final pq ele pode pular um kf dependendo do elapsedtime)
+	UINT mCurrentInitKFIndex;
+	UINT mCurrentEndKFIndex;
 	//tempo corrente dentro da animacao
 	float mCurrentTime;
 	//intervalor de tempo entre o frame final e inicial
-	float mKFTotalTime;
+	float mAnimationClipTotalTime;
 	//tempo do frame inicial (para descontar do tempo total)
 	float mStartTime;
 	//fator de interpolacao da animacao entre as matrizes
@@ -37,8 +38,6 @@ private:
 
 	void UpdateBones(const Matrix& world);
 	void UpdateBones(AMT_JOINT* joint);
-
-	void ComputeKFLerp(int currentKF, Matrix& outMatrix);
 
 public:
 	ACAnimationController();

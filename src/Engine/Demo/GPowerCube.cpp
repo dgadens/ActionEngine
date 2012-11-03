@@ -15,7 +15,7 @@ GPowerCube::GPowerCube(ACRenderDevice* gDevice, ACContentManager* cManager)
 	for (int i = 0; i < 1; i++)
 	{
 		ACModel* model = new ACModel(mpGDevice, mpCManager);
-		model->Load("OCSMAnim.amt");
+		model->Load("goblin.amt");
 		
 		
 		//faco isso para adicionar a textura de animacao no braco
