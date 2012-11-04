@@ -100,7 +100,7 @@ void ACModel::Load(const std::string& name)
 	pModelDefinition = mpCManager->LoadModel(name);
 
 	//carrega os shaders padrao para modelos carregados de arquivo, se for skin na gpu entao é outro vs
-	if (pModelDefinition->HasSkeleton && ACConfigurations::Instance()->GetIsGPUSkinning())
+	if (pModelDefinition->HasSkeleton && ACConfigurations::Instance()->USE_GPU_SKINNING)
 		mpVS = mpCManager->LoadVertexShader("SkinnedMesh.VShlsl4", VertexFormat::VF_VertexSkinnedMesh);
 	else
 		mpVS = mpCManager->LoadVertexShader("LightingTextured.VShlsl4", VertexFormat::VF_VertexPositionNormalTextured);
@@ -169,7 +169,7 @@ void ACModel::Render(ACCamera* camera)
 		{
 			//se for na gpu skin entao ele passa a lista de matrizes
 			//senao ele passa a matriz identidade para world
-			if (ACConfigurations::Instance()->GetIsGPUSkinning())
+			if (ACConfigurations::Instance()->USE_GPU_SKINNING)
 				mpGDevice->SetSkinMatrizes(pModelDefinition->GetNumberOfBones(),
 										   pModelDefinition->GetSkinMatrizes());
 			else

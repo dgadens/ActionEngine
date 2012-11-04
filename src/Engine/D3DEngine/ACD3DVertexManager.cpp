@@ -144,7 +144,7 @@ HRESULT ACD3DVertexManager::CreateStaticBuffer(VertexFormat vertexFormat,
 void ACD3DVertexManager::InvalidateStaticBuffer()
 {
 	mpCurrentVertexBuffer = nullptr;
-	mpCurrentSkin = nullptr;
+	//mpCurrentSkin = nullptr;
 };
 
 void ACD3DVertexManager::ReleaseBuffer(ACVertexBuffer* vertexBuffer)
@@ -208,13 +208,13 @@ HRESULT ACD3DVertexManager::Render(ACVertexBuffer* vertexBuffer)
 						mpACD3D->SetTexture(mpCurrentSkin->Textures[0], 0);
 					else
 					{
-						for (int i = 0; i < NUM_TEXTURES; i++)
+						for (UINT i = 0; i < NUM_TEXTURES; i++)
 							mpACD3D->SetTexture(mpCurrentSkin->Textures[i], i);
 					}
 				}
 				else
 				{
-					for (int i = 0; i < NUM_TEXTURES; i++)
+					for (UINT i = 0; i < NUM_TEXTURES; i++)
 						mpACD3D->SetTexture(nullptr, i);
 				}
 

@@ -56,7 +56,7 @@ void ACModelDefinition::Prepare(AMT_MODEL* amtModel)
 		mpJointMark = new ACMark(mpGDevice, mpCManager); 
 
 		//se for skin na gpu entao ele usa o VB com skin senao usa o padrao e vai pela gpu mesmo
-		if (ACConfigurations::Instance()->GetIsGPUSkinning())
+		if (ACConfigurations::Instance()->USE_GPU_SKINNING)
 			VFormat = VertexFormat::VF_VertexSkinnedMesh;
 		else
 			VFormat = VertexFormat::VF_VertexPositionNormalTextured;
@@ -139,7 +139,7 @@ void ACModelDefinition::PrepareVSM(AMT_MODEL* model)
 	PrepareSkin(model);
 
 	//se for skin na gpu entao ele cria um staticVB senao é dinamico pq ele movimenta os vertices no update
-	if (ACConfigurations::Instance()->GetIsGPUSkinning())
+	if (ACConfigurations::Instance()->USE_GPU_SKINNING)
 	{
 		mpGDevice->CreateStaticBuffer(VertexFormat::VF_VertexSkinnedMesh, 
 									  mNumVertices, 
@@ -222,40 +222,34 @@ void ACModelDefinition::Update(FLOAT elapsedTime, Matrix& world)
 
 void ACModelDefinition::RenderModel(ACCamera* camera)
 {
-	if (HasSkeleton)
+	//se for skin por software entao usa o vbdinamico
+	if (HasSkeleton && !ACConfigurations::Instance()->USE_GPU_SKINNING)
 	{
-
-		//renderiza o model (se for skinning na gpu entao ele usa o shader especifico senao o normal mesmo
-		if (ACConfigurations::Instance()->GetIsGPUSkinning())
-			mpGDevice->Render(pVertexBuffer);
-		else
+		//CPU SKINNING
+		Matrix* skinMatrizes = GetSkinMatrizes();
+		for (int i = 0; i < mNumVertices; i++)
 		{
-			//CPU SKINNING
-			Matrix* skinMatrizes = GetSkinMatrizes();
-			for (int i = 0; i < mNumVertices; i++)
-			{
-				Matrix skinTransform;
-				skinTransform.M41 = 0;
-				skinTransform.M42 = 0;
-				skinTransform.M43 = 0;
-				skinTransform.M44 = 0;
+			Matrix skinTransform;
+			skinTransform.M41 = 0;
+			skinTransform.M42 = 0;
+			skinTransform.M43 = 0;
+			skinTransform.M44 = 0;
 
-				skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[0]] * mpModel->pVertices[i]->BoneWeights[0];
-				skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[1]] * mpModel->pVertices[i]->BoneWeights[1];
-				skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[2]] * mpModel->pVertices[i]->BoneWeights[2];
-				skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[3]] * mpModel->pVertices[i]->BoneWeights[3];
+			skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[0]] * mpModel->pVertices[i]->BoneWeights[0];
+			skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[1]] * mpModel->pVertices[i]->BoneWeights[1];
+			skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[2]] * mpModel->pVertices[i]->BoneWeights[2];
+			skinTransform = skinTransform + skinMatrizes[mpModel->pVertices[i]->BoneIndices[3]] * mpModel->pVertices[i]->BoneWeights[3];
 		
-				Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform , &mpVPNTCache[i].position);
-				Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform , &mpVPNTCache[i].normal);
-			}
-
-			mpGDevice->Render(VertexFormat::VF_VertexPositionNormalTextured, 
-										  mNumVertices, 
-										  mNumIndices, 
-										  mpVPNTCache, 
-										  mpIndices, 
-										  mpSkin);
+			Vector3::Transform(&mpModel->pVertices[i]->Position, &skinTransform , &mpVPNTCache[i].position);
+			Vector3::TransformNormal(&mpModel->pVertices[i]->Normal, &skinTransform , &mpVPNTCache[i].normal);
 		}
+
+		mpGDevice->Render(VertexFormat::VF_VertexPositionNormalTextured, 
+										mNumVertices, 
+										mNumIndices, 
+										mpVPNTCache, 
+										mpIndices, 
+										mpSkin);
 	}
 	else
 		mpGDevice->Render(pVertexBuffer);

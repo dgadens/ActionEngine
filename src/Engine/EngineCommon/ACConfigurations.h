@@ -39,8 +39,6 @@ private:
 	UINT MAX_VERTICES_IN_BUFFER;
 	UINT MAX_INDICES_IN_BUFFER;
 
-	BOOL USE_GPU_SKINNING;
-
 public:
 
 	//mantem o id globals dos objetos
@@ -48,9 +46,11 @@ public:
 
 	void Initialize();
 
-	bool ENABLE_LOG;
+	BOOL ENABLE_LOG;
+	BOOL EDITOR_MODE;
+	BOOL USE_GPU_SKINNING;
 	UINT GlobalID;
-	bool EDITOR_MODE;
+
 	const std::string& GetCurrentDirectory();
 	const std::string& GetPathModels();
 	const std::string& GetPathTextures();
@@ -61,8 +61,6 @@ public:
 
 	const UINT GetMaxVerticesInBuffer();
 	const UINT GetMaxIndicesInBuffer();
-
-	const BOOL GetIsGPUSkinning();
 };
 
 #endif

@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(IncludePath)</IncludePath>
-    <OutDir>$(ProjectDir)\Build\</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -73,15 +73,12 @@
       <LargeAddressAware>false</LargeAddressAware>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)$(Configuration)\ACD3DEngine.dll $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\ACDIEngine.dll $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\ACOpenALEngine.dll $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\ACWSEngine.dll $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\Engine.lib $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\EngineCommon.lib $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\ConfigurationFile.ini $(ProjectDir)\Build\</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy $(SolutionDir)$(Configuration)\ConfigurationFile.ini $(ProjectDir)\</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -115,8 +112,12 @@ copy $(SolutionDir)$(Configuration)\ACWSEngine.dll $(ProjectDir)\Build\
 copy $(SolutionDir)$(Configuration)\Engine.lib $(ProjectDir)\Build\
 copy $(SolutionDir)$(Configuration)\EngineCommon.lib $(ProjectDir)\Build\
 copy $(SolutionDir)$(Configuration)\EngineMath.lib $(ProjectDir)\Build\
-copy $(SolutionDir)$(Configuration)\ConfigurationFile.ini $(ProjectDir)\Build\</Command>
+copy $(SolutionDir)$(Configuration)\ConfigurationFile.ini $(ProjectDir)\Build\
+copy $(SolutionDir)$(Configuration)\Demo.exe $(ProjectDir)\Build\</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy $(SolutionDir)$(Configuration)\ConfigurationFile.ini $(ProjectDir)\</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Demo.ico" />

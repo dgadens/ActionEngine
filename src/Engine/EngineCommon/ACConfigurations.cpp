@@ -148,8 +148,3 @@ const UINT ACConfigurations::GetMaxIndicesInBuffer()
 {
 	return MAX_INDICES_IN_BUFFER;
 };
-
-const BOOL ACConfigurations::GetIsGPUSkinning()
-{
-	return USE_GPU_SKINNING;
-};
