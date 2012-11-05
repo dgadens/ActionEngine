@@ -43,7 +43,6 @@ public:
 	Matrix World;
 	BoundingBox BB;
 	OrientedBoundingBox OBB;
-	EffectType EffectName;
 
 	BOOL IsActive; //executa o update
 	BOOL IsVisible; //executa o render

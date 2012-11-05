@@ -3,15 +3,27 @@
 
 ACModel::ACModel(ACRenderDevice* gDevice, ACContentManager* cManager)
 {
-	pModelDefinition = nullptr;
-
 	mpGDevice = gDevice;
 	mpCManager = cManager;
+
+    mPosition = Vector3();
+	mScale = Vector3(1);
+	mRotation = Vector3();
+
+	mRenderBones = FALSE;
+	mRenderNormals = FALSE;
+
+	World = Matrix();
+	BB = BoundingBox();
+	OBB = OrientedBoundingBox();
+
+	pModelDefinition = nullptr;
 
 	mChangeTransformation = FALSE;
 
 	IsActive = TRUE; //faz o update
 	IsVisible = TRUE; //renderiza
+	IsDead = FALSE; //nao faz porra nenhuma
 
 	mpVS = nullptr;
 	mpPS = nullptr;

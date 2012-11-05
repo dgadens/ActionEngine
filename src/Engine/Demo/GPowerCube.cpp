@@ -18,8 +18,13 @@ GPowerCube::GPowerCube(ACRenderDevice* gDevice, ACContentManager* cManager)
 		model->Load("goblin.amt");
 		
 		
+		ACSkin* skin = mpCManager->CreateSkin();
+		skin->Textures[0] = mpCManager->LoadTexture("Floor.dds");
+		model->SetSkin(skin);
+		SAFE_DELETE(skin);
+
 		//faco isso para adicionar a textura de animacao no braco
-		const ACSkin* modelDefaultSkin = model->GetSkin();
+	/*	const ACSkin* modelDefaultSkin = model->GetSkin();
 		ACSkin* skin = mpCManager->CreateSkin();
 		skin->Material = modelDefaultSkin->Material;
 		skin->Textures[0] = mpCManager->LoadTexture("Floor.dds");
@@ -27,7 +32,7 @@ GPowerCube::GPowerCube(ACRenderDevice* gDevice, ACContentManager* cManager)
 		skin->Textures[2] = modelDefaultSkin->Textures[2];
 		skin->Textures[3] = mpCManager->LoadTexture("BoxTNTAnimated.png"); //seta essa textura para o canal de animacao 
 		model->SetSkin(skin);
-		delete skin;
+		delete skin;*/
 
 		mpModels[i] = model;
 	}

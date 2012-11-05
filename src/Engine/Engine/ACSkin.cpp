@@ -40,7 +40,7 @@ ACSkin::~ACSkin()
 
 void ACSkin::Release()
 {
-	for(char i = 0; i < NUM_TEXTURES; i++)
+	for(UINT i = 0; i < NUM_TEXTURES; i++)
 	{
 		if (Textures[i] != nullptr)
 		{

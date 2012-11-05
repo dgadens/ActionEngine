@@ -20,6 +20,8 @@
 
 #include "GEnums.h"
 
+#include <memory>
+
 class GPowerCube
 {
 	ACRenderDevice* mpGDevice;

@@ -505,7 +505,7 @@ void ACContentManager::CloneSkin(ACSkin* destSkin, const ACSkin* srcSkin)
 	memcpy(&destSkin->Material, &srcSkin->Material, sizeof( ACMaterial ));
 	destSkin->UseMaterial = srcSkin->UseMaterial;
 
-	for (int i = 0; i < 8; i++)
+	for (UINT i = 0; i < 8; i++)
 	{
 		destSkin->Textures[i] = srcSkin->Textures[i];
 		if (destSkin->Textures[i] != nullptr)
