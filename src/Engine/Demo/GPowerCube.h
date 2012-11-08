@@ -53,6 +53,8 @@ public:
 	//special effects
 	void Explode();
 	void Broke();
+
+	void Release();
 };
 
 #endif

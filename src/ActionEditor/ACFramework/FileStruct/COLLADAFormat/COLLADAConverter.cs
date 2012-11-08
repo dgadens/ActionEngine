@@ -378,11 +378,12 @@ namespace ACFramework.FileStruct
             //se tem o nodo skeleton
             XElement rootNode = FindRootSkeletonNodeId(visualScene);
 
+            amtModel.Joints = new List<AMT_JOINT>();
+
             //Começo a percorrer os nodes procurando pela hierarquia de bones
             if (rootNode != null)
             {
                 //adiciona o bone raiz
-                amtModel.Joints = new List<AMT_JOINT>();
                 Matrix matrix = Matrix.Identity;
 
                 string sid = rootNode.Attribute("sid").Value;
@@ -430,6 +431,10 @@ namespace ACFramework.FileStruct
             XElement controller = nodes.Find(
                 item => { return item.Element(XName.Get("instance_controller", Namespace)) != null; }
                 );
+
+            if (controller == null)
+                return null;
+
             controller = controller.Element(XName.Get("instance_controller", Namespace));
 
 
@@ -513,6 +518,10 @@ namespace ACFramework.FileStruct
         private void ConvertAnimations(XElement rootElement, ref AMT_MODEL amtModel)
         {
             XElement libraryAnimations = rootElement.Element(XName.Get("library_animations", Namespace));
+
+            if (libraryAnimations == null)
+                return;
+
             List<XElement> animations = libraryAnimations.Elements(XName.Get("animation", Namespace)).ToList();
 
             foreach (XElement animation in animations)
@@ -597,6 +606,10 @@ namespace ACFramework.FileStruct
         private void ConvertController(XElement rootElement, ref AMT_MODEL amtModel)
         {
             XElement libraryController = rootElement.Element(XName.Get("library_controllers", Namespace));
+
+            if (libraryController == null)
+                return;
+
             List<XElement> controllers = libraryController.Elements(XName.Get("controller", Namespace)).ToList();
             
             foreach (XElement controller in controllers)
@@ -914,6 +927,7 @@ namespace ACFramework.FileStruct
             amtModel.Head.NumVertices = (uint)amtModel.Vertices.Count;
             amtModel.Head.NumMaterials = (uint)amtModel.Materials.Count;
             amtModel.Head.NumJoints = (uint)amtModel.Joints.Count;
+            //o numero de animacaoes nao esta aqui
         }
         #endregion
 

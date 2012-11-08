@@ -22,6 +22,11 @@ ACSpriteBatch::ACSpriteBatch(ACRenderDevice* gDevice, ACContentManager* cManager
 
 ACSpriteBatch::~ACSpriteBatch()
 {
+	Release();
+};
+
+void ACSpriteBatch::Release()
+{
 	if (mpPS != nullptr)
 		mpCManager->RemovePixelShader(mpPS);
 

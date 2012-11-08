@@ -55,6 +55,8 @@ public:
 	void LoadContents();
 	void Update();
 	void Draw();
+
+	void Release();
 };
 
 #endif

@@ -20,7 +20,11 @@ ACCamera::ACCamera()
 
 ACCamera::~ACCamera()
 {
+	Release();
+};
 
+void ACCamera::Release()
+{
 };
 
 void ACCamera::Update()

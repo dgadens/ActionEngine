@@ -93,6 +93,8 @@ public:
 	//SoundSource
 	//cria um soundsource novo
 	ACSoundSource* CreateSoundSource();
+
+	void Release();
 };
 
 #endif

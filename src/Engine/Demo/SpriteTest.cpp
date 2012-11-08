@@ -18,6 +18,11 @@ SpriteTest::SpriteTest(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 SpriteTest::~SpriteTest()
 {
+	Release();
+};
+
+void SpriteTest::Release()
+{
 	if (mpTexture != nullptr)
 		mpCManager->RemoveTexture(mpTexture);
 	if (mpTexture2 != nullptr)
@@ -25,7 +30,7 @@ SpriteTest::~SpriteTest()
 	if (mpTexture3 != nullptr)
 		mpCManager->RemoveTexture(mpTexture3);
 
-	SAFE_DELETE(mpSpriteBatch);
+	SAFE_RELEASE(mpSpriteBatch);
 };
 
 void SpriteTest::Update(float elapsedTime)

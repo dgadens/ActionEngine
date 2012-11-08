@@ -26,4 +26,6 @@ public:
 
 	void Update(float elapsedTime);
 	void Draw();
+
+	void Release();
 };

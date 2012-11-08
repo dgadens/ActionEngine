@@ -74,6 +74,8 @@ public:
 	const Matrix& GetViewProjection();
 
 	void Update();
+
+	void Release();
 };
 
 #endif

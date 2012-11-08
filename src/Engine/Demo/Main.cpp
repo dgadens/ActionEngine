@@ -44,11 +44,11 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 		return 0;
 	}
 
-#if DEBUG
+//#if DEBUG
 	ACConfigurations::Instance()->ENABLE_LOG = true;
-#else
-	ACConfigurations::Instance()->ENABLE_LOG = false;
-#endif
+//#else
+//	ACConfigurations::Instance()->ENABLE_LOG = false;
+//#endif
                                 
     // Main message loop
     MSG msg = {0};
@@ -399,10 +399,10 @@ HRESULT EngineStartup()
 void CleanupDevice()
 {
 	//remover nesta ordem pq senao ele tenta remover os conteudos depois de remover o ponteiro do contentmanager ai fudeu
-	SAFE_DELETE(pGame);
-	SAFE_DELETE(pContentManager);
-	SAFE_DELETE(pRenderer);
-	SAFE_DELETE(pInput);
-	SAFE_DELETE(pNetwork);
-	SAFE_DELETE(pAudio);
+	SAFE_RELEASE(pGame);
+	SAFE_RELEASE(pContentManager);
+	SAFE_RELEASE(pRenderer);
+	SAFE_RELEASE(pInput);
+	SAFE_RELEASE(pNetwork);
+	SAFE_RELEASE(pAudio);
 }

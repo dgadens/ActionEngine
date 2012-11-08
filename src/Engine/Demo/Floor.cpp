@@ -45,6 +45,11 @@ Floor::Floor(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 Floor::~Floor()
 {
+	Release();
+};
+
+void Floor::Release()
+{
 	mpCManager->RemoveVertexShader(mpVS);
 	mpCManager->RemovePixelShader(mpPS);
 	mpGDevice->ReleaseBuffer(mpVB);

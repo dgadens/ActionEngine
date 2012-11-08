@@ -30,6 +30,8 @@ public:
 
 	void Update(float elapsedTime);
 	void Draw(ACCamera* camera);
+
+	void Release();
 };
 
 #endif

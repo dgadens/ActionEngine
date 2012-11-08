@@ -12,6 +12,11 @@ ACSoundSource::ACSoundSource(ACAudioDevice* aDevice, ACContentManager* cManager)
 
 ACSoundSource::~ACSoundSource()
 {
+	Release();
+};
+
+void ACSoundSource::Release()
+{
 	//se estiver acoplado a algum som ele primeiro desacopla
 	if (mCoupled)
 		UnbindSound();

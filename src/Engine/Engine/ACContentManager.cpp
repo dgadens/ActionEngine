@@ -14,6 +14,11 @@ ACContentManager::ACContentManager(ACRenderDevice* gDevice, ACAudioDevice* aDevi
 
 ACContentManager::~ACContentManager()
 {
+	Release();
+};
+
+void ACContentManager::Release()
+{
 	if (textures.size() > 0 || 
 		sounds.size() > 0   || 
 		vertexShaders.size() > 0 || 

@@ -50,7 +50,12 @@ GPowerCube::GPowerCube(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 GPowerCube::~GPowerCube()
 {
-	SAFE_DELETE(mpSoundSource);
+	Release();
+};
+
+void GPowerCube::Release()
+{
+	SAFE_RELEASE(mpSoundSource);
 
 	if (mpSoundBuffer!= nullptr)
 	{

@@ -61,6 +61,8 @@ public:
 	void RenderString(ACFont* font, const std::string& text, Vector2& position, const Vector4& color);
 
 	void EndRender();
+
+	void Release();
 };
 
 #endif

@@ -10,14 +10,19 @@ Game::Game(ACRenderDevice* gDevice, ACContentManager* cManager)
 
 Game::~Game()
 {
+	Release();
+};
+
+void Game::Release()
+{
 	mpCManager->RemoveFont(mpFont);
 
-	SAFE_DELETE(mpFloor);
-	SAFE_DELETE(mpScriptMachine);
-	SAFE_DELETE(mpPowerCube);
-	SAFE_DELETE(mpDynamicTest);
-	SAFE_DELETE(mpCamera);
-	SAFE_DELETE(mpSpriteBatch);
+	SAFE_RELEASE(mpFloor);
+	SAFE_RELEASE(mpScriptMachine);
+	SAFE_RELEASE(mpPowerCube);
+	SAFE_RELEASE(mpDynamicTest);
+	SAFE_RELEASE(mpCamera);
+	SAFE_RELEASE(mpSpriteBatch);
 };
 
 //Ativa o game ou desativa, quando a janela perde o foco ele desativa quando ganyha ativa
@@ -90,12 +95,12 @@ void Game::Update()
 {
 	if (Globals::IsRunning)
 	{
-		ACKeyboardState ks = GGameInput::GetKBState();
+		/*ACKeyboardState ks = GGameInput::GetKBState();
 		ACKeyboardState pks = GGameInput::GetPreviousKBState();
 		if (ks.IsPressed(ACKEYS::ACKEY_A))
 			mpPowerCube->SetAnimation("Anim 1");
 		if (ks.IsPressed(ACKEYS::ACKEY_B))
-			mpPowerCube->SetAnimation("Anim 2");
+			mpPowerCube->SetAnimation("Anim 2");*/
 
 		//fixo na ordem
 		ACTimeControl::Update();

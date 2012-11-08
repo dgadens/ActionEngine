@@ -24,15 +24,15 @@ void ScriptMachine::Release()
 
 void ScriptMachine::ExecuteScript(const std::string& name)
 {
-	GUtils::ShowConsole();
+	//GUtils::ShowConsole();
 	
 	//FirstExample();
 
 	//SecondExample();
 
-	ThirdExample();
+	//ThirdExample();
 
-	GUtils::HideConsole();
+	//GUtils::HideConsole();
 };
 
 //exemplo q mostra como carregar o arquivo e as variaveis globais

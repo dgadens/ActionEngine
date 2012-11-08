@@ -209,9 +209,7 @@ HRESULT ACD3DVertexManager::Render(ACVertexBuffer* vertexBuffer)
 					else
 					{
 						for (UINT i = 0; i < NUM_TEXTURES; i++)
-						{
 							mpACD3D->SetTexture(mpCurrentSkin->Textures[i], i);
-						}
 					}
 				}
 				else

@@ -43,6 +43,7 @@ public:
 	void ACSoundSource::SetPitch(const float&);
 	void ACSoundSource::SetGain(const float&);
 
+	void Release();
 };
 
 #endif

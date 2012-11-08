@@ -39,17 +39,32 @@ namespace ACFramework.FileStructs
 
         public int SID;    //id original do vertices (nao é exportado) é apenas um auxilio para achar o vertice quando for atualizar o peso dos bones
 
+        public AMT_VERTEX()
+        {
+            BoneIndices = new uint[4];
+            BoneWeights = new float[4];
+        }
+
         public static bool operator ==(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            for (int i = 0; i < 4; i++)
-			{
-                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
-                    v1.BoneWeights[i] != v2.BoneWeights[i])
-                    return false;
-			} 
+            if ((v1.BoneIndices == null && v2.BoneIndices != null ||
+                 v1.BoneIndices != null && v2.BoneIndices == null) ||
+                (v1.BoneWeights == null && v2.BoneWeights != null ||
+                 v1.BoneWeights != null && v2.BoneWeights == null))
+                return false;
 
-            if (v1.Position != v2.Position || 
-                v1.TexCoord1 != v2.TexCoord1 || 
+            if (v1.BoneIndices != null && v1.BoneWeights != null)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                        v1.BoneWeights[i] != v2.BoneWeights[i])
+                        return false;
+                }
+            }
+
+            if (v1.Position != v2.Position ||
+                v1.TexCoord1 != v2.TexCoord1 ||
                 v1.TexCoord2 != v2.TexCoord2 ||
                 v1.Normal != v2.Normal
                 )
@@ -60,15 +75,24 @@ namespace ACFramework.FileStructs
 
         public static bool operator !=(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
-                    v1.BoneWeights[i] != v2.BoneWeights[i])
-                    return true;
-            } 
+            if ((v1.BoneIndices == null && v2.BoneIndices != null ||
+                 v1.BoneIndices != null && v2.BoneIndices == null) ||
+                (v1.BoneWeights == null && v2.BoneWeights != null ||
+                 v1.BoneWeights != null && v2.BoneWeights == null))
+                return true;
 
-            if (v1.Position != v2.Position || 
-                v1.TexCoord1 != v2.TexCoord1 || 
+            if (v1.BoneIndices != null && v1.BoneWeights != null)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                        v1.BoneWeights[i] != v2.BoneWeights[i])
+                        return true;
+                }
+            }
+
+            if (v1.Position != v2.Position ||
+                v1.TexCoord1 != v2.TexCoord1 ||
                 v1.TexCoord2 != v2.TexCoord2 ||
                 v1.Normal != v2.Normal)
                 return true;
@@ -78,15 +102,24 @@ namespace ACFramework.FileStructs
 
         public static bool EqualsWithoutFlagTest(AMT_VERTEX v1, AMT_VERTEX v2)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
-                    v1.BoneWeights[i] != v2.BoneWeights[i])
-                    return false;
-            } 
+            if ((v1.BoneIndices == null && v2.BoneIndices != null ||
+                 v1.BoneIndices != null && v2.BoneIndices == null) ||
+                (v1.BoneWeights == null && v2.BoneWeights != null ||
+                 v1.BoneWeights != null && v2.BoneWeights == null))
+                return true;
 
-            if (v1.Position != v2.Position || 
-                v1.TexCoord1 != v2.TexCoord1 || 
+            if (v1.BoneIndices != null && v1.BoneWeights != null)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (v1.BoneIndices[i] != v2.BoneIndices[i] ||
+                        v1.BoneWeights[i] != v2.BoneWeights[i])
+                        return false;
+                }
+            }
+
+            if (v1.Position != v2.Position ||
+                v1.TexCoord1 != v2.TexCoord1 ||
                 v1.TexCoord2 != v2.TexCoord2 ||
                 v1.Normal != v2.Normal)
                 return false;
@@ -138,7 +171,7 @@ namespace ACFramework.FileStructs
     public class AMT_JOINT
     {
         public uint ID;                                //Id q ta na lista principal, armazeno para ser facil de achar
-        public string Name;                         
+        public string Name;
         public int ParentID;                           // ParentID
         public uint NumChildren;                        // Numero de filhos
         public List<uint> JointChildren;               // Ids dos filhos do bone 
@@ -158,10 +191,10 @@ namespace ACFramework.FileStructs
 
     public struct AMT_ANIMATION
     {
-        public string Name;                         
-        public float StartFrame;                    
+        public string Name;
+        public float StartFrame;
         public float EndFrame;
-        public uint Active;                         
+        public uint Active;
     }
 
     public struct AMT_MODEL
@@ -173,5 +206,5 @@ namespace ACFramework.FileStructs
         public List<AMT_MATERIAL> Materials;            // Materials
         public List<AMT_JOINT> Joints;               // Joints
         public List<AMT_ANIMATION> Animations;            // Animations
-    } 
+    }
 }
