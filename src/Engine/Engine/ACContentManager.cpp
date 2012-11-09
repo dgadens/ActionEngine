@@ -505,19 +505,6 @@ ACSkin* ACContentManager::CreateSkin(BOOL useMaterial)
 	return skin;
 };
 
-void ACContentManager::CloneSkin(ACSkin* destSkin, const ACSkin* srcSkin)
-{
-	memcpy(&destSkin->Material, &srcSkin->Material, sizeof( ACMaterial ));
-	destSkin->UseMaterial = srcSkin->UseMaterial;
-
-	for (UINT i = 0; i < 8; i++)
-	{
-		destSkin->Textures[i] = srcSkin->Textures[i];
-		if (destSkin->Textures[i] != nullptr)
-			destSkin->Textures[i]->Instance++;
-	}
-};
-
 #pragma endregion
 
 #pragma region SoundSource

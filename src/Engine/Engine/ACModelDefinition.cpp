@@ -191,11 +191,10 @@ void ACModelDefinition::SetSkin(ACSkin* skin)
 	if (mpSkin != nullptr)
 		SAFE_DELETE(mpSkin);
 
-	mpSkin = mpCManager->CreateSkin();
-	mpCManager->CloneSkin(mpSkin, skin);
+	mpSkin = skin;
 };
 
-const ACSkin const * ACModelDefinition::GetSkin()
+ACSkin* ACModelDefinition::GetSkin()
 {
 	return mpSkin;
 };

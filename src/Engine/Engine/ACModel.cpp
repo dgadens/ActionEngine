@@ -52,7 +52,7 @@ void ACModel::SetSkin(ACSkin* skin)
 	pModelDefinition->SetSkin(skin);
 };
 
-const ACSkin const* ACModel::GetSkin()
+ACSkin* ACModel::GetSkin()
 {
 	return pModelDefinition->GetSkin();
 }

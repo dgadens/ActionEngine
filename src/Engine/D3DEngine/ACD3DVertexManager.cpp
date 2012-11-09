@@ -205,7 +205,7 @@ HRESULT ACD3DVertexManager::Render(ACVertexBuffer* vertexBuffer)
 				{
 					//se for pointsprite ele usa so a primeira textura
 					if (shadeMode == ACSHADEMODE::ACSM_PointSprite)
-						mpACD3D->SetTexture(vertexBuffer->Skin->Textures[0], 0);
+						mpACD3D->SetTexture(mpCurrentSkin->Textures[0], 0);
 					else
 					{
 						for (UINT i = 0; i < NUM_TEXTURES; i++)

@@ -80,7 +80,7 @@ public:
 	~ACModelDefinition();
 
 	void SetSkin(ACSkin* skin);
-	const ACSkin const * GetSkin();
+	ACSkin* GetSkin();
 
 	void Prepare(AMT_MODEL* pointer);
 

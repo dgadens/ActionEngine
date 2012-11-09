@@ -86,9 +86,6 @@ public:
 	//skin
 	//cria um skin novo
 	ACSkin* CreateSkin(BOOL useMaterial = true);
-	//cria um clone do skin copiando todos os atributos do src pro dest
-	//tb é feito o controle do numero de instancias de cada material e textura clonado
-	void CloneSkin(ACSkin* destSkin, const ACSkin* srcSkin);
 
 	//SoundSource
 	//cria um soundsource novo

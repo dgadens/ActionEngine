@@ -55,7 +55,7 @@ public:
 	//mas o ponteiro do parametro continua existindo (remover)
 	void SetSkin(ACSkin* skin);
 	//Retorna o ponteiro para o skin interno ao modelo
-	const ACSkin const* GetSkin();
+	ACSkin* GetSkin();
 
 	//mesh
 	void Load(const std::string& path);
