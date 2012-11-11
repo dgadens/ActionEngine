@@ -47,7 +47,6 @@ struct PS_INPUT
 
 float4 main( PS_INPUT input ) : SV_Target
 {
-/*
     float3 lightDir = xLightPosition - input.PosWorld;
     float lightDistance = length(lightDir);
     lightDir /= lightDistance; 
@@ -79,9 +78,4 @@ float4 main( PS_INPUT input ) : SV_Target
     finalColor += texAnimated.xyz * (1 - texDiffuse.a); 	     
 
     return float4(finalColor.xyz, texDiffuse.w * xMaterialDiffuse.w); 
-
-*/
-
-	float4 texDiffuse = xDiffuseTexture.Sample( samplerStateDiffuse, input.TexCoord );
-    return texDiffuse ;
 }
