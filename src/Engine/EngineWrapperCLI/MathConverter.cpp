@@ -26,3 +26,39 @@ Matrix MathConverter::ToUnmanaged(EngineMathCLI::Matrix^ value)
 		value->M31, value->M32, value->M33, value->M34,
 		value->M41, value->M42, value->M43, value->M44);
 }
+
+Vector4* MathConverter::ToUnmanaged(UINT numberOfElements, array<EngineMathCLI::Vector4>^ value)
+{
+	Vector4* values = new Vector4[numberOfElements];
+	for (int i = 0; i < numberOfElements; i++)
+		values[i] = MathConverter::ToUnmanaged(value[i]);
+
+	return values;
+}
+
+Vector3* MathConverter::ToUnmanaged(UINT numberOfElements, array<EngineMathCLI::Vector3>^ value)
+{
+	Vector3* values = new Vector3[numberOfElements];
+	for (int i = 0; i < numberOfElements; i++)
+		values[i] = MathConverter::ToUnmanaged(value[i]);
+
+	return values;
+}
+
+Vector2* MathConverter::ToUnmanaged(UINT numberOfElements, array<EngineMathCLI::Vector2>^ value)
+{
+	Vector2* values = new Vector2[numberOfElements];
+	for (int i = 0; i < numberOfElements; i++)
+		values[i] = MathConverter::ToUnmanaged(value[i]);
+
+	return values;
+}
+
+Matrix* MathConverter::ToUnmanaged(UINT numberOfElements, array<EngineMathCLI::Matrix>^ value)
+{
+	Matrix* values = new Matrix[numberOfElements];
+	for (int i = 0; i < numberOfElements; i++)
+		values[i] = MathConverter::ToUnmanaged(value[i]);
+
+	return values;
+}

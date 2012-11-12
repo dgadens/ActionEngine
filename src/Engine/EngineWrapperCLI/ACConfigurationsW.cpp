@@ -5,5 +5,5 @@ using namespace EngineWrapper;
 
 void ACConfigurationsW::Initialize()
 {
-	ACConfigurations::Initialize();
+	ACConfigurations::Instance()->Initialize();
 };
