@@ -8,6 +8,16 @@ ACRenderDeviceW::ACRenderDeviceW(ACRenderDevice* device)
 	Value = device;
 }
 
+ACRenderDeviceW::~ACRenderDeviceW()
+{
+	Release();
+}
+
+void ACRenderDeviceW::Release()
+{
+	Value->Release();
+}
+
 void ACRenderDeviceW::SetContentManager(ACContentManagerW^ cManager)
 {
 	Value->SetContentManager(cManager->Value);
@@ -41,11 +51,6 @@ void ACRenderDeviceW::SetActiveRenderingViewport(IntPtr windowPtr)
 void ACRenderDeviceW::Resize(UINT width, UINT height)
 {
 	Value->Resize(width, height);
-}
-
-void ACRenderDeviceW::Release()
-{
-	Value->Release();
 }
 
 UINT ACRenderDeviceW::GetVPWidth()

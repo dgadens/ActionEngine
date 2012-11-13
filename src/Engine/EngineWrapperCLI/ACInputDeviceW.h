@@ -9,9 +9,12 @@ namespace EngineWrapper
 {
 	public ref class ACInputDeviceW
 	{
-		private:
-			ACInputDevice* pInputDevice;
-		public:
-			ACInputDeviceW(ACInputDevice* device);
+	private:
+		ACInputDevice* pInputDevice;
+	public:
+		ACInputDeviceW(ACInputDevice* device);
+		~ACInputDeviceW();
+
+		void Release();
 	};
 }

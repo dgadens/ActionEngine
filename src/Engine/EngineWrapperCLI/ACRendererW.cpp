@@ -8,6 +8,16 @@ ACRendererW::ACRendererW(IntPtr hInst)
 	pRenderer = new ACRenderer((HINSTANCE)hInst.ToPointer());
 };
 
+ACRendererW::~ACRendererW()
+{
+	Release();
+}
+
+void ACRendererW::Release()
+{
+	pRenderer->Release();
+}
+
 HRESULT ACRendererW::CreateDevice(String^ graphicsLibraryName)
 {
 	HRESULT hr = pRenderer->CreateDevice(marshal_as<std::string>(graphicsLibraryName));

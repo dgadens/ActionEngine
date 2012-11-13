@@ -7,3 +7,13 @@ ACMouseW::ACMouseW(ACMouse* mouse)
 {
 	pMouse = mouse;
 }
+
+ACMouseW::~ACMouseW()
+{
+	Release();
+}
+
+void ACMouseW::Release()
+{
+	delete pMouse;
+}

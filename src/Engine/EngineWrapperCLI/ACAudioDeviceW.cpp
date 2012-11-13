@@ -9,6 +9,16 @@ ACAudioDeviceW::ACAudioDeviceW(ACAudioDevice* device)
 	Value = device;
 }
 
+ACAudioDeviceW::~ACAudioDeviceW()
+{
+	Release();
+}
+
+void ACAudioDeviceW::Release()
+{
+	Value->Release();
+}
+
 void ACAudioDeviceW::Init(IntPtr windowPtr, bool log)
 {
 	Value->Init((HWND)windowPtr.ToPointer(), log ? 1 : 0);

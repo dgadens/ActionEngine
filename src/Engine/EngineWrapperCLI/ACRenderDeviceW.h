@@ -15,6 +15,8 @@ public ref class ACRenderDeviceW
 		ACRenderDevice* Value;
 
 		ACRenderDeviceW(ACRenderDevice* device);
+		~ACRenderDeviceW();
+		void Release();
 
 		void SetContentManager(ACContentManagerW^ cManager);
 
@@ -24,9 +26,8 @@ public ref class ACRenderDeviceW
 		void DropViewport(IntPtr windowPtr);
 		void SetActiveViewport(IntPtr windowPtr);			//seta a janela ativa (onde as transformacoes serao feitas)
 		void SetActiveRenderingViewport(IntPtr windowPtr);	//seta a janela de renderizacao ativa 
-		void GoFullscreen(BOOL value);
+		//void GoFullscreen(BOOL value);
 		void Resize(UINT width, UINT height);
-		void Release();
 
 		//atributos VP
 		UINT GetVPWidth();							//retorna a largura da janela de renderizacao ativa

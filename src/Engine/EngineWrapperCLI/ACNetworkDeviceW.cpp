@@ -7,3 +7,13 @@ ACNetworkDeviceW::ACNetworkDeviceW(ACNetworkDevice* device)
 {
 	pNetworkDevice = device;
 }
+
+ACNetworkDeviceW::~ACNetworkDeviceW()
+{
+	Release();
+}
+
+void ACNetworkDeviceW::Release()
+{
+	pNetworkDevice->Release();
+}

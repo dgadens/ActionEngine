@@ -9,9 +9,13 @@ namespace EngineWrapper
 {
 	public ref class ACNetworkDeviceW
 	{
-		private:
-			ACNetworkDevice* pNetworkDevice;
-		public:
-			ACNetworkDeviceW(ACNetworkDevice* device);
+	private:
+		ACNetworkDevice* pNetworkDevice;
+
+	public:
+		ACNetworkDeviceW(ACNetworkDevice* device);
+		~ACNetworkDeviceW();
+
+		void Release();
 	};
 }

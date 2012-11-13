@@ -7,3 +7,13 @@ ACInputDeviceW::ACInputDeviceW(ACInputDevice* device)
 {
 	pInputDevice = device;
 }
+
+ACInputDeviceW::~ACInputDeviceW()
+{
+	Release();
+}
+
+void ACInputDeviceW::Release()
+{
+	pInputDevice->Release();
+}

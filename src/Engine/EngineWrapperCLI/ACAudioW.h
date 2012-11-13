@@ -12,12 +12,16 @@ namespace EngineWrapper
 {
 	public ref class ACAudioW
 	{
-		private:
-			ACAudio* pAudio;
-			ACAudioDeviceW^ _audioDevice;
-		public:
-			ACAudioW(IntPtr hInst);
-			HRESULT CreateDevice(String^ audioLibraryName);
-			ACAudioDeviceW^ GetDevice();
+	private:
+		ACAudio* pAudio;
+		ACAudioDeviceW^ _audioDevice;
+
+	public:
+		ACAudioW(IntPtr hInst);
+		~ACAudioW();
+
+		HRESULT CreateDevice(String^ audioLibraryName);
+		ACAudioDeviceW^ GetDevice();
+		void Release();
 	};
 }

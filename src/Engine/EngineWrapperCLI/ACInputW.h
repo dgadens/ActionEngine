@@ -14,20 +14,25 @@ namespace EngineWrapper
 {
 	public ref class ACInputW
 	{
-		private:
-			ACInput* pInput;
-			ACInputDeviceW^ _inputDevice;
-			ACMouseW^ _mouse;
-			ACKeyboardW^ _keyboard;
-		public:
-			ACInputW(IntPtr hInst);
-			HRESULT CreateDevice(String^ inputLibraryName);
-			ACInputDeviceW^ GetDevice();
+	private:
+		ACInput* pInput;
+		ACInputDeviceW^ _inputDevice;
+		ACMouseW^ _mouse;
+		ACKeyboardW^ _keyboard;
 
-			void CreateMouse();
-			ACMouseW^ GetMouse();
+	public:
+		ACInputW(IntPtr hInst);
+		~ACInputW();
 
-			void CreateKeyboard();
-			ACKeyboardW^ GetKeyboard();
+		HRESULT CreateDevice(String^ inputLibraryName);
+		ACInputDeviceW^ GetDevice();
+
+		void CreateMouse();
+		ACMouseW^ GetMouse();
+
+		void CreateKeyboard();
+		ACKeyboardW^ GetKeyboard();
+
+		void Release();
 	};
 }

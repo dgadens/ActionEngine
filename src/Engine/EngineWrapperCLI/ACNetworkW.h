@@ -12,12 +12,17 @@ namespace EngineWrapper
 {
 	public ref class ACNetworkW
 	{
-		private:
-			ACNetwork* pNetwork;
-			ACNetworkDeviceW^ _networkDevice;
-		public:
-			ACNetworkW(IntPtr hInst);
-			HRESULT CreateDevice(String^ networkLibraryName);
-			ACNetworkDeviceW^ GetDevice();
+	private:
+		ACNetwork* pNetwork;
+		ACNetworkDeviceW^ _networkDevice;
+
+	public:
+		ACNetworkW(IntPtr hInst);
+		~ACNetworkW();
+
+		HRESULT CreateDevice(String^ networkLibraryName);
+		ACNetworkDeviceW^ GetDevice();
+
+		void Release();
 	};
 }

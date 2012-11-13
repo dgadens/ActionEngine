@@ -1,14 +1,15 @@
 #pragma once
 
 #include "ACContentManager.h"
-#include "ACRenderDeviceW.h"
-#include "ACAudioDeviceW.h"
 
 using namespace System;
 using namespace System::Runtime::InteropServices;
 
 namespace EngineWrapper
 {
+	ref class ACRenderDeviceW;
+	ref class ACAudioDeviceW;
+
 	public ref class ACContentManagerW
 	{
 	private:
@@ -16,9 +17,13 @@ namespace EngineWrapper
 		ACAudioDeviceW^ _audioDevice;
 
 	public:
+
 		ACContentManager* Value;
 
 		ACContentManagerW(ACRenderDeviceW^ renderDevice, ACAudioDeviceW^ audioDevice);
+		~ACContentManagerW();
+
+		void Release();
 	};
 
 }

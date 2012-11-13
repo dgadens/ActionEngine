@@ -7,3 +7,14 @@ ACKeyboardW::ACKeyboardW(ACKeyboard* keyboard)
 {
 	pKeyboard = keyboard;
 }
+
+ACKeyboardW::~ACKeyboardW()
+{
+	Release();
+}
+
+void ACKeyboardW::Release()
+{
+	delete pKeyboard;
+}
+

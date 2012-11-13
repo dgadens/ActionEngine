@@ -64,6 +64,9 @@ namespace DemoCLI
             _audioDevice.SetListener(Vector3.Zero, Vector3.Zero, Vector3.Zero, Vector3.Zero);
 
             _contentManager = new ACContentManagerW(_renderDevice, _audioDevice);
+
+            _renderDevice.BeginRendering();
+            _renderDevice.EndRendering();
         }
     }
 }

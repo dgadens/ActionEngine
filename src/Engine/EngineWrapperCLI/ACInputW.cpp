@@ -8,6 +8,16 @@ ACInputW::ACInputW(IntPtr hInst)
 	pInput = new ACInput((HINSTANCE)hInst.ToPointer());
 }
 
+ACInputW::~ACInputW()
+{
+	Release();
+}
+
+void ACInputW::Release()
+{
+	pInput->Release();
+}
+
 HRESULT ACInputW::CreateDevice(String^ inputLibraryName)
 {
 	HRESULT hr = pInput->CreateDevice(marshal_as<std::string>(inputLibraryName));

@@ -8,6 +8,16 @@ ACNetworkW::ACNetworkW(IntPtr hInst)
 	pNetwork = new ACNetwork((HINSTANCE)hInst.ToPointer());
 }
 
+ACNetworkW::~ACNetworkW()
+{
+	Release();
+}
+
+void ACNetworkW::Release()
+{
+	pNetwork->Release();
+}
+
 HRESULT ACNetworkW::CreateDevice(String^ networkLibraryName)
 {
 	HRESULT hr = pNetwork->CreateDevice(marshal_as<std::string>(networkLibraryName));

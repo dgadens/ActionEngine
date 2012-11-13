@@ -9,9 +9,12 @@ namespace EngineWrapper
 {
 	public ref class ACKeyboardW
 	{
-		private:
-			ACKeyboard* pKeyboard;
-		public:
-			ACKeyboardW(ACKeyboard* keyboard);
+	private:
+		ACKeyboard* pKeyboard;
+	public:
+		ACKeyboardW(ACKeyboard* keyboard);
+		~ACKeyboardW();
+
+		void Release();
 	};
 }

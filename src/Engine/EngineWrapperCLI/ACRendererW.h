@@ -15,9 +15,14 @@ namespace EngineWrapper
 	private:
 		ACRenderer* pRenderer;
 		ACRenderDeviceW^ _renderDevice;
+
 	public:
 		ACRendererW(IntPtr hInst);
+		~ACRendererW();
+
 		HRESULT CreateDevice(String^ graphicsLibraryName);
 		ACRenderDeviceW^ GetDevice();
+
+		void Release();
 	};
 }

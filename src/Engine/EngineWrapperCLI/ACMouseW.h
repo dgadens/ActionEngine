@@ -9,15 +9,19 @@ namespace EngineWrapper
 {
 	public ref class ACMouseW
 	{
-		private:
-			ACMouse* pMouse;
-		public:
-			ACMouseW(ACMouse* mouse);
+	private:
+		ACMouse* pMouse;
 
-			/*void SetButtonDown(ACMOUSEBUTTON button);
-			void SetButtonUp(ACMOUSEBUTTON button);
-			void SetPosition(int x, int y);
+	public:
+		ACMouseW(ACMouse* mouse);
+		~ACMouseW();
 
-			void GetState(ACMouseState* mouseState);*/
+		void Release();
+
+		/*void SetButtonDown(ACMOUSEBUTTON button);
+		void SetButtonUp(ACMOUSEBUTTON button);
+		void SetPosition(int x, int y);
+
+		void GetState(ACMouseState* mouseState);*/
 	};
 }
