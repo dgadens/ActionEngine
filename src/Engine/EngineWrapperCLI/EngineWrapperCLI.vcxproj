@@ -91,6 +91,7 @@
     <ClInclude Include="ACMouseW.h" />
     <ClInclude Include="ACNetworkDeviceW.h" />
     <ClInclude Include="ACNetworkW.h" />
+    <ClInclude Include="ACRenderDeviceEnumsW.h" />
     <ClInclude Include="ACRenderDeviceW.h" />
     <ClInclude Include="MathConverter.h" />
     <ClInclude Include="resource.h" />

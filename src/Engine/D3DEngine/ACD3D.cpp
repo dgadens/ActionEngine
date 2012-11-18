@@ -112,6 +112,8 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 {
 	HRESULT hr;
 
+	Log("Begin Init Graphics Device");
+
 	//inicializa membros
 	mDriverType = D3D_DRIVER_TYPE_HARDWARE;
 	mFeatureLevel = D3D_FEATURE_LEVEL_11_0;
@@ -154,7 +156,7 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 							   &mFeatureLevel, &ACD3DGlobals::G_pContext );
 		if( SUCCEEDED( hr ) )
 		{
-			Log("Create device success.");
+			Log("Create graphics device success.");
 			break;
 		}
 	}
@@ -219,6 +221,8 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 		}
 	}
 
+	Log("Width: %i. Height: %i", width, height);
+
 	// Get the adapter (video card) description.
 	hr = pDXGIAdapter->GetDesc(&adapterDesc);
 	if(FAILED(hr))
@@ -250,6 +254,8 @@ HRESULT ACD3D::CreateGraphicsDevice(int width, int height)
 	// Release the factory.
 	pDXGIFactory->Release();
 	pDXGIFactory = nullptr;
+
+	Log("End Graphics Device");
 
 	return AC_OK;
 };
@@ -597,7 +603,10 @@ HRESULT ACD3D::Clear(BOOL clearPixels, BOOL clearDepth, BOOL clearStencil)
 	
 	UINT flags = 0;
 	if (clearPixels)
+	{
+		Log("Clear Render Target. Color: %i, %i, %i, %i,", mClearColor[0], mClearColor[1], mClearColor[2], mClearColor[3]);
 		ACD3DGlobals::G_pContext->ClearRenderTargetView( pVp->pRenderTargetView, mClearColor );
+	}
 
 	if (clearDepth)
 	{
@@ -612,7 +621,10 @@ HRESULT ACD3D::Clear(BOOL clearPixels, BOOL clearDepth, BOOL clearStencil)
 	}
 
 	if (flags != 0)
+	{
+		Log("Clear Depth.");
 		ACD3DGlobals::G_pContext->ClearDepthStencilView( pVp->pDepthStencilView, flags, 1.0f, 0 );
+	}
 
 	return AC_OK;
 };
@@ -847,6 +859,7 @@ void ACD3D::EndRendering()
 	mpVManager->ForcedFlushAll();
 	ACD3DVpComponents* pVp = mpVpComponents[mActiveWndRendering];
 	pVp->pSwapChain->Present( 0, 0 );
+	Log("Present.");
 };
 
 #pragma endregion

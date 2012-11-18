@@ -96,6 +96,9 @@
     <ClInclude Include="MathConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ACRenderDeviceEnumsW.h">
+      <Filter>Header Files\Engine\RenderEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

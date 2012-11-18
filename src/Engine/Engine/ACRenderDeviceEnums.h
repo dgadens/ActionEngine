@@ -66,6 +66,4 @@ enum ACSHADEMODE
 	ACSM_PointSprite,
 };
 
-
-
 #endif

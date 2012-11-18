@@ -48,6 +48,11 @@ void ACRenderDeviceW::SetActiveRenderingViewport(IntPtr windowPtr)
 	Value->SetActiveRenderingViewport((HWND)windowPtr.ToPointer());
 }
 
+void ACRenderDeviceW::GoFullscreen(BOOL value)
+{
+	Value->GoFullscreen(value);
+}
+
 void ACRenderDeviceW::Resize(UINT width, UINT height)
 {
 	Value->Resize(width, height);
@@ -110,7 +115,7 @@ void ACRenderDeviceW::Clear(BOOL clearPixels, BOOL clearDepth, BOOL clearStencil
 	Value->Clear(clearPixels, clearDepth, clearStencil);
 }
 
-void ACRenderDeviceW::SetClearColor(EngineMathCLI::Vector4^ color)
+void ACRenderDeviceW::SetClearColor(EngineMathCLI::Vector4 color)
 {
 	Value->SetClearColor(MathConverter::ToUnmanaged(color));
 }
@@ -171,7 +176,7 @@ void ACRenderDeviceW::SaveScreenShot(const std::string& path)
 //render
 void ACRenderDeviceW::BeginRendering()
 {
-	Value->BeginRendering();
+	int a = Value->BeginRendering();
 }
 
 //renderiza as linhas usando o vbdinamico

@@ -26,7 +26,7 @@ public ref class ACRenderDeviceW
 		void DropViewport(IntPtr windowPtr);
 		void SetActiveViewport(IntPtr windowPtr);			//seta a janela ativa (onde as transformacoes serao feitas)
 		void SetActiveRenderingViewport(IntPtr windowPtr);	//seta a janela de renderizacao ativa 
-		//void GoFullscreen(BOOL value);
+		void GoFullscreen(BOOL value);
 		void Resize(UINT width, UINT height);
 
 		//atributos VP
@@ -45,7 +45,7 @@ public ref class ACRenderDeviceW
 
 		//clear
 		void Clear(BOOL clearPixels, BOOL clearDepth, BOOL clearStencil);
-		void SetClearColor(EngineMathCLI::Vector4^ color);
+		void SetClearColor(EngineMathCLI::Vector4 color);
 
 		//modo de preenchimento
 		void SetShadeMode(ACSHADEMODE value);

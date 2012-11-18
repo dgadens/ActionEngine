@@ -70,7 +70,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -83,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EngineMathCLI\EngineMathCLI.csproj">
-      <Project>{6DE26760-8118-430C-AA94-AFB29714810F}</Project>
+      <Project>{6de26760-8118-430c-aa94-afb29714810f}</Project>
       <Name>EngineMathCLI</Name>
     </ProjectReference>
     <ProjectReference Include="..\EngineWrapperCLI\EngineWrapperCLI.vcxproj">
