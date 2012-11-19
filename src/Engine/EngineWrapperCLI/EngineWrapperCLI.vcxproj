@@ -129,9 +129,6 @@
     <ProjectReference Include="..\EngineMathCLI\EngineMathCLI.csproj">
       <Project>{6de26760-8118-430c-aa94-afb29714810f}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Engine\Engine.vcxproj">
-      <Project>{d32bc7d9-98f2-4097-9241-230c832e3331}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

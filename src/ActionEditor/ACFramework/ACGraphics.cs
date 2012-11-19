@@ -11,50 +11,6 @@ namespace ACFramework
 {
     public class ACGraphics
     {
-        #region Metodos externos
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "InitializeGraphicsDevice", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr __InitializeGraphicsDevice(IntPtr hInst,
-                                   [MarshalAs(UnmanagedType.LPStr)] string chAPI,
-                                   IntPtr hWnd,
-                                   [MarshalAs(UnmanagedType.Bool)] bool saveLog);
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "AddViewport", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr __AddViewport(IntPtr hWnd);
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "DropViewport", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __DropViewport(IntPtr hWnd);
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "SetWindowSize", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __SetWindowSize(IntPtr hWnd,
-                                          [MarshalAs(UnmanagedType.I4)] int width,
-                                          [MarshalAs(UnmanagedType.I4)] int height);
-        
-        [DllImport(ACGlobals.dllPath, EntryPoint = "ActiveViewport", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __ActiveViewport(IntPtr hWnd);
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "SetClearColor", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __SetClearColorW([MarshalAs(UnmanagedType.R4)] float r,
-                                          [MarshalAs(UnmanagedType.R4)] float g,
-                                          [MarshalAs(UnmanagedType.R4)] float b);
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "Lock", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __Lock();
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "Unlock", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __Unlock();
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "Update", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __Update();
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "Render", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __Render();
-
-        [DllImport(ACGlobals.dllPath, EntryPoint = "Release", CallingConvention = CallingConvention.Cdecl)]
-        static extern void __Release();
-
-        #endregion
-
         public static bool MainInitialize = false;
         public static List<IntPtr> hWndList = new List<IntPtr>();
 

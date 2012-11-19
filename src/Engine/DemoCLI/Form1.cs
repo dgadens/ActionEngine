@@ -14,6 +14,8 @@ namespace DemoCLI
 {
     public partial class Form1 : Form
     {
+        IntPtr hWnd;
+
         ACRendererW _renderer;
         ACRenderDeviceW _renderDevice;
         ACInputW _input;
@@ -36,7 +38,7 @@ namespace DemoCLI
             ACConfigurationsW.Initialize();
 
             var hInstance = Marshal.GetHINSTANCE(typeof(Form).Module);
-            IntPtr hWnd = panel1.Handle;
+            hWnd = panel1.Handle;
 
             _renderer = new ACRendererW(hInstance);
             _renderer.CreateDevice("ACD3DEngine.dll");
@@ -71,12 +73,6 @@ namespace DemoCLI
             _renderDevice.SetWireColor(new Vector3(1, 1, 0));
             //_renderDevice.SetRasterizeState(ACRASTERIZESTATEW::ACRS_SolidCullCCW);
             //_renderDevice.SetShadeMode(ACSHADEMODEW::ACSM_LineList);
-
-            _renderDevice.SetActiveRenderingViewport(hWnd);
-            _renderDevice.SetClearColor(new Vector4(0, 0, 0, 1));
-            _renderDevice.BeginRendering();
-            _renderDevice.EndRendering();
-
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -87,6 +83,19 @@ namespace DemoCLI
 
         private void pnlVP_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            _renderDevice.SetActiveRenderingViewport(hWnd);
+            _renderDevice.SetClearColor(new Vector4(0, 0, 0, 1));
+            _renderDevice.BeginRendering();
+            _renderDevice.EndRendering();
+        }
+
+        private void panel1_Validated(object sender, EventArgs e)
+        {
+          
         }
     }
 }
