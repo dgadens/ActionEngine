@@ -60,10 +60,28 @@ namespace ACEditor
                 lblInformation.Text = _information;
             }
 
-            get
+            get { return _information; }
+        }
+
+        private bool _showInformationBar = true;
+        public bool ShowInformationBar
+        {
+            set
             {
-                return _information;
+                _showInformationBar = value;
+                if (_showInformationBar)
+                {
+                    pnlVPContainer.Height -= lblInformation.Height;
+                    lblInformation.Visible = true;
+                }
+                else
+                {
+                    pnlVPContainer.Height += lblInformation.Height;
+                    lblInformation.Visible = false;
+                }
             }
+
+            get { return _showInformationBar; }
         }
 
 

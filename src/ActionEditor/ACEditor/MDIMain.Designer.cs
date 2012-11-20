@@ -48,8 +48,10 @@
             this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuImportModels = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuImportFonts = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuModels = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuFonts = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -65,11 +67,12 @@
             this.fileMenu,
             this.editMenu,
             this.viewMenu,
-            this.importToolStripMenuItem});
+            this.importToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip.Size = new System.Drawing.Size(843, 28);
+            this.menuStrip.Size = new System.Drawing.Size(818, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "MenuStrip";
             // 
@@ -215,25 +218,40 @@
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuModels,
-            this.mnuFonts});
+            this.mnuImportModels,
+            this.mnuImportFonts});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
             this.importToolStripMenuItem.Text = "Import";
             // 
+            // mnuImportModels
+            // 
+            this.mnuImportModels.Name = "mnuImportModels";
+            this.mnuImportModels.Size = new System.Drawing.Size(152, 24);
+            this.mnuImportModels.Text = "Models";
+            this.mnuImportModels.Click += new System.EventHandler(this.mnuImportModels_Click);
+            // 
+            // mnuImportFonts
+            // 
+            this.mnuImportFonts.Name = "mnuImportFonts";
+            this.mnuImportFonts.Size = new System.Drawing.Size(152, 24);
+            this.mnuImportFonts.Text = "Fonts";
+            this.mnuImportFonts.Click += new System.EventHandler(this.mnuImportFonts_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuModels});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
             // mnuModels
             // 
             this.mnuModels.Name = "mnuModels";
-            this.mnuModels.Size = new System.Drawing.Size(127, 24);
+            this.mnuModels.Size = new System.Drawing.Size(152, 24);
             this.mnuModels.Text = "Models";
             this.mnuModels.Click += new System.EventHandler(this.mnuModels_Click);
-            // 
-            // mnuFonts
-            // 
-            this.mnuFonts.Name = "mnuFonts";
-            this.mnuFonts.Size = new System.Drawing.Size(127, 24);
-            this.mnuFonts.Text = "Fonts";
-            this.mnuFonts.Click += new System.EventHandler(this.mnuFonts_Click);
             // 
             // statusBarToolStripMenuItem
             // 
@@ -249,10 +267,10 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 533);
+            this.statusStrip.Location = new System.Drawing.Point(0, 564);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.statusStrip.Size = new System.Drawing.Size(843, 25);
+            this.statusStrip.Size = new System.Drawing.Size(818, 25);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "StatusStrip";
             // 
@@ -270,11 +288,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VpMain.BackColor = System.Drawing.Color.DarkGray;
-            this.VpMain.Information = null;
+            this.VpMain.Information = "";
             this.VpMain.Location = new System.Drawing.Point(0, 32);
-            this.VpMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.VpMain.Margin = new System.Windows.Forms.Padding(4);
             this.VpMain.Name = "VpMain";
-            this.VpMain.Size = new System.Drawing.Size(843, 433);
+            this.VpMain.ShowInformationBar = false;
+            this.VpMain.Size = new System.Drawing.Size(815, 528);
             this.VpMain.TabIndex = 4;
             this.VpMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.VpMain_DragDrop);
             this.VpMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.VpMain_DragEnter);
@@ -283,7 +302,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(843, 558);
+            this.ClientSize = new System.Drawing.Size(818, 589);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.VpMain);
@@ -291,7 +310,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MDIMain";
-            this.Text = "MDIMain";
+            this.Text = "Action Editor";
             this.Load += new System.EventHandler(this.MDIMain_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -326,9 +345,11 @@
         private System.Windows.Forms.ToolStripMenuItem statusBarToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mnuModels;
-        private System.Windows.Forms.ToolStripMenuItem mnuFonts; 
+        private System.Windows.Forms.ToolStripMenuItem mnuImportModels;
+        private System.Windows.Forms.ToolStripMenuItem mnuImportFonts; 
         private ucViewport VpMain;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuModels;
     }
 }
 

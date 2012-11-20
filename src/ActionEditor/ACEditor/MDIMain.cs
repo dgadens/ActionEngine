@@ -108,7 +108,7 @@ namespace ACEditor
             }
         }
 
-        private void mnuModels_Click(object sender, EventArgs e)
+        private void mnuImportModels_Click(object sender, EventArgs e)
         {
             if (_frmImport == null || _frmImport.IsDisposed)
                 _frmImport = new frmImport();
@@ -116,13 +116,22 @@ namespace ACEditor
             _frmImport.Show();
         }
 
-        private void mnuFonts_Click(object sender, EventArgs e)
+        private void mnuImportFonts_Click(object sender, EventArgs e)
         {
             if (_frmImportFont == null || _frmImportFont.IsDisposed)
                 _frmImportFont = new frmImportFont();
 
             _frmImportFont.Show();
         }
+
+        private void mnuModels_Click(object sender, EventArgs e)
+        {
+            if (_frmModelManager == null || _frmModelManager.IsDisposed)
+                _frmModelManager = new frmModelManager();
+
+            _frmModelManager.Show();
+        }
+
 
         private void VpMain_DragDrop(object sender, DragEventArgs e)
         {

@@ -34,38 +34,41 @@
             // 
             // pnlVPContainer
             // 
-            this.pnlVPContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlVPContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlVPContainer.BackColor = System.Drawing.Color.Black;
-            this.pnlVPContainer.Location = new System.Drawing.Point(3, 3);
+            this.pnlVPContainer.Location = new System.Drawing.Point(4, 4);
+            this.pnlVPContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pnlVPContainer.Name = "pnlVPContainer";
-            this.pnlVPContainer.Size = new System.Drawing.Size(144, 144);
+            this.pnlVPContainer.Size = new System.Drawing.Size(192, 177);
             this.pnlVPContainer.TabIndex = 0;
             this.pnlVPContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlVPContainer_MouseDown);
             // 
             // lblInformation
             // 
-            this.lblInformation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblInformation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInformation.BackColor = System.Drawing.Color.DimGray;
             this.lblInformation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInformation.ForeColor = System.Drawing.Color.White;
-            this.lblInformation.Location = new System.Drawing.Point(3, 150);
+            this.lblInformation.Location = new System.Drawing.Point(4, 182);
+            this.lblInformation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblInformation.Name = "lblInformation";
-            this.lblInformation.Size = new System.Drawing.Size(144, 16);
+            this.lblInformation.Size = new System.Drawing.Size(192, 24);
             this.lblInformation.TabIndex = 1;
             this.lblInformation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblInformation.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblInformation_MouseDown);
             // 
             // ucViewport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lblInformation);
             this.Controls.Add(this.pnlVPContainer);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ucViewport";
-            this.Size = new System.Drawing.Size(150, 170);
+            this.Size = new System.Drawing.Size(200, 209);
             this.Load += new System.EventHandler(this.ucViewport_Load);
             this.Enter += new System.EventHandler(this.ucViewport_Enter);
             this.Resize += new System.EventHandler(this.ucViewport_Resize);

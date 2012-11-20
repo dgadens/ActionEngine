@@ -24,7 +24,7 @@ namespace ACEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string basePath = Environment.CurrentDirectory + @"\..\..\..\..\ShadowWorld\Contents\Models";
+            string basePath = Environment.CurrentDirectory + @"C:\GitHub\ActionEngine\src\Engine\Demo\Contents\Models";
             string[] files = Directory.GetFiles(basePath);
             for (int i = 0; i < files.Length; i++)
             {
@@ -54,12 +54,12 @@ namespace ACEditor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ucViewport.CurrentViewport.AddModel("dude.amt");
+            ucViewport.CurrentViewport.AddModel("goblin.amt");
         }
 
         private void btnShowNormals_Click(object sender, EventArgs e)
         {
-            ucViewport.CurrentViewport.ShowNormals("dude.amt");
+            ucViewport.CurrentViewport.ShowNormals("goblin.amt");
         }
     }
 }
