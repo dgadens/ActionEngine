@@ -5,6 +5,7 @@ using System.Text;
 using ACFramework.FileStructs;
 using System.Xml.Linq;
 using System.Globalization;
+using EngineMathCLI;
 
 namespace ACFramework.FileStruct
 {

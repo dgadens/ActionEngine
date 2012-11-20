@@ -15,7 +15,7 @@ namespace ACEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MDIEditor());
+            Application.Run(new MDIMain());
         }
     }
 }

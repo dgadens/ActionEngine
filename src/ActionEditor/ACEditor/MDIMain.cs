@@ -5,25 +5,30 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using ACFramework;
+using EngineMathCLI;
 
 namespace ACEditor
 {
-    public partial class MDIEditor : Form
+    public partial class MDIMain : Form
     {
         frmModelManager _frmModelManager;
         frmImport _frmImport;
         frmImportFont _frmImportFont;
 
-        public MDIEditor()
+        private int childFormNumber = 0;
+
+        public MDIMain()
         {
             InitializeComponent();
         }
 
-        private void ShowNewForm(object sender, EventArgs e)
+        private void MDIMain_Load(object sender, EventArgs e)
         {
-
+            VpMain.InitializeVP();
+            VpMain.ClearColor = new Vector3(0, 0, 0);
+            VpMain.Draw();
         }
 
         private void OpenFile(object sender, EventArgs e)
@@ -37,7 +42,7 @@ namespace ACEditor
             }
         }
 
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuSaveAs_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -48,14 +53,26 @@ namespace ACEditor
             }
         }
 
-        private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuNew_Click(object sender, EventArgs e)
         {
-            toolStrip.Visible = toolBarToolStripMenuItem.Checked;
+
+        }
+
+        private void mnuCut_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void mnuCopy_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void mnuPaste_Click(object sender, EventArgs e)
+        {
         }
 
         private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -91,14 +108,7 @@ namespace ACEditor
             }
         }
 
-        private void MDIEditor_Load(object sender, EventArgs e)
-        {
-            VpMain.InitializeVP();
-            VpMain.ClearColor = new Vector3(0, 0, 0);
-            VpMain.Draw();
-        }
-
-        private void mnuImportModel_Click(object sender, EventArgs e)
+        private void mnuModels_Click(object sender, EventArgs e)
         {
             if (_frmImport == null || _frmImport.IsDisposed)
                 _frmImport = new frmImport();
@@ -106,18 +116,12 @@ namespace ACEditor
             _frmImport.Show();
         }
 
-        private void tsbAddModel_Click(object sender, EventArgs e)
+        private void mnuFonts_Click(object sender, EventArgs e)
         {
-            if (_frmModelManager == null || _frmModelManager.IsDisposed)
-                _frmModelManager = new frmModelManager();
+            if (_frmImportFont == null || _frmImportFont.IsDisposed)
+                _frmImportFont = new frmImportFont();
 
-            _frmModelManager.Show();
-            _frmModelManager.BringToFront();
-        }
-
-        private void MDIEditor_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //ACFramework.ACGraphics.Instance.DropAll();
+            _frmImportFont.Show();
         }
 
         private void VpMain_DragDrop(object sender, DragEventArgs e)
@@ -132,14 +136,6 @@ namespace ACEditor
                 e.Effect = DragDropEffects.Copy;
             else
                 e.Effect = DragDropEffects.None;
-        }
-
-        private void mnuImportFont_Click(object sender, EventArgs e)
-        {
-            if (_frmImportFont == null || _frmImportFont.IsDisposed)
-                _frmImportFont = new frmImportFont();
-
-            _frmImportFont.Show();
         }
     }
 }

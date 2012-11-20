@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ACEditor</RootNamespace>
     <AssemblyName>ACEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -39,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -48,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -80,11 +83,11 @@
     <Compile Include="frmModelManager.Designer.cs">
       <DependentUpon>frmModelManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="MDIEditor.cs">
+    <Compile Include="MDIMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MDIEditor.Designer.cs">
-      <DependentUpon>MDIEditor.cs</DependentUpon>
+    <Compile Include="MDIMain.Designer.cs">
+      <DependentUpon>MDIMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,8 +106,8 @@
     <EmbeddedResource Include="frmModelManager.resx">
       <DependentUpon>frmModelManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MDIEditor.resx">
-      <DependentUpon>MDIEditor.cs</DependentUpon>
+    <EmbeddedResource Include="MDIMain.resx">
+      <DependentUpon>MDIMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -119,6 +122,7 @@
     <EmbeddedResource Include="ucViewport.resx">
       <DependentUpon>ucViewport.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -130,6 +134,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Engine\EngineMathCLI\EngineMathCLI.csproj">
+      <Project>{6de26760-8118-430c-aa94-afb29714810f}</Project>
+      <Name>EngineMathCLI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ACFramework\ACFramework.csproj">
       <Project>{232DFBE1-C605-4E63-A65A-6D7B0C38F391}</Project>
       <Name>ACFramework</Name>
@@ -160,7 +168,6 @@
   <ItemGroup>
     <Content Include="Images\Model.png" />
     <Content Include="Informations\AMT_specification.txt" />
-    <Content Include="Informations\Ms3d_specification.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

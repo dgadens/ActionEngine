@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ACFramework</RootNamespace>
     <AssemblyName>ACFramework</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,20 +53,14 @@
     <Compile Include="Converters\FileStruct\IConverter.cs" />
     <Compile Include="Converters\Font\Character.cs" />
     <Compile Include="Converters\Font\ConvertBMFont.cs" />
-    <Compile Include="Math\BoundingBox.cs" />
-    <Compile Include="Math\BoundingSphere.cs" />
-    <Compile Include="Math\FrameworkResources.cs" />
-    <Compile Include="Math\MathHelper.cs" />
-    <Compile Include="Math\Matrix.cs" />
-    <Compile Include="Math\Plane3D.cs" />
-    <Compile Include="Math\Quaternion.cs" />
-    <Compile Include="Math\Ray.cs" />
-    <Compile Include="Math\Vector2.cs" />
-    <Compile Include="Math\Vector3.cs" />
-    <Compile Include="Math\Vector4.cs" />
-    <Compile Include="Math\ZMath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\Tools.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engine\EngineMathCLI\EngineMathCLI.csproj">
+      <Project>{6de26760-8118-430c-aa94-afb29714810f}</Project>
+      <Name>EngineMathCLI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

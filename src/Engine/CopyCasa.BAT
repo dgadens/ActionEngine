@@ -1,5 +1,0 @@
-copy debug\Engine.lib ..\ActionEditor\ACEditor\bin\Debug;
-copy debug\EngineMath.lib ..\ActionEditor\ACEditor\bin\Debug;
-copy debug\EngineCommon.lib ..\ActionEditor\ACEditor\bin\Debug;
-copy debug\ACD3DEngine.dll ..\ActionEditor\ACEditor\bin\Debug;
-copy debug\EngineWrapper.dll ..\ActionEditor\ACEditor\bin\Debug;

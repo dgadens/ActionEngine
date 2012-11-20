@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ACFramework;
 using System.Runtime.InteropServices;
 using System.Threading;
+using EngineMathCLI;
 
 namespace ACEditor
 {
