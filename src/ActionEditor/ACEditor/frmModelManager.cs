@@ -24,7 +24,7 @@ namespace ACEditor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string basePath = Environment.CurrentDirectory + @"C:\GitHub\ActionEngine\src\Engine\Demo\Contents\Models";
+            string basePath = @"C:\GitHub\ActionEngine\src\Engine\Demo\Contents\Models";
             string[] files = Directory.GetFiles(basePath);
             for (int i = 0; i < files.Length; i++)
             {

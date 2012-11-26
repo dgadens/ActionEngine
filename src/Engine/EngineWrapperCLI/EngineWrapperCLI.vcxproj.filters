@@ -49,6 +49,18 @@
     <Filter Include="Source Files\ContentManager">
       <UniqueIdentifier>{e0768ba8-b336-4ce5-8f4a-90da4aa3f574}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{7e1a5f32-7bf3-4db0-aa0b-53db937415c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{c098a3b2-a830-4e23-9846-9479ec5b6052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ContentManager\ACSkin">
+      <UniqueIdentifier>{67c4ce48-6a3b-43a6-b57d-e9cf97445b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ContentManager\ACSkin">
+      <UniqueIdentifier>{05e8ca5e-5c69-431b-8f33-98e973236508}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -99,6 +111,15 @@
     <ClInclude Include="ACRenderDeviceEnumsW.h">
       <Filter>Header Files\Engine\RenderEngine</Filter>
     </ClInclude>
+    <ClInclude Include="ACModelW.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ACCameraW.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ACSkinW.h">
+      <Filter>Header Files\ContentManager\ACSkin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -145,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="MathConverter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ACCameraW.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="ACSkinW.cpp">
+      <Filter>Source Files\ContentManager\ACSkin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

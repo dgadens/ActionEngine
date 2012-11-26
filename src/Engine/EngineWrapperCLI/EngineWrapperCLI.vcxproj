@@ -83,16 +83,19 @@
   <ItemGroup>
     <ClInclude Include="ACAudioDeviceW.h" />
     <ClInclude Include="ACAudioW.h" />
+    <ClInclude Include="ACCameraW.h" />
     <ClInclude Include="ACConfigurationsW.h" />
     <ClInclude Include="ACContentManagerW.h" />
     <ClInclude Include="ACInputDeviceW.h" />
     <ClInclude Include="ACInputW.h" />
     <ClInclude Include="ACKeyboardW.h" />
+    <ClInclude Include="ACModelW.h" />
     <ClInclude Include="ACMouseW.h" />
     <ClInclude Include="ACNetworkDeviceW.h" />
     <ClInclude Include="ACNetworkW.h" />
     <ClInclude Include="ACRenderDeviceEnumsW.h" />
     <ClInclude Include="ACRenderDeviceW.h" />
+    <ClInclude Include="ACSkinW.h" />
     <ClInclude Include="MathConverter.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
@@ -101,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="ACAudioDeviceW.cpp" />
     <ClCompile Include="ACAudioW.cpp" />
+    <ClCompile Include="ACCameraW.cpp" />
     <ClCompile Include="ACConfigurationsW.cpp" />
     <ClCompile Include="ACContentManagerW.cpp" />
     <ClCompile Include="ACInputDeviceW.cpp" />
@@ -110,6 +114,7 @@
     <ClCompile Include="ACNetworkDeviceW.cpp" />
     <ClCompile Include="ACNetworkW.cpp" />
     <ClCompile Include="ACRenderDeviceW.cpp" />
+    <ClCompile Include="ACSkinW.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="MathConverter.cpp" />
     <ClCompile Include="Stdafx.cpp">
